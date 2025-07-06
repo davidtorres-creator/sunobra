@@ -38,7 +38,7 @@ require_once 'header.php'
                     <a class="nav-link" href="#contact">Contact Us</a>
                 </li>
                 <li class="nav-item">
-                    <a href="login.php" class="btn btn-primary ml-xl-4">Inicar sesion </a>
+                    <a href="login" class="btn btn-primary ml-xl-4">Iniciar sesión</a>
                 </li>
             </ul>
         </div>
