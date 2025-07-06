@@ -205,38 +205,34 @@ class BaseController {
     }
     
     /**
-     * Obtener mensajes flash
-     * @return array
+     * Obtener mensaje flash
+     * @param string $type Tipo de mensaje
+     * @return string|null
      */
-    protected function getFlash() {
-        $flash = $_SESSION['flash'] ?? [];
-        unset($_SESSION['flash']);
-        return $flash;
+    protected function getFlash($type) {
+        $message = $_SESSION['flash'][$type] ?? null;
+        unset($_SESSION['flash'][$type]);
+        return $message;
     }
     
     /**
      * Validar datos requeridos
      * @param array $data Datos a validar
      * @param array $required Campos requeridos
-     * @return array Resultado de validación
+     * @return array Errores encontrados
      */
     protected function validateRequired($data, $required) {
         $errors = [];
-        
         foreach ($required as $field) {
             if (empty($data[$field])) {
-                $errors[] = "El campo '$field' es requerido.";
+                $errors[] = "El campo $field es requerido.";
             }
         }
-        
-        return [
-            'valid' => empty($errors),
-            'errors' => $errors
-        ];
+        return $errors;
     }
     
     /**
-     * Validar email
+     * Validar formato de email
      * @param string $email Email a validar
      * @return bool
      */
@@ -292,7 +288,7 @@ class BaseController {
     protected function error500($message = 'Error interno del servidor') {
         http_response_code(500);
         $this->render('errors/500', [
-            'title' => '500 - Error interno del servidor',
+            'title' => '500 - Error interno',
             'message' => $message
         ]);
     }
@@ -303,12 +299,17 @@ class BaseController {
      * @param string $description Descripción de la actividad
      */
     protected function logActivity($action, $description) {
-        $userId = $this->getCurrentUserId();
-        if ($userId) {
-            // Usar el modelo de usuario para registrar actividad
-            // Por ahora, solo log
-            error_log("Actividad: $action - $description - Usuario: $userId");
-        }
+        // Implementar logging de actividades
+        $logEntry = [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'user_id' => $this->getCurrentUserId(),
+            'action' => $action,
+            'description' => $description,
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown'
+        ];
+        
+        // Aquí puedes guardar en base de datos o archivo de log
+        error_log(json_encode($logEntry));
     }
     
     /**
@@ -328,7 +329,7 @@ class BaseController {
     }
     
     /**
-     * Generar datos de paginación
+     * Generar paginación
      * @param int $total Total de registros
      * @param int $page Página actual
      * @param int $limit Límite por página
@@ -341,12 +342,10 @@ class BaseController {
             'current_page' => $page,
             'total_pages' => $totalPages,
             'total_records' => $total,
-            'per_page' => $limit,
             'has_previous' => $page > 1,
             'has_next' => $page < $totalPages,
             'previous_page' => $page > 1 ? $page - 1 : null,
             'next_page' => $page < $totalPages ? $page + 1 : null
         ];
     }
-}
-?> 
+} 

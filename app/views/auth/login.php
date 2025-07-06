@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio Sesión</title>
+    <title><?php echo $title ?? 'Inicio Sesión'; ?> - SunObra</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="assets/css/style2.css">
     <link rel="icon" href="assets/imgs/logo sun obra.png">
@@ -38,18 +38,22 @@
                 <h2 class="text-2xl font-bold text-center mb-6 text-gray-700">Acceso</h2>
                 
                 <!-- Mensajes de Error/Success -->
-                <?php if (isset($_SESSION['auth_error']) && $_SESSION['auth_error']): ?>
-                    <div class="text-red-500 text-center mb-4"><?php echo htmlspecialchars($_SESSION['auth_error']); ?></div>
+                <?php if (isset($error) && $error): ?>
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
                 <?php endif; ?>
 
-                <?php if (isset($_SESSION['auth_success']) && $_SESSION['auth_success']): ?>
-                    <div class="text-green-500 text-center mb-4"><?php echo htmlspecialchars($_SESSION['auth_success']); ?></div>
+                <?php if (isset($success) && $success): ?>
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                        <?php echo htmlspecialchars($success); ?>
+                    </div>
                 <?php endif; ?>
                 
                 <form id="loginForm" action="/auth/login" method="POST" class="space-y-4">
                     <div>
-                        <label for="registerType" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Usuario</label>
-                        <select name="userType" id="registerType" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <label for="userType" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Usuario</label>
+                        <select name="userType" id="userType" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
                             <option value="" disabled selected>Seleccione un tipo</option>
                             <option value="obrero">Obrero</option>
                             <option value="cliente">Cliente</option>
@@ -89,4 +93,4 @@
         });
     </script>
 </body>
-</html>
+</html> 

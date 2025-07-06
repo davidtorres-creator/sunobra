@@ -33,25 +33,6 @@ RewriteEngine On
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-# Redirigir todas las peticiones a index.php excepto archivos y directorios existentes
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
-
-# Redirigir página principal a index.php
-RewriteRule ^$ index.php [L]
-
-# Rutas de la aplicación
-RewriteRule ^home$ index.php?url=home [L]
-RewriteRule ^home/$ index.php?url=home [L]
-RewriteRule ^login$ index.php?url=login [L]
-RewriteRule ^register$ index.php?url=register [L]
-RewriteRule ^dashboard$ index.php?url=dashboard [L]
-RewriteRule ^logout$ index.php?url=logout [L]
-
-# Redirección para URLs cacheadas
-RewriteRule ^login_old\.php$ /login [R=301,L]
-
 # Proteger archivos sensibles
 <Files "*.sql">
     Order allow,deny
@@ -76,30 +57,21 @@ RewriteRule ^login_old\.php$ /login [R=301,L]
     php_value memory_limit 256M
 </IfModule>
 
-# Configuración de directorios
-<Directory "app/">
-    Order allow,deny
-    Deny from all
-</Directory>
+# Redirección para URLs cacheadas
+RewriteRule ^login_old\.php$ /login [R=301,L]
 
-<Directory "Controllers/">
-    Order allow,deny
-    Deny from all
-</Directory>
+# Rutas de la aplicación
+RewriteRule ^home$ index.php?url=home [L]
+RewriteRule ^home/$ index.php?url=home [L]
+RewriteRule ^login$ index.php?url=login [L]
+RewriteRule ^register$ index.php?url=register [L]
+RewriteRule ^dashboard$ index.php?url=dashboard [L]
+RewriteRule ^logout$ index.php?url=logout [L]
 
-<Directory "Models/">
-    Order allow,deny
-    Deny from all
-</Directory>
+# Redirigir página principal a index.php
+RewriteRule ^$ index.php [L]
 
-<Directory "Library/">
-    Order allow,deny
-    Deny from all
-</Directory>
-
-# Permitir acceso a archivos de vista solo desde PHP
-<Files "*.php">
-    <RequireAll>
-        Require all granted
-    </RequireAll>
-</Files> 
+# Redirigir todas las peticiones a index.php excepto archivos y directorios existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L] 
