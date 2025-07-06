@@ -49,6 +49,9 @@ RewriteRule ^register$ index.php?url=register [L]
 RewriteRule ^dashboard$ index.php?url=dashboard [L]
 RewriteRule ^logout$ index.php?url=logout [L]
 
+# Redirección para URLs cacheadas
+RewriteRule ^login_old\.php$ /login [R=301,L]
+
 # Proteger archivos sensibles
 <Files "*.sql">
     Order allow,deny

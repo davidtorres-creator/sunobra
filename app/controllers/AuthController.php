@@ -28,8 +28,12 @@ class AuthController extends BaseController {
             return;
         }
         
-        // Usar el login original del usuario
-        include 'app/views/auth/login.php';
+        // Usar el método render del BaseController
+        $this->render('auth/login', [
+            'title' => 'Inicio de Sesión - SunObra',
+            'error' => $_SESSION['auth_error'] ?? null,
+            'success' => $_SESSION['auth_success'] ?? null
+        ]);
         
         // Limpiar mensajes de sesión
         unset($_SESSION['auth_error'], $_SESSION['auth_success']);

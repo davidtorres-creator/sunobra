@@ -135,7 +135,7 @@ if (isset($authRoutes[$controller])) {
         require_once $controllerFile;
         $controllerInstance = new $newController();
         
-        // Mapear métodos
+        // Mapear métodos - manejar rutas como /auth/login
         $methodMap = [
             'login' => 'showLogin',
             'register' => 'showRegister',
@@ -144,7 +144,12 @@ if (isset($authRoutes[$controller])) {
             'home' => 'index'
         ];
         
-        $methodName = $methodMap[$controller] ?? $method;
+        // Si es /auth/login, usar el método 'login'
+        if ($controller === 'auth' && $method === 'login') {
+            $methodName = 'login';
+        } else {
+            $methodName = $methodMap[$controller] ?? $method;
+        }
         
         if (method_exists($controllerInstance, $methodName)) {
             if ($params) {
