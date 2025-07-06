@@ -1,0 +1,36 @@
+RewriteEngine On
+
+# Redirigir todas las peticiones a index-simple.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index-simple.php?url=$1 [QSA,L]
+
+# Headers de seguridad
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+
+# Cache para archivos estáticos
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
+
+# Proteger archivos sensibles
+<FilesMatch "\.(php|log|sql|env)$">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</FilesMatch>
+
+# Permitir acceso a archivos específicos
+<Files "index-simple.php">
+    Require all granted
+</Files>
+
+<Files "test-login.php">
+    Require all granted
+</Files>
+
+<Files "login-simple.php">
+    Require all granted
+</Files> 

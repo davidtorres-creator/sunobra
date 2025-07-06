@@ -1,16 +1,19 @@
 <?php
-session_start();
-require_once 'app/models/UserModel.php';
-require_once 'app/models/ObreroModel.php';
-require_once 'app/models/ClienteModel.php';
+// Verificar si la sesión ya está iniciada antes de iniciarla
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../models/ObreroModel.php';
+require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/BaseController.php';
 
-class AuthController {
-    private $userModel;
+class AuthController extends BaseController {
     private $obreroModel;
     private $clienteModel;
     
     public function __construct() {
-        $this->userModel = new UserModel();
+        parent::__construct();
         $this->obreroModel = new ObreroModel();
         $this->clienteModel = new ClienteModel();
     }
@@ -25,18 +28,15 @@ class AuthController {
             return;
         }
         
-        $this->render('auth/login', [
-            'title' => 'Iniciar Sesión - SunObra',
-            'error' => $_SESSION['auth_error'] ?? null,
-            'success' => $_SESSION['auth_success'] ?? null
-        ]);
+        // Usar el login original del usuario
+        include 'app/views/auth/login.php';
         
         // Limpiar mensajes de sesión
         unset($_SESSION['auth_error'], $_SESSION['auth_success']);
     }
     
     /**
-     * Procesar login
+     * Procesar login usando la lógica original del usuario
      */
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -44,11 +44,12 @@ class AuthController {
             return;
         }
         
+        $userType = $_POST['userType'] ?? '';
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         
         // Validaciones básicas
-        if (empty($email) || empty($password)) {
+        if (empty($email) || empty($password) || empty($userType)) {
             $_SESSION['auth_error'] = 'Por favor, complete todos los campos.';
             $this->redirect('/login');
             return;
@@ -61,25 +62,111 @@ class AuthController {
             return;
         }
         
+        // Validar tipo de usuario
+        if (!in_array($userType, ['obrero', 'cliente', 'admin'])) {
+            $_SESSION['auth_error'] = 'Tipo de usuario no válido.';
+            $this->redirect('/login');
+            return;
+        }
+        
         try {
-            // Intentar autenticar usuario
-            $user = $this->userModel->authenticate($email, $password);
+            // Usar la lógica original del usuario con mysqli
+            $servername = "localhost";
+            $username = "root";
+            $password_db = "";
+            $dbname = "SunObra";
             
-            if ($user) {
-                // Autenticación exitosa
-                $this->createSession($user);
+            $conn = new mysqli($servername, $username, $password_db, $dbname);
+            
+            // Verificar conexión
+            if ($conn->connect_error) {
+                throw new Exception("Conexión fallida: " . $conn->connect_error);
+            }
+            
+            // Consulta para verificar el usuario
+            $sql = "SELECT * FROM usuarios WHERE correo = ? AND password = ? AND tipo_usuario = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sss", $email, $password, $userType);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                // Usuario encontrado, obtener datos
+                $user = $result->fetch_assoc();
                 
-                // Registrar login exitoso
-                $this->logActivity($user['id'], 'Login exitoso', 'Usuario inició sesión correctamente');
+                // Guardar datos en sesión
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['email'] = $email;
+                $_SESSION['userType'] = $userType;
+                $_SESSION['nombre'] = $user['nombre'];
+                $_SESSION['apellido'] = $user['apellido'];
                 
-                // Redirigir al dashboard correspondiente
-                $this->redirectToDashboard();
+                // Redirigir según el tipo de usuario
+                switch ($userType) {
+                    case 'cliente':
+                        // Para clientes, verificar si existe en la tabla clientes
+                        $sql_cliente = "SELECT id FROM clientes WHERE id = ?";
+                        $stmt_cliente = $conn->prepare($sql_cliente);
+                        $stmt_cliente->bind_param("i", $user['id']);
+                        $stmt_cliente->execute();
+                        $result_cliente = $stmt_cliente->get_result();
+                        
+                        if ($result_cliente->num_rows == 0) {
+                            // Si no existe en la tabla clientes, crearlo
+                            $sql_insert = "INSERT INTO clientes (id, preferencias_contacto) VALUES (?, 'email')";
+                            $stmt_insert = $conn->prepare($sql_insert);
+                            $stmt_insert->bind_param("i", $user['id']);
+                            $stmt_insert->execute();
+                            $stmt_insert->close();
+                        }
+                        
+                        $_SESSION['cliente_id'] = $user['id'];
+                        $this->redirect('/cliente/dashboard');
+                        break;
+                        
+                    case 'obrero':
+                        // Para obreros, verificar si existe en la tabla obreros
+                        $sql_obrero = "SELECT id FROM obreros WHERE id = ?";
+                        $stmt_obrero = $conn->prepare($sql_obrero);
+                        $stmt_obrero->bind_param("i", $user['id']);
+                        $stmt_obrero->execute();
+                        $result_obrero = $stmt_obrero->get_result();
+                        
+                        if ($result_obrero->num_rows == 0) {
+                            // Si no existe en la tabla obreros, crearlo
+                            $sql_insert = "INSERT INTO obreros (id, especialidad, experiencia, disponibilidad) VALUES (?, 'General', 0, 1)";
+                            $stmt_insert = $conn->prepare($sql_insert);
+                            $stmt_insert->bind_param("i", $user['id']);
+                            $stmt_insert->execute();
+                            $stmt_insert->close();
+                        }
+                        
+                        $_SESSION['obrero_id'] = $user['id'];
+                        $this->redirect('/obrero/dashboard');
+                        break;
+                        
+                    case 'admin':
+                        $_SESSION['admin_id'] = $user['id'];
+                        $this->redirect('/admin/dashboard');
+                        break;
+                        
+                    default:
+                        $this->redirect('/dashboard');
+                        break;
+                }
+                
+                $stmt->close();
+                $conn->close();
+                exit();
                 
             } else {
-                // Autenticación fallida
-                $_SESSION['auth_error'] = 'Credenciales incorrectas. Por favor, verifique su email y contraseña.';
+                // Usuario no encontrado
+                $_SESSION['auth_error'] = "Correo electrónico, contraseña o tipo de usuario incorrectos.";
                 $this->redirect('/login');
             }
+            
+            $stmt->close();
+            $conn->close();
             
         } catch (Exception $e) {
             error_log("Error en login: " . $e->getMessage());
@@ -175,8 +262,7 @@ class AuthController {
      */
     public function logout() {
         if ($this->isAuthenticated()) {
-            $userId = $_SESSION['user_id'];
-            $this->logActivity($userId, 'Logout', 'Usuario cerró sesión');
+            $this->logActivity('Logout', 'Usuario cerró sesión');
         }
         
         // Destruir sesión
@@ -555,35 +641,13 @@ class AuthController {
     }
     
     /**
-     * Registrar actividad
+     * Registrar actividad (sobrescribe el método del BaseController)
      */
-    private function logActivity($userId, $action, $description) {
+    protected function logActivity($action, $description) {
+        $userId = $this->getCurrentUserId();
         // Usar el modelo de usuario para registrar actividad
         // Por ahora, solo log
         error_log("Actividad: $action - $description - Usuario: $userId");
-    }
-    
-    /**
-     * Renderizar vista
-     */
-    private function render($view, $data = []) {
-        extract($data);
-        $viewPath = "app/views/$view.php";
-        
-        if (file_exists($viewPath)) {
-            include $viewPath;
-        } else {
-            // Vista no encontrada, mostrar error básico
-            echo "<h1>Error 404</h1><p>Vista no encontrada: $view</p>";
-        }
-    }
-    
-    /**
-     * Redirigir a URL
-     */
-    private function redirect($url) {
-        header("Location: $url");
-        exit;
     }
 }
 ?> 

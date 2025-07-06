@@ -68,6 +68,14 @@ spl_autoload_register(function($class) {
             return;
         }
     }
+    
+    // Si no se encuentra, intentar con la estructura de namespaces
+    $class = str_replace('\\', '/', $class);
+    $file = 'app/' . $class . '.php';
+    if (file_exists($file)) {
+        require_once $file;
+        return;
+    }
 });
 
 // Verificar si el usuario está autenticado
@@ -97,10 +105,9 @@ function getCurrentUser() {
 // Sistema de rutas híbrido
 $url = $_GET["url"] ?? "";
 
-// Si no hay URL específica, mostrar home.php como página principal
+// Si no hay URL específica, mostrar home como página principal
 if (empty($url)) {
-    include 'app/views/home.php';
-    exit;
+    $url = 'home';
 }
 
 $arrayUrl = explode("/", $url);
@@ -115,7 +122,8 @@ $authRoutes = [
     'login' => 'AuthController',
     'register' => 'AuthController',
     'logout' => 'AuthController',
-    'dashboard' => 'DashboardController'
+    'dashboard' => 'DashboardController',
+    'home' => 'HomeController'
 ];
 
 // Si es una ruta de autenticación, usar el nuevo sistema
@@ -132,7 +140,8 @@ if (isset($authRoutes[$controller])) {
             'login' => 'showLogin',
             'register' => 'showRegister',
             'logout' => 'logout',
-            'dashboard' => 'index'
+            'dashboard' => 'index',
+            'home' => 'index'
         ];
         
         $methodName = $methodMap[$controller] ?? $method;
@@ -151,8 +160,12 @@ if (isset($authRoutes[$controller])) {
 // Sistema original para rutas existentes
 $controller = $controller . 'Controller';
 $controllersPath = "Controllers/" . $controller . '.php';
+$appControllersPath = "app/controllers/" . $controller . '.php';
 
-if (file_exists($controllersPath)) {
+if (file_exists($appControllersPath)) {
+    require_once $appControllersPath;
+    $controllerInstance = new $controller();
+} elseif (file_exists($controllersPath)) {
     require_once $controllersPath;
     $controllerInstance = new $controller();
     
@@ -211,17 +224,27 @@ if (file_exists($controllersPath)) {
 // Función helper para renderizar vistas
 function render($view, $data = []) {
     extract($data);
+    
+    // Buscar en la estructura de vistas de la app
     $viewPath = "app/views/$view.php";
     
     if (file_exists($viewPath)) {
         include $viewPath;
     } else {
-        // Intentar con la ruta original
-        $viewPath = "Views/$view.php";
+        // Intentar con subdirectorios
+        $viewPath = "app/views/layouts/$view.php";
         if (file_exists($viewPath)) {
             include $viewPath;
         } else {
-            echo "<h1>Error 404</h1><p>Vista no encontrada: $view</p>";
+            // Intentar con la ruta original
+            $viewPath = "Views/$view.php";
+            if (file_exists($viewPath)) {
+                include $viewPath;
+            } else {
+                // Mostrar error 404
+                http_response_code(404);
+                echo "<h1>Error 404</h1><p>Vista no encontrada: $view</p>";
+            }
         }
     }
 }

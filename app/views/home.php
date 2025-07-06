@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php'
+require_once 'app/views/header.php';
 ?>
 
 
@@ -38,7 +38,7 @@ require_once 'header.php'
                     <a class="nav-link" href="#contact">Contact Us</a>
                 </li>
                 <li class="nav-item">
-                    <a href="login" class="btn btn-primary ml-xl-4">Iniciar sesión</a>
+                    <a href="/login" class="btn btn-primary ml-xl-4">Iniciar sesión</a>
                 </li>
             </ul>
         </div>
@@ -291,5 +291,5 @@ require_once 'header.php'
 
 
 <?php
-require_once 'footer.php'
+require_once 'app/views/footer.php';
 ?>

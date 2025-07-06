@@ -9,13 +9,12 @@ class BaseController {
     protected $userModel;
     
     public function __construct() {
-        // Incluir el controlador de autenticación
-        require_once 'app/controllers/AuthController.php';
-        $this->auth = new AuthController();
-        
         // Incluir modelos básicos
-        require_once 'app/models/UserModel.php';
+        require_once __DIR__ . '/../models/UserModel.php';
         $this->userModel = new UserModel();
+        
+        // Inicializar auth como null por ahora para evitar dependencia circular
+        $this->auth = null;
     }
     
     /**
@@ -164,7 +163,7 @@ class BaseController {
      * @return array|null
      */
     protected function getCurrentUser() {
-        if (!$this->auth->isAuthenticated()) {
+        if (!isset($_SESSION['user_id'])) {
             return null;
         }
         
@@ -186,6 +185,14 @@ class BaseController {
      */
     protected function getCurrentUserRole() {
         return $_SESSION['user_role'] ?? null;
+    }
+    
+    /**
+     * Verificar si el usuario está autenticado
+     * @return bool
+     */
+    protected function isAuthenticated() {
+        return isset($_SESSION['user_id']);
     }
     
     /**

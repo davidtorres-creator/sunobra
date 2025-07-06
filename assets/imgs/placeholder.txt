@@ -1,0 +1,15 @@
+Este directorio contiene las imágenes del sitio web SunObra.
+
+Imágenes necesarias:
+- logo sun obra.png (logo de la empresa)
+- gallary-1.jpg (imágenes de galería)
+- gallary-2.jpg
+- gallary-3.jpg
+- construction-bg.jpg (imagen de fondo para el header)
+- about-bg.jpg (imagen de fondo para la sección nosotros)
+
+Por favor, coloca las imágenes correspondientes en este directorio.
+
+Si no tienes las imágenes, puedes usar servicios temporales como:
+- https://via.placeholder.com/400x300
+- https://picsum.photos/400/300 

@@ -38,6 +38,17 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
+# Redirigir página principal a index.php
+RewriteRule ^$ index.php [L]
+
+# Rutas de la aplicación
+RewriteRule ^home$ index.php?url=home [L]
+RewriteRule ^home/$ index.php?url=home [L]
+RewriteRule ^login$ index.php?url=login [L]
+RewriteRule ^register$ index.php?url=register [L]
+RewriteRule ^dashboard$ index.php?url=dashboard [L]
+RewriteRule ^logout$ index.php?url=logout [L]
+
 # Proteger archivos sensibles
 <Files "*.sql">
     Order allow,deny
