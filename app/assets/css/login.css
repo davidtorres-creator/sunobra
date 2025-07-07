@@ -1,0 +1,175 @@
+/* ===================================
+   SUNOBRA - ESTILOS DE LOGIN
+   =================================== */
+
+/* Fondo de la página */
+body {
+    background: var(--primary-gradient);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenedor principal del login */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 400px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Header del login */
+.login-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+.login-header h2 {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-weight: 700;
+}
+
+.login-header p {
+    position: relative;
+    z-index: 2;
+    margin: 10px 0 0 0;
+    opacity: 0.9;
+}
+
+/* Cuerpo del login */
+.login-body {
+    padding: 40px 30px;
+}
+
+/* Selector de tipo de usuario */
+.user-type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.user-type-btn {
+    flex: 1;
+    padding: 15px 10px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    font-weight: 500;
+}
+
+.user-type-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.user-type-btn.active {
+    border-color: var(--primary-color);
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.user-type-btn i {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.user-type-btn small {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* Botón de login */
+.btn-login {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    font-weight: 600;
+    transition: var(--transition);
+    width: 100%;
+    font-size: 1rem;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background: var(--primary-gradient);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Enlaces */
+.login-body a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.login-body a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-container {
+        margin: 20px;
+        max-width: none;
+    }
+    
+    .login-body {
+        padding: 30px 20px;
+    }
+    
+    .user-type-selector {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .user-type-btn {
+        padding: 12px;
+    }
+} 

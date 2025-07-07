@@ -1,0 +1,306 @@
+/* ===================================
+   SUNOBRA - ESTILOS DE REGISTRO
+   =================================== */
+
+/* Fondo de la página */
+body {
+    background: var(--primary-gradient);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Centrado solo para el registro */
+.register-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 500px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Header del registro */
+.register-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+.register-header h2 {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-weight: 700;
+}
+
+.register-header p {
+    position: relative;
+    z-index: 2;
+    margin: 10px 0 0 0;
+    opacity: 0.9;
+}
+
+/* Cuerpo del registro */
+.register-body {
+    padding: 40px 30px;
+}
+
+/* Selector de tipo de usuario */
+.user-type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.user-type-btn {
+    flex: 1;
+    padding: 15px 10px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    font-weight: 500;
+}
+
+.user-type-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.user-type-btn.active {
+    border-color: var(--primary-color);
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.user-type-btn i {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.user-type-btn small {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* Grupos de campos */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Campos de formulario */
+.form-control {
+    border-radius: var(--border-radius);
+    border: 2px solid #e9ecef;
+    padding: 12px 15px;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Validación de campos */
+.form-control.is-invalid {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control.is-valid {
+    border-color: var(--success-color);
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--danger-color);
+}
+
+.valid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--success-color);
+}
+
+/* Botón de registro */
+.btn-register {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    font-weight: 600;
+    transition: var(--transition);
+    width: 100%;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background: var(--primary-gradient);
+}
+
+.btn-register:active {
+    transform: translateY(0);
+}
+
+/* Enlaces */
+.register-body a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.register-body a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Términos y condiciones */
+.terms-checkbox {
+    margin: 20px 0;
+}
+
+.terms-checkbox .form-check-input {
+    margin-right: 10px;
+}
+
+.terms-checkbox .form-check-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.terms-checkbox .form-check-label a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.terms-checkbox .form-check-label a:hover {
+    text-decoration: underline;
+}
+
+/* Indicador de fortaleza de contraseña */
+.password-strength {
+    margin-top: 10px;
+}
+
+.password-strength .progress {
+    height: 5px;
+    border-radius: 3px;
+}
+
+.password-strength .strength-text {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.strength-weak {
+    color: var(--danger-color);
+}
+
+.strength-medium {
+    color: var(--warning-color);
+}
+
+.strength-strong {
+    color: var(--success-color);
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .register-container {
+        margin: 20px;
+        max-width: none;
+    }
+    
+    .register-body {
+        padding: 30px 20px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .user-type-selector {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .user-type-btn {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-header {
+        padding: 20px;
+    }
+    
+    .register-body {
+        padding: 25px 15px;
+    }
+} 

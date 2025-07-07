@@ -6,7 +6,7 @@
 
 // Configuración de la base de datos
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'sunobra');
+define('DB_NAME', 'SunObra');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
@@ -122,7 +122,7 @@ function baseUrl($path = '') {
 
 // Función para obtener la ruta de assets
 function assetUrl($path = '') {
-    return baseUrl('assets/' . ltrim($path, '/'));
+    return baseUrl('app/assets/' . ltrim($path, '/'));
 }
 
 // Función para obtener la ruta de uploads

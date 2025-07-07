@@ -1,4 +1,7 @@
 <?php
+/**
+ * Controlador para la página principal
+ */
 require_once __DIR__ . '/BaseController.php';
 
 class HomeController extends BaseController {
@@ -8,17 +11,17 @@ class HomeController extends BaseController {
     }
     
     /**
-     * Mostrar página principal
+     * Página principal
      */
     public function index() {
         $this->render('home', [
-            'title' => 'SunObra - Construyelo con tus manos',
+            'title' => 'SunObra - Plataforma de Servicios de Construcción',
             'user' => $this->getCurrentUser()
         ]);
     }
     
     /**
-     * Mostrar página de contacto
+     * Página de contacto
      */
     public function contact() {
         $this->render('contact', [
@@ -27,29 +30,20 @@ class HomeController extends BaseController {
     }
     
     /**
-     * Mostrar página de servicios
-     */
-    public function services() {
-        $this->render('services', [
-            'title' => 'Servicios - SunObra'
-        ]);
-    }
-    
-    /**
-     * Mostrar página de proyectos
-     */
-    public function projects() {
-        $this->render('projects', [
-            'title' => 'Proyectos - SunObra'
-        ]);
-    }
-    
-    /**
-     * Mostrar página sobre nosotros
+     * Página sobre nosotros
      */
     public function about() {
         $this->render('about', [
             'title' => 'Sobre Nosotros - SunObra'
+        ]);
+    }
+    
+    /**
+     * Página de servicios
+     */
+    public function services() {
+        $this->render('services', [
+            'title' => 'Servicios - SunObra'
         ]);
     }
 } 

@@ -1,0 +1,466 @@
+/* ===================================
+   SUNOBRA - UTILIDADES Y HELPERS
+   =================================== */
+
+/* ===================================
+   ESPACIADO
+   =================================== */
+
+.mt-6 { margin-top: 4rem !important; }
+.mb-6 { margin-bottom: 4rem !important; }
+.ml-6 { margin-left: 4rem !important; }
+.mr-6 { margin-right: 4rem !important; }
+
+.pt-6 { padding-top: 4rem !important; }
+.pb-6 { padding-bottom: 4rem !important; }
+.pl-6 { padding-left: 4rem !important; }
+.pr-6 { padding-right: 4rem !important; }
+
+/* ===================================
+   TEXTO
+   =================================== */
+
+.text-gradient {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.text-truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ===================================
+   FONDOS
+   =================================== */
+
+.bg-gradient-primary {
+    background: var(--primary-gradient);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+}
+
+/* ===================================
+   BORDES
+   =================================== */
+
+.border-gradient {
+    border: 2px solid;
+    border-image: var(--primary-gradient) 1;
+}
+
+.border-radius-custom {
+    border-radius: var(--border-radius);
+}
+
+.border-radius-lg {
+    border-radius: 15px;
+}
+
+.border-radius-xl {
+    border-radius: 20px;
+}
+
+/* ===================================
+   SOMBRAS
+   =================================== */
+
+.shadow-custom {
+    box-shadow: var(--box-shadow);
+}
+
+.shadow-lg-custom {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-xl-custom {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-hover {
+    transition: var(--transition);
+}
+
+.shadow-hover:hover {
+    box-shadow: var(--box-shadow);
+}
+
+/* ===================================
+   POSICIONAMIENTO
+   =================================== */
+
+.position-sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.position-sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1020;
+}
+
+/* ===================================
+   DISPLAY
+   =================================== */
+
+.d-inline-flex {
+    display: inline-flex !important;
+}
+
+.d-grid {
+    display: grid !important;
+}
+
+.d-table {
+    display: table !important;
+}
+
+.d-table-cell {
+    display: table-cell !important;
+}
+
+.d-table-row {
+    display: table-row !important;
+}
+
+/* ===================================
+   FLEXBOX
+   =================================== */
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-around {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.flex-column-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===================================
+   GRID
+   =================================== */
+
+.grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.grid-auto-fill {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+/* ===================================
+   VISIBILIDAD
+   =================================== */
+
+.visible-hover {
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.visible-hover:hover {
+    opacity: 1;
+}
+
+.hidden-hover {
+    opacity: 1;
+    transition: var(--transition);
+}
+
+.hidden-hover:hover {
+    opacity: 0;
+}
+
+/* ===================================
+   CURSOR
+   =================================== */
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-grab {
+    cursor: grab;
+}
+
+.cursor-grabbing {
+    cursor: grabbing;
+}
+
+.cursor-zoom-in {
+    cursor: zoom-in;
+}
+
+.cursor-zoom-out {
+    cursor: zoom-out;
+}
+
+/* ===================================
+   OVERFLOW
+   =================================== */
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-scroll {
+    overflow: scroll;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+/* ===================================
+   Z-INDEX
+   =================================== */
+
+.z-1000 {
+    z-index: 1000;
+}
+
+.z-1010 {
+    z-index: 1010;
+}
+
+.z-1020 {
+    z-index: 1020;
+}
+
+.z-1030 {
+    z-index: 1030;
+}
+
+.z-1040 {
+    z-index: 1040;
+}
+
+/* ===================================
+   ANIMACIONES
+   =================================== */
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease-out;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease-out;
+}
+
+.slide-in-up {
+    animation: slideInUp 0.5s ease-out;
+}
+
+.slide-in-down {
+    animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===================================
+   TRANSFORMACIONES
+   =================================== */
+
+.scale-hover {
+    transition: var(--transition);
+}
+
+.scale-hover:hover {
+    transform: scale(1.05);
+}
+
+.rotate-hover {
+    transition: var(--transition);
+}
+
+.rotate-hover:hover {
+    transform: rotate(5deg);
+}
+
+.skew-hover {
+    transition: var(--transition);
+}
+
+.skew-hover:hover {
+    transform: skew(-2deg);
+}
+
+/* ===================================
+   RESPONSIVE UTILIDADES
+   =================================== */
+
+@media (max-width: 576px) {
+    .d-sm-none {
+        display: none !important;
+    }
+    
+    .d-sm-block {
+        display: block !important;
+    }
+    
+    .d-sm-flex {
+        display: flex !important;
+    }
+    
+    .text-sm-center {
+        text-align: center !important;
+    }
+    
+    .text-sm-left {
+        text-align: left !important;
+    }
+    
+    .text-sm-right {
+        text-align: right !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .d-md-none {
+        display: none !important;
+    }
+    
+    .d-md-block {
+        display: block !important;
+    }
+    
+    .d-md-flex {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .d-lg-none {
+        display: none !important;
+    }
+    
+    .d-lg-block {
+        display: block !important;
+    }
+    
+    .d-lg-flex {
+        display: flex !important;
+    }
+} 

@@ -1,24 +1,26 @@
 RewriteEngine On
 
-# Configuración de seguridad
-<IfModule mod_headers.c>
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options DENY
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
+# Redirigir todas las peticiones a index.php excepto archivos y directorios existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
 
-# Configuración de caché para archivos estáticos
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType image/png "access plus 1 month"
-    ExpiresByType image/jpg "access plus 1 month"
-    ExpiresByType image/jpeg "access plus 1 month"
-    ExpiresByType image/gif "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
-</IfModule>
+# Configuraciones de seguridad
+<Files ".htaccess">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevenir acceso a archivos sensibles
+<FilesMatch "\.(env|log|sql|md|txt)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Configurar headers de seguridad
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
 
 # Compresión GZIP
 <IfModule mod_deflate.c>
@@ -33,21 +35,17 @@ RewriteEngine On
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-# Proteger archivos sensibles
-<Files "*.sql">
-    Order allow,deny
-    Deny from all
-</Files>
-
-<Files "*.log">
-    Order allow,deny
-    Deny from all
-</Files>
-
-<Files ".env">
-    Order allow,deny
-    Deny from all
-</Files>
+# Cache para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/ico "access plus 1 year"
+</IfModule>
 
 # Configuración de PHP
 <IfModule mod_php.c>
@@ -69,9 +67,4 @@ RewriteRule ^dashboard$ index.php?url=dashboard [L]
 RewriteRule ^logout$ index.php?url=logout [L]
 
 # Redirigir página principal a index.php
-RewriteRule ^$ index.php [L]
-
-# Redirigir todas las peticiones a index.php excepto archivos y directorios existentes
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,L] 
+RewriteRule ^$ index.php [L] 

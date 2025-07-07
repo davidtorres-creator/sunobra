@@ -134,6 +134,14 @@ class Database {
     }
     
     /**
+     * Obtener la conexión mysqli
+     * @return mysqli
+     */
+    public function getConnection() {
+        return $this->connection;
+    }
+    
+    /**
      * Obtener información de la conexión
      * @return array
      */
