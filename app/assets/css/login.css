@@ -11,10 +11,8 @@ body {
 
 /* Contenedor principal del login */
 .login-container {
-    display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     background: white;
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -172,4 +170,12 @@ body {
     .user-type-btn {
         padding: 12px;
     }
+}
+
+.login-viewport {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--primary-gradient);
 } 

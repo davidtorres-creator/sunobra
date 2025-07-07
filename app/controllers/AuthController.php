@@ -23,19 +23,11 @@ class AuthController extends BaseController {
      * Mostrar formulario de login
      */
     public function showLogin() {
-        // Si ya está autenticado, redirigir al dashboard correspondiente
-        if ($this->isAuthenticated()) {
-            $this->redirectToDashboard();
-            return;
-        }
-        
         $this->render('auth/login', [
             'title' => 'Inicio de Sesión - SunObra',
             'error' => $_SESSION['auth_error'] ?? null,
             'success' => $_SESSION['auth_success'] ?? null
         ]);
-        
-        // Limpiar mensajes de sesión
         unset($_SESSION['auth_error'], $_SESSION['auth_success']);
     }
     
@@ -175,26 +167,18 @@ class AuthController extends BaseController {
      * Mostrar formulario de registro
      */
     public function showRegister() {
-        if ($this->isAuthenticated()) {
-            $this->redirectToDashboard();
-            return;
-        }
-        
         // Obtener el tipo de usuario desde la URL
         $userType = $_GET['type'] ?? '';
-        
         // Validar el tipo de usuario
         if (!empty($userType) && !in_array($userType, ['obrero', 'cliente'])) {
             $userType = '';
         }
-        
         $this->render('auth/register', [
             'title' => 'Registro - SunObra',
             'error' => $_SESSION['auth_error'] ?? null,
             'success' => $_SESSION['auth_success'] ?? null,
             'userType' => $userType
         ]);
-        
         unset($_SESSION['auth_error'], $_SESSION['auth_success']);
     }
     

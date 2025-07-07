@@ -1,4 +1,5 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
+<div class="login-viewport">
     <div class="login-container">
         <div class="login-header">
             <h2><i class="fas fa-hammer"></i> SunObra</h2>
@@ -62,6 +63,7 @@
             </div>
         </div>
     </div>
+</div>
     <script>
         // Selector de tipo de usuario
         document.querySelectorAll('.user-type-btn').forEach(btn => {

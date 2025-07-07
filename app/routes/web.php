@@ -20,9 +20,9 @@ $router->get('/welcome', 'IndexController@welcome');
 $router->get('/dashboard', 'IndexController@dashboard');
 
 // Rutas de autenticación
-$router->get('/login', 'AuthController@showLogin', ['guest']);
+$router->get('/login', 'AuthController@showLogin');
 $router->post('/login', 'AuthController@login', ['guest']);
-$router->get('/register', 'AuthController@showRegister', ['guest']);
+$router->get('/register', 'AuthController@showRegister');
 $router->post('/register', 'AuthController@register', ['guest']);
 $router->get('/logout', 'AuthController@logout');
 
