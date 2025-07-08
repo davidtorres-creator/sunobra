@@ -281,8 +281,32 @@ class AuthController extends BaseController {
                         break;
                 }
                 
-                $_SESSION['auth_success'] = 'Registro exitoso. Por favor, inicie sesión.';
-                $this->redirect('/login');
+                // Iniciar sesión automáticamente después del registro exitoso
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['email'] = $userData['email'];
+                $_SESSION['user_role'] = $userData['userType'];
+                $_SESSION['nombre'] = $userData['nombre'];
+                $_SESSION['apellido'] = $userData['apellido'];
+                
+                // Redirigir al dashboard correspondiente
+                switch ($userData['userType']) {
+                    case 'cliente':
+                        $_SESSION['cliente_id'] = $userId;
+                        $_SESSION['auth_success'] = 'Registro exitoso. ¡Bienvenido a SunObra!';
+                        $this->redirect('/cliente/dashboard');
+                        break;
+                        
+                    case 'obrero':
+                        $_SESSION['obrero_id'] = $userId;
+                        $_SESSION['auth_success'] = 'Registro exitoso. ¡Bienvenido a SunObra!';
+                        $this->redirect('/obrero/dashboard');
+                        break;
+                        
+                    default:
+                        $_SESSION['auth_success'] = 'Registro exitoso. ¡Bienvenido a SunObra!';
+                        $this->redirect('/login');
+                        break;
+                }
                 
             } else {
                 $_SESSION['auth_error'] = 'Error al crear la cuenta. Por favor, intente nuevamente.';

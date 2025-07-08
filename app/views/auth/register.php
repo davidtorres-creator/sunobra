@@ -117,6 +117,17 @@
 
             <!-- Formulario Paso 2 - Información de Obrero -->
             <form method="POST" action="/register" id="obreroForm" style="display: none;">
+                <!-- Campos ocultos del primer paso -->
+                <input type="hidden" name="nombre" id="obrero_nombre">
+                <input type="hidden" name="apellido" id="obrero_apellido">
+                <input type="hidden" name="email" id="obrero_email">
+                <input type="hidden" name="password" id="obrero_password">
+                <input type="hidden" name="confirmPassword" id="obrero_confirmPassword">
+                <input type="hidden" name="userType" id="obrero_userType" value="obrero">
+                <input type="hidden" name="telefono" id="obrero_telefono">
+                <input type="hidden" name="direccion" id="obrero_direccion">
+                <input type="hidden" name="terminos" id="obrero_terminos">
+                
                 <div class="text-center mb-4">
                     <h4 class="text-primary"><i class="fas fa-hard-hat"></i> Información Profesional</h4>
                     <p class="text-muted">Completa tu perfil profesional</p>
@@ -272,6 +283,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedType === 'obrero') {
             // Validar formulario básico
             if (validateBasicForm()) {
+                // Copiar datos del primer formulario a los campos ocultos del segundo
+                document.getElementById('obrero_nombre').value = document.getElementById('nombre').value;
+                document.getElementById('obrero_apellido').value = document.getElementById('apellido').value;
+                document.getElementById('obrero_email').value = document.getElementById('email').value;
+                document.getElementById('obrero_password').value = document.getElementById('password').value;
+                document.getElementById('obrero_confirmPassword').value = document.getElementById('confirmPassword').value;
+                document.getElementById('obrero_telefono').value = document.getElementById('telefono').value;
+                document.getElementById('obrero_direccion').value = document.getElementById('direccion').value;
+                document.getElementById('obrero_terminos').value = document.getElementById('terminos').checked ? 'on' : '';
+                
                 registerForm.style.display = 'none';
                 obreroForm.style.display = 'block';
                 
