@@ -2,12 +2,30 @@
    SUNOBRA - ARCHIVO CSS PRINCIPAL
    =================================== */
 
-/* Importar todos los archivos CSS */
+/* Variables CSS críticas */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --dark-color: #2d3748;
+    --light-color: #f7fafc;
+    --success-color: #48bb78;
+    --warning-color: #ed8936;
+    --danger-color: #f56565;
+    --info-color: #4299e1;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --transition: all 0.3s ease;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Importar solo los archivos CSS críticos */
 @import url('main.css');
 @import url('components.css');
-@import url('utilities.css');
-@import url('login.css');
-@import url('register.css');
+
+/* Cargar CSS no crítico de forma asíncrona */
+@import url('utilities.css') print;
+@import url('login.css') print;
+@import url('register.css') print;
 
 /* ===================================
    ESTILOS ADICIONALES GLOBALES
