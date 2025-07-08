@@ -303,7 +303,45 @@ class ClienteController extends BaseController {
                 'servicio' => 'Albañilería',
                 'fecha' => '2024-01-15',
                 'estado' => 'pendiente',
-                'descripcion' => 'Reparación de pared'
+                'descripcion' => 'Necesito reparar una pared que tiene grietas en mi sala de estar. La pared es de aproximadamente 3x4 metros.',
+                'presupuesto' => 300000,
+                'cotizaciones' => 2
+            ],
+            [
+                'id' => 2,
+                'servicio' => 'Electricidad',
+                'fecha' => '2024-01-12',
+                'estado' => 'aceptado',
+                'descripcion' => 'Instalación de nuevos tomacorrientes en la cocina y sala. Necesito 4 tomacorrientes adicionales.',
+                'presupuesto' => 450000,
+                'cotizaciones' => 3
+            ],
+            [
+                'id' => 3,
+                'servicio' => 'Plomería',
+                'fecha' => '2024-01-10',
+                'estado' => 'en-proceso',
+                'descripcion' => 'Reparación de fuga en el baño principal. El agua se está filtrando por el techo.',
+                'presupuesto' => 200000,
+                'cotizaciones' => 1
+            ],
+            [
+                'id' => 4,
+                'servicio' => 'Pintura',
+                'fecha' => '2024-01-08',
+                'estado' => 'completado',
+                'descripcion' => 'Pintura completa de la casa. 3 habitaciones, sala, comedor y cocina.',
+                'presupuesto' => 800000,
+                'cotizaciones' => 4
+            ],
+            [
+                'id' => 5,
+                'servicio' => 'Carpintería',
+                'fecha' => '2024-01-05',
+                'estado' => 'rechazado',
+                'descripcion' => 'Fabricación de estanterías para la biblioteca. Necesito 3 estanterías de 2 metros de alto.',
+                'presupuesto' => 600000,
+                'cotizaciones' => 0
             ]
         ];
     }
@@ -329,11 +367,128 @@ class ClienteController extends BaseController {
         return [
             [
                 'id' => 1,
-                'servicio' => 'Electricidad',
-                'fecha' => '2024-01-10',
+                'servicio' => 'Pintura',
+                'fecha' => '2024-01-08',
                 'estado' => 'completado',
-                'precio' => 80000
+                'precio' => 800000,
+                'descripcion' => 'Pintura completa de la casa. 3 habitaciones, sala, comedor y cocina.',
+                'obrero' => 'Carlos Mendoza',
+                'calificacion' => 5,
+                'comentario' => 'Excelente trabajo, muy profesional y puntual. La calidad de la pintura es superior.',
+                'duracion' => '5 días'
+            ],
+            [
+                'id' => 2,
+                'servicio' => 'Electricidad',
+                'fecha' => '2023-12-20',
+                'estado' => 'completado',
+                'precio' => 450000,
+                'descripcion' => 'Instalación de nuevos tomacorrientes en la cocina y sala. 4 tomacorrientes adicionales.',
+                'obrero' => 'Miguel Torres',
+                'calificacion' => 4,
+                'comentario' => 'Buen trabajo, instalación correcta. Un poco lento pero muy cuidadoso.',
+                'duracion' => '2 días'
+            ],
+            [
+                'id' => 3,
+                'servicio' => 'Albañilería',
+                'fecha' => '2023-12-15',
+                'estado' => 'completado',
+                'precio' => 320000,
+                'descripcion' => 'Reparación de pared con grietas en la sala de estar. Pared de 3x4 metros.',
+                'obrero' => 'Roberto Silva',
+                'calificacion' => 5,
+                'comentario' => 'Trabajo impecable, la pared quedó como nueva. Muy recomendado.',
+                'duracion' => '3 días'
+            ],
+            [
+                'id' => 4,
+                'servicio' => 'Plomería',
+                'fecha' => '2023-12-10',
+                'estado' => 'completado',
+                'precio' => 180000,
+                'descripcion' => 'Reparación de fuga en el baño principal. El agua se filtraba por el techo.',
+                'obrero' => 'Luis Ramírez',
+                'calificacion' => 4,
+                'comentario' => 'Solucionó el problema rápidamente. Precio justo por el trabajo.',
+                'duracion' => '1 día'
+            ],
+            [
+                'id' => 5,
+                'servicio' => 'Carpintería',
+                'fecha' => '2023-11-28',
+                'estado' => 'completado',
+                'precio' => 550000,
+                'descripcion' => 'Fabricación de estanterías para la biblioteca. 3 estanterías de 2 metros de alto.',
+                'obrero' => 'Fernando López',
+                'calificacion' => 5,
+                'comentario' => 'Excelente carpintero, las estanterías quedaron perfectas. Muy detallista.',
+                'duracion' => '7 días'
+            ],
+            [
+                'id' => 6,
+                'servicio' => 'Electricidad',
+                'fecha' => '2023-11-15',
+                'estado' => 'completado',
+                'precio' => 280000,
+                'descripcion' => 'Cambio de cableado en la habitación principal. Instalación de ventilador de techo.',
+                'obrero' => 'Miguel Torres',
+                'calificacion' => 4,
+                'comentario' => 'Buen trabajo, el ventilador funciona perfectamente.',
+                'duracion' => '2 días'
+            ],
+            [
+                'id' => 7,
+                'servicio' => 'Pintura',
+                'fecha' => '2023-11-05',
+                'estado' => 'completado',
+                'precio' => 350000,
+                'descripcion' => 'Pintura de la fachada de la casa. Dos colores, trabajo de altura.',
+                'obrero' => 'Carlos Mendoza',
+                'calificacion' => 5,
+                'comentario' => 'Increíble trabajo, la casa se ve completamente renovada.',
+                'duracion' => '4 días'
+            ],
+            [
+                'id' => 8,
+                'servicio' => 'Albañilería',
+                'fecha' => '2023-10-25',
+                'estado' => 'completado',
+                'precio' => 420000,
+                'descripcion' => 'Construcción de muro de contención en el jardín. 10 metros lineales.',
+                'obrero' => 'Roberto Silva',
+                'calificacion' => 5,
+                'comentario' => 'Muro sólido y bien construido. Muy profesional en su trabajo.',
+                'duracion' => '6 días'
             ]
         ];
+    }
+    
+    /**
+     * Calcular tiempo transcurrido desde una fecha
+     */
+    public function getTimeAgo($date) {
+        $timestamp = strtotime($date);
+        $now = time();
+        $diff = $now - $timestamp;
+        
+        if ($diff < 60) {
+            return 'unos segundos';
+        } elseif ($diff < 3600) {
+            $minutes = floor($diff / 60);
+            return $minutes . ' minuto' . ($minutes > 1 ? 's' : '');
+        } elseif ($diff < 86400) {
+            $hours = floor($diff / 3600);
+            return $hours . ' hora' . ($hours > 1 ? 's' : '');
+        } elseif ($diff < 2592000) {
+            $days = floor($diff / 86400);
+            return $days . ' día' . ($days > 1 ? 's' : '');
+        } elseif ($diff < 31536000) {
+            $months = floor($diff / 2592000);
+            return $months . ' mes' . ($months > 1 ? 'es' : '');
+        } else {
+            $years = floor($diff / 31536000);
+            return $years . ' año' . ($years > 1 ? 's' : '');
+        }
     }
 } 

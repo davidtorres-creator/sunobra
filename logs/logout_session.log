@@ -32,3 +32,17 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 1
+)
+
+DESPUES: Array
+(
+)
+
