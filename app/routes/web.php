@@ -15,7 +15,7 @@ $router = new Router();
 // ========================================
 
 // Página principal - IndexController como predeterminado
-$router->get('/', 'IndexController@index');
+$router->get('HomeController@index', 'HomeController@index');
 $router->get('/welcome', 'IndexController@welcome');
 $router->get('/dashboard', 'IndexController@dashboard');
 
