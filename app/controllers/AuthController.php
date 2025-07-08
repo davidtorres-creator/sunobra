@@ -196,8 +196,18 @@ class AuthController extends BaseController {
             'apellido' => trim($_POST['apellido'] ?? ''),
             'email' => trim($_POST['email'] ?? ''),
             'password' => $_POST['password'] ?? '',
-            'confirm_password' => $_POST['confirm_password'] ?? '',
-            'userType' => $_POST['userType'] ?? ''
+            'confirmPassword' => $_POST['confirmPassword'] ?? '',
+            'userType' => $_POST['userType'] ?? '',
+            'telefono' => trim($_POST['telefono'] ?? ''),
+            'direccion' => trim($_POST['direccion'] ?? ''),
+            // Campos específicos de cliente
+            'preferencias_contacto' => $_POST['preferencias_contacto'] ?? 'Email',
+            // Campos específicos de obrero
+            'especialidades' => $_POST['especialidades'] ?? [],
+            'experiencia' => $_POST['experiencia'] ?? 0,
+            'tarifa_hora' => $_POST['tarifa_hora'] ?? null,
+            'certificaciones' => trim($_POST['certificaciones'] ?? ''),
+            'descripcion' => trim($_POST['descripcion'] ?? '')
         ];
         
         // Validar datos
@@ -229,12 +239,14 @@ class AuthController extends BaseController {
             }
             
             // Insertar nuevo usuario
-            $sql_insert = "INSERT INTO usuarios (nombre, apellido, correo, password, tipo_usuario) VALUES (?, ?, ?, ?, ?)";
+            $sql_insert = "INSERT INTO usuarios (nombre, apellido, correo, telefono, direccion, password, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt_insert = $connection->prepare($sql_insert);
-            $stmt_insert->bind_param("sssss", 
+            $stmt_insert->bind_param("sssssss", 
                 $userData['nombre'], 
                 $userData['apellido'], 
-                $userData['email'], 
+                $userData['email'],
+                $userData['telefono'],
+                $userData['direccion'],
                 $userData['password'], 
                 $userData['userType']
             );
@@ -245,16 +257,26 @@ class AuthController extends BaseController {
                 // Crear registro específico según el tipo de usuario
                 switch ($userData['userType']) {
                     case 'cliente':
-                        $sql_cliente = "INSERT INTO clientes (id, preferencias_contacto) VALUES (?, 'email')";
+                        $sql_cliente = "INSERT INTO clientes (id, preferencias_contacto) VALUES (?, ?)";
                         $stmt_cliente = $connection->prepare($sql_cliente);
-                        $stmt_cliente->bind_param("i", $userId);
+                        $stmt_cliente->bind_param("is", $userId, $userData['preferencias_contacto']);
                         $stmt_cliente->execute();
                         break;
                         
                     case 'obrero':
-                        $sql_obrero = "INSERT INTO obreros (id, especialidad, experiencia, disponibilidad) VALUES (?, 'General', 0, 1)";
+                        // Convertir array de especialidades a string
+                        $especialidades_str = implode(', ', $userData['especialidades']);
+                        
+                        $sql_obrero = "INSERT INTO obreros (id, especialidad, experiencia, certificaciones, descripcion, tarifa_hora, disponibilidad) VALUES (?, ?, ?, ?, ?, ?, 1)";
                         $stmt_obrero = $connection->prepare($sql_obrero);
-                        $stmt_obrero->bind_param("i", $userId);
+                        $stmt_obrero->bind_param("isissd", 
+                            $userId, 
+                            $especialidades_str,
+                            $userData['experiencia'],
+                            $userData['certificaciones'],
+                            $userData['descripcion'],
+                            $userData['tarifa_hora']
+                        );
                         $stmt_obrero->execute();
                         break;
                 }
@@ -281,10 +303,9 @@ class AuthController extends BaseController {
      * Cerrar sesión
      */
     public function logout() {
-        // Destruir todas las variables de sesión
+        // Log antes de destruir
+        file_put_contents(__DIR__ . '/../../logs/logout_session.log', "ANTES: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
         $_SESSION = array();
-        
-        // Destruir la sesión
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000,
@@ -292,10 +313,9 @@ class AuthController extends BaseController {
                 $params["secure"], $params["httponly"]
             );
         }
-        
         session_destroy();
-        
-        // Redirigir al login
+        // Log después de destruir
+        file_put_contents(__DIR__ . '/../../logs/logout_session.log', "DESPUES: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
         $this->redirect('/login');
     }
     
@@ -369,14 +389,29 @@ class AuthController extends BaseController {
             $errors[] = 'La contraseña debe tener al menos 6 caracteres.';
         }
         
-        if ($userData['password'] !== $userData['confirm_password']) {
+        if ($userData['password'] !== $userData['confirmPassword']) {
             $errors[] = 'Las contraseñas no coinciden.';
         }
         
         if (empty($userData['userType'])) {
             $errors[] = 'Debe seleccionar un tipo de usuario.';
-        } elseif (!in_array($userData['userType'], ['obrero', 'cliente', 'admin'])) {
+        } elseif (!in_array($userData['userType'], ['obrero', 'cliente'])) {
             $errors[] = 'Tipo de usuario no válido.';
+        }
+        
+        // Validaciones específicas para obreros
+        if ($userData['userType'] === 'obrero') {
+            if (empty($userData['especialidades'])) {
+                $errors[] = 'Debe seleccionar al menos una especialidad.';
+            }
+            
+            if (!is_numeric($userData['experiencia']) || $userData['experiencia'] < 0) {
+                $errors[] = 'Los años de experiencia deben ser un número válido.';
+            }
+            
+            if (!empty($userData['tarifa_hora']) && (!is_numeric($userData['tarifa_hora']) || $userData['tarifa_hora'] < 0)) {
+                $errors[] = 'La tarifa por hora debe ser un número válido.';
+            }
         }
         
         return $errors;

@@ -1,128 +1,154 @@
-# 🏗️ SunObra - Plataforma de Servicios de Construcción
+# 📁 Scripts de Proceso y Diagnóstico - SunObra
 
-## 📋 Estado Actual
+Esta carpeta contiene todos los scripts de proceso, diagnóstico y pruebas para el sistema SunObra.
 
-**✅ LIMPIEZA COMPLETADA**
+## 🔧 Scripts Disponibles
 
-El proyecto ha sido completamente refactorizado y limpiado:
+### 1. `process-register.php`
+**Propósito:** Proceso directo de registro para diagnóstico
+- Simula el proceso completo de registro
+- Prueba la creación de usuarios en la base de datos
+- Verifica la funcionalidad del AuthController
+- Muestra información detallada del proceso
 
-### 🗑️ **Eliminado:**
-- 25 archivos de test duplicados
-- Documentación obsoleta
-- Arquitectura híbrida problemática
-- Configuraciones duplicadas
+**Uso:** Acceder directamente via navegador
+**URL:** `/processes/process-register.php`
 
-### ✅ **Mantenido:**
-- Estructura MVC limpia
-- Sistema de autenticación unificado
-- Configuración de base de datos unificada
-- Vistas modernas y responsivas
+### 2. `test-routing.php`
+**Propósito:** Prueba del sistema de enrutamiento
+- Verifica que todas las rutas estén funcionando
+- Prueba la creación de controladores
+- Verifica la conexión a la base de datos
+- Prueba middleware de autenticación
 
----
+**Uso:** Acceder directamente via navegador
+**URL:** `/processes/test-routing.php`
 
-## 🚀 **Inicio Rápido**
+### 3. `test-form.php`
+**Propósito:** Prueba del formulario HTML de registro
+- Formulario completo de registro con validación
+- Prueba el envío de datos POST
+- Verifica la validación de campos
+- Incluye SweetAlert2 para feedback
 
-### Requisitos
-- PHP 7.4+
-- MySQL 5.7+
-- Apache con mod_rewrite habilitado
+**Uso:** Acceder directamente via navegador
+**URL:** `/processes/test-form.php`
 
-### Instalación
-1. Clonar el repositorio
-2. Configurar base de datos `SunObra`
-3. Acceder a `http://localhost/sunobra`
+### 4. `debug-register.php`
+**Propósito:** Debug específico del proceso de registro
+- Muestra datos POST recibidos
+- Verifica la estructura de datos
+- Prueba la validación de campos
+- Identifica problemas en el formulario
 
----
+**Uso:** Acceder directamente via navegador
+**URL:** `/processes/debug-register.php`
 
-## 📁 **Estructura del Proyecto**
+### 5. `check-database.php`
+**Propósito:** Verificación del estado de la base de datos
+- Muestra estructura de tablas
+- Verifica conexión a MySQL
+- Lista usuarios existentes
+- Verifica integridad de datos
 
+**Uso:** Acceder directamente via navegador
+**URL:** `/processes/check-database.php`
+
+### 6. `test-swal.php`
+**Propósito:** Prueba de SweetAlert2
+- Demuestra diferentes tipos de alertas
+- Prueba mensajes de éxito y error
+- Verifica la integración de SweetAlert2
+- Incluye ejemplos de uso
+
+**Uso:** Acceder directamente via navegador
+**URL:** `/processes/test-swal.php`
+
+## 🚀 Cómo Usar
+
+1. **Para diagnosticar problemas de registro:**
+   ```
+   http://localhost/sunobra/processes/process-register.php
+   ```
+
+2. **Para probar el sistema de rutas:**
+   ```
+   http://localhost/sunobra/processes/test-routing.php
+   ```
+
+3. **Para probar el formulario:**
+   ```
+   http://localhost/sunobra/processes/test-form.php
+   ```
+
+4. **Para verificar la base de datos:**
+   ```
+   http://localhost/sunobra/processes/check-database.php
+   ```
+
+## 🔍 Proceso de Diagnóstico
+
+### Paso 1: Verificar Sistema de Rutas
+```bash
+# Acceder a test-routing.php
+# Verificar que todas las rutas estén funcionando
+# Confirmar que los controladores se crean correctamente
 ```
-sunobra/
-├── app/
-│   ├── controllers/     # Controladores MVC
-│   ├── models/         # Modelos de datos
-│   ├── views/          # Vistas del sistema
-│   └── library/        # Librerías y utilidades
-├── assets/             # Recursos estáticos
-├── config.php          # Configuración principal
-├── index.php           # Punto de entrada
-└── .htaccess          # Configuración Apache
+
+### Paso 2: Probar Formulario
+```bash
+# Acceder a test-form.php
+# Completar el formulario con datos de prueba
+# Verificar que los datos se envían correctamente
 ```
 
----
+### Paso 3: Verificar Base de Datos
+```bash
+# Acceder a check-database.php
+# Confirmar que las tablas existen
+# Verificar que los datos se guardan correctamente
+```
 
-## 🔧 **Funcionalidades Implementadas**
+### Paso 4: Probar Proceso Completo
+```bash
+# Acceder a process-register.php
+# Ejecutar el proceso completo de registro
+# Verificar que el usuario se crea en la base de datos
+```
 
-### ✅ **Sistema de Autenticación**
-- Login unificado para clientes, obreros y administradores
-- Registro de usuarios
-- Manejo de sesiones seguro
-- Redirección automática según rol
+## ⚠️ Notas Importantes
 
-### ✅ **Enrutamiento Limpio**
-- Sistema de rutas simple y eficiente
-- Controladores organizados
-- Manejo de errores 404/500
+- Todos los scripts incluyen manejo de errores
+- Los scripts muestran información detallada para diagnóstico
+- Algunos scripts simulan datos si no se proporcionan
+- Los scripts están diseñados para desarrollo y debugging
 
-### ✅ **Interfaz Moderna**
-- Diseño responsivo con Bootstrap 5
-- Iconos FontAwesome
-- Gradientes y animaciones suaves
-- UX optimizada
+## 🛠️ Troubleshooting
 
----
+### Problema: No se muestran mensajes después del registro
+**Solución:** Verificar `process-register.php` para ver si el controlador se ejecuta correctamente
 
-## 🛣️ **Rutas Disponibles**
+### Problema: Formulario no envía datos
+**Solución:** Usar `test-form.php` para verificar la estructura del formulario
 
-| Ruta | Controlador | Descripción |
-|------|-------------|-------------|
-| `/` | HomeController | Página principal |
-| `/login` | AuthController | Formulario de login |
-| `/register` | AuthController | Formulario de registro |
-| `/logout` | AuthController | Cerrar sesión |
-| `/services` | HomeController | Página de servicios |
-| `/about` | HomeController | Sobre nosotros |
-| `/contact` | HomeController | Contacto |
+### Problema: Error de base de datos
+**Solución:** Usar `check-database.php` para verificar la conexión y estructura
 
----
+### Problema: Rutas no funcionan
+**Solución:** Usar `test-routing.php` para verificar el sistema de enrutamiento
 
-## 🎨 **Características de Diseño**
+## 📝 Logs y Debugging
 
-- **Paleta de colores**: Gradientes azul-púrpura
-- **Framework**: Bootstrap 5
-- **Iconos**: FontAwesome 6
-- **Responsive**: Mobile-first design
-- **Animaciones**: Transiciones suaves
+Todos los scripts incluyen:
+- Información detallada de errores
+- Estado de la sesión
+- Datos POST recibidos
+- Estado de la base de datos
+- Trazas de ejecución
 
----
+## 🔒 Seguridad
 
-## 🔒 **Seguridad**
-
-- Validación de entrada
-- Sanitización de datos
-- Tokens CSRF
-- Headers de seguridad
-- Escape de HTML
-
----
-
-## 📊 **Próximos Pasos**
-
-1. **Implementar dashboards** por rol
-2. **Sistema de cotizaciones**
-3. **Gestión de proyectos**
-4. **Sistema de pagos**
-5. **Notificaciones**
-
----
-
-## 🐛 **Reportar Problemas**
-
-Si encuentras algún problema, por favor:
-1. Verificar que XAMPP esté iniciado
-2. Comprobar que la base de datos exista
-3. Revisar los logs de error
-
----
-
-**🎉 ¡Proyecto limpio y listo para desarrollo!** 
+- Los scripts están en una carpeta separada
+- Solo deben usarse en desarrollo
+- No exponer en producción
+- Incluyen validación de datos 

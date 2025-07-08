@@ -118,7 +118,14 @@ class Router {
     /**
      * Obtener la URL actual
      */
-    private function getCurrentUrl() {
+    public function getCurrentUrl() {
+        // Si hay un parámetro 'url' (desde .htaccess), usarlo
+        if (isset($_GET['url'])) {
+            $url = '/' . trim($_GET['url'], '/');
+            return $url ?: '/';
+        }
+        
+        // Si no, usar REQUEST_URI
         $url = $_SERVER['REQUEST_URI'] ?? '/';
         $url = parse_url($url, PHP_URL_PATH);
         return $url ?: '/';
@@ -225,6 +232,7 @@ class Router {
      * Middleware para clientes
      */
     private function clienteMiddleware() {
+        var_dump($_SESSION); exit; // DEPURACIÓN
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'cliente') {
             $this->redirect('/login');
             return false;

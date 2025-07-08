@@ -21,11 +21,11 @@
 /* Importar solo los archivos CSS críticos */
 @import url('main.css');
 @import url('components.css');
+@import url('login.css');
+@import url('register.css');
 
 /* Cargar CSS no crítico de forma asíncrona */
 @import url('utilities.css') print;
-@import url('login.css') print;
-@import url('register.css') print;
 
 /* ===================================
    ESTILOS ADICIONALES GLOBALES

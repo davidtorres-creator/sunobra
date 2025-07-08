@@ -1,0 +1,20 @@
+ANTES: Array
+(
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => root
+    [nombre] => David
+    [apellido] => Antolinez
+    [cliente_id] => 1
+    [user_email] => idruizv@gmail.com
+    [user_name] => Iván
+    [user_lastname] => Ruiz
+    [logged_in] => 1
+    [login_time] => 1751941171
+    [ByFrost_redirect] => root&action=dashboard
+)
+
+DESPUES: Array
+(
+)
+

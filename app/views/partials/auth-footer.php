@@ -1,6 +1,3 @@
-<?php
-// Footer global para SunObra
-?>
     <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container text-center">
@@ -21,8 +18,10 @@
             <div class="mt-3 small">&copy; <?= date('Y') ?> SunObra. Todos los derechos reservados.</div>
         </div>
     </footer>
+    
     <!-- Scripts de terceros -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Scripts de SunObra -->
     <script src="/app/assets/js/index.js"></script>
@@ -30,7 +29,7 @@
     <!-- Debug en desarrollo -->
     <?php if (defined('DEBUG') && DEBUG): ?>
     <script>
-        console.log('🔧 Modo debug activado - SunObra');
+        console.log('🔧 Modo debug activado - SunObra Auth');
         document.addEventListener('sunobra:ready', function(event) {
             console.log('✅ Sistema JavaScript listo:', event.detail);
         });

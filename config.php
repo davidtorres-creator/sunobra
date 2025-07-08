@@ -14,7 +14,7 @@ define('DB_CHARSET', 'utf8mb4');
 // Configuración de la aplicación
 define('APP_NAME', 'SunObra');
 define('APP_VERSION', '1.0.0');
-define('APP_URL', 'http://localhost/sunobra');
+define('APP_URL', 'http://localhost:8080');
 define('APP_TIMEZONE', 'America/Bogota');
 
 // Configuración de seguridad

@@ -15,10 +15,13 @@ class IndexController extends BaseController {
      * Página principal - Punto de entrada por defecto
      */
     public function index() {
-        // Siempre mostrar la página home principal
+        $user = null;
+        if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+            $user = $this->getCurrentUser();
+        }
         $this->render('home', [
             'title' => 'SunObra - Plataforma de Servicios de Construcción',
-            'user' => $this->getCurrentUser(),
+            'user' => $user,
             'isHome' => true
         ]);
     }
@@ -27,9 +30,13 @@ class IndexController extends BaseController {
      * Página de bienvenida
      */
     public function welcome() {
+        $user = null;
+        if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+            $user = $this->getCurrentUser();
+        }
         $this->render('welcome', [
             'title' => 'Bienvenido a SunObra',
-            'user' => $this->getCurrentUser()
+            'user' => $user
         ]);
     }
     
@@ -85,5 +92,97 @@ class IndexController extends BaseController {
         $this->render('errors/500', [
             'title' => 'Error del Servidor - SunObra'
         ]);
+    }
+    
+    /**
+     * Manejar parámetros GET para compatibilidad
+     */
+    public function handleGetParams() {
+        $view = $_GET['view'] ?? '';
+        $action = $_GET['action'] ?? '';
+        
+        // Mapear parámetros GET a rutas
+        switch ($view) {
+            case 'root':
+                switch ($action) {
+                    case 'dashboard':
+                        $this->dashboard();
+                        break;
+                    default:
+                        $this->index();
+                        break;
+                }
+                break;
+            case 'auth':
+                switch ($action) {
+                    case 'login':
+                        $this->redirect('/login');
+                        break;
+                    case 'register':
+                        $this->redirect('/register');
+                        break;
+                    case 'logout':
+                        $this->redirect('/logout');
+                        break;
+                    default:
+                        $this->index();
+                        break;
+                }
+                break;
+            case 'admin':
+                if ($this->isAuthenticated() && $_SESSION['user_role'] === 'admin') {
+                    switch ($action) {
+                        case 'dashboard':
+                            $this->redirect('/admin/dashboard');
+                            break;
+                        case 'users':
+                            $this->redirect('/admin/users');
+                            break;
+                        default:
+                            $this->redirect('/admin/dashboard');
+                            break;
+                    }
+                } else {
+                    $this->redirect('/login');
+                }
+                break;
+            case 'cliente':
+                if ($this->isAuthenticated() && $_SESSION['user_role'] === 'cliente') {
+                    switch ($action) {
+                        case 'dashboard':
+                            $this->redirect('/cliente/dashboard');
+                            break;
+                        case 'profile':
+                            $this->redirect('/cliente/profile');
+                            break;
+                        default:
+                            $this->redirect('/cliente/dashboard');
+                            break;
+                    }
+                } else {
+                    $this->redirect('/login');
+                }
+                break;
+            case 'obrero':
+                if ($this->isAuthenticated() && $_SESSION['user_role'] === 'obrero') {
+                    switch ($action) {
+                        case 'dashboard':
+                            $this->redirect('/obrero/dashboard');
+                            break;
+                        case 'profile':
+                            $this->redirect('/obrero/profile');
+                            break;
+                        default:
+                            $this->redirect('/obrero/dashboard');
+                            break;
+                    }
+                } else {
+                    $this->redirect('/login');
+                }
+                break;
+            default:
+                $this->index();
+                break;
+        }
     }
 } 

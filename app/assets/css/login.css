@@ -2,17 +2,37 @@
    SUNOBRA - ESTILOS DE LOGIN
    =================================== */
 
+/* Variables CSS básicas si no están definidas */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --transition: all 0.3s ease;
+    --border-radius: 8px;
+}
+
 /* Fondo de la página */
 body {
     background: var(--primary-gradient);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 /* Contenedor principal del login */
-.login-container {
+.login-viewport {
+    display: flex;
     align-items: center;
     justify-content: center;
+    min-height: calc(100vh - 140px - 200px); /* Ajustar para navbar y footer */
+    background: var(--primary-gradient);
+    padding: 20px;
+    margin-top: 70px; /* Espacio para navbar fija */
+    margin-bottom: 50px; /* Espacio para footer */
+}
+
+.login-container {
     background: white;
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -20,6 +40,11 @@ body {
     width: 100%;
     max-width: 400px;
     animation: fadeInUp 0.6s ease-out;
+}
+
+/* Contenedor más ancho para el registro */
+.register-viewport .login-container {
+    max-width: 600px;
 }
 
 /* Header del login */
@@ -105,6 +130,48 @@ body {
     opacity: 0.8;
 }
 
+/* Checklist de especialidades */
+.especialidades-checklist {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.especialidades-checklist .form-check {
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.especialidades-checklist .form-check:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.especialidades-checklist .form-check-input {
+    margin-right: 10px;
+}
+
+.especialidades-checklist .form-check-label {
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.especialidades-checklist .form-check-label i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.especialidades-checklist .form-check-input:checked + .form-check-label {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
 /* Botón de login */
 .btn-login {
     background: var(--primary-gradient);
@@ -115,16 +182,37 @@ body {
     transition: var(--transition);
     width: 100%;
     font-size: 1rem;
+    color: white;
 }
 
 .btn-login:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
     background: var(--primary-gradient);
+    color: white;
 }
 
 .btn-login:active {
     transform: translateY(0);
+}
+
+/* Botón secundario */
+.btn-secondary {
+    background: #6c757d;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    font-weight: 600;
+    transition: var(--transition);
+    font-size: 1rem;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+    color: white;
 }
 
 /* Enlaces */
@@ -158,6 +246,10 @@ body {
         max-width: none;
     }
     
+    .register-viewport .login-container {
+        max-width: none;
+    }
+    
     .login-body {
         padding: 30px 20px;
     }
@@ -170,12 +262,8 @@ body {
     .user-type-btn {
         padding: 12px;
     }
-}
-
-.login-viewport {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: var(--primary-gradient);
+    
+    .especialidades-checklist {
+        padding: 15px;
+    }
 } 

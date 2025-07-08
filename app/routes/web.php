@@ -15,9 +15,12 @@ $router = new Router();
 // ========================================
 
 // Página principal - IndexController como predeterminado
-$router->get('HomeController@index', 'HomeController@index');
+$router->get('/', 'IndexController@index');
 $router->get('/welcome', 'IndexController@welcome');
 $router->get('/dashboard', 'IndexController@dashboard');
+
+// Ruta para manejar parámetros GET (compatibilidad)
+$router->get('/index.php', 'IndexController@handleGetParams');
 
 // Rutas de autenticación
 $router->get('/login', 'AuthController@showLogin');
