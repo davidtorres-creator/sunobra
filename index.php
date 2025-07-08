@@ -14,19 +14,30 @@ define('DEBUG', true);
 // Configuración de zona horaria
 date_default_timezone_set('America/Bogota');
 
+// Optimizaciones de rendimiento
+if (extension_loaded('zlib')) {
+    ini_set('zlib.output_compression', 1);
+    ini_set('zlib.output_compression_level', 5);
+}
+
+// Iniciar buffer de salida para optimización
+ob_start();
+
+// Configurar headers de rendimiento
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
+header('Cache-Control: public, max-age=3600');
+
 // Incluir archivos de configuración
 require_once 'config.php';
+require_once 'performance.php';
 require_once 'app/library/db.php';
 
 // Iniciar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// Configurar headers de seguridad básicos
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('X-XSS-Protection: 1; mode=block');
 
 // Sistema de autoload simple
 spl_autoload_register(function($class) {
@@ -143,3 +154,6 @@ function isActive($path) {
 
 // Cargar y ejecutar las rutas
 require_once 'app/routes/web.php';
+
+// Flush output buffer para optimización
+ob_end_flush();

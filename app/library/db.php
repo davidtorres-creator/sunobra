@@ -18,6 +18,12 @@ class Database {
      */
     private function connect() {
         try {
+            // Configurar opciones de conexión para mejor rendimiento
+            $options = [
+                MYSQLI_OPT_CONNECT_TIMEOUT => 5,
+                MYSQLI_OPT_READ_TIMEOUT => 30,
+            ];
+            
             $this->connection = new mysqli($this->host, $this->username, $this->password, $this->database);
             
             if ($this->connection->connect_error) {
@@ -26,6 +32,11 @@ class Database {
             
             // Establecer charset
             $this->connection->set_charset("utf8");
+            
+            // Configurar opciones de rendimiento
+            $this->connection->query("SET SESSION sql_mode = ''");
+            $this->connection->query("SET SESSION wait_timeout = 600");
+            $this->connection->query("SET SESSION interactive_timeout = 600");
             
         } catch (Exception $e) {
             error_log("Error de conexión a la base de datos: " . $e->getMessage());

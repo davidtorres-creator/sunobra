@@ -14,7 +14,11 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="<?= assetUrl('imgs/nosotros.jpg') ?>" alt="Nosotros" class="img-fluid rounded">
+                <img src="<?= assetUrl('imgs/about-section.jpg') ?>" 
+                     alt="Nosotros" 
+                     class="img-fluid rounded"
+                     loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/600x400/667eea/ffffff?text=SunObra'">
             </div>
             <div class="col-lg-6">
                 <h2 class="mb-4 text-primary">Nosotros</h2>
@@ -33,7 +37,11 @@
         <div class="row g-4 justify-content-center">
             <div class="col-sm-6 col-lg-3">
                 <div class="card h-100">
-                    <img src="<?= assetUrl('imgs/proyecto1.jpg') ?>" class="card-img-top" alt="Proyecto 1">
+                    <img src="<?= assetUrl('imgs/gallary-1.jpg') ?>" 
+                         class="card-img-top" 
+                         alt="Proyecto 1"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=Proyecto+1'">
                     <div class="card-body">
                         <h5 class="card-title">Proyecto 1</h5>
                         <p class="card-text">Remodelación de vivienda en Bogotá.</p>
@@ -42,7 +50,11 @@
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card h-100">
-                    <img src="<?= assetUrl('imgs/proyecto2.jpg') ?>" class="card-img-top" alt="Proyecto 2">
+                    <img src="<?= assetUrl('imgs/gallary-2.jpg') ?>" 
+                         class="card-img-top" 
+                         alt="Proyecto 2"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=Proyecto+2'">
                     <div class="card-body">
                         <h5 class="card-title">Proyecto 2</h5>
                         <p class="card-text">Construcción de local comercial.</p>
@@ -51,7 +63,11 @@
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card h-100">
-                    <img src="<?= assetUrl('imgs/proyecto3.jpg') ?>" class="card-img-top" alt="Proyecto 3">
+                    <img src="<?= assetUrl('imgs/gallary-3.jpg') ?>" 
+                         class="card-img-top" 
+                         alt="Proyecto 3"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=Proyecto+3'">
                     <div class="card-body">
                         <h5 class="card-title">Proyecto 3</h5>
                         <p class="card-text">Obra nueva en conjunto residencial.</p>
@@ -60,7 +76,11 @@
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card h-100">
-                    <img src="<?= assetUrl('imgs/proyecto4.jpg') ?>" class="card-img-top" alt="Proyecto 4">
+                    <img src="<?= assetUrl('imgs/main.jpg') ?>" 
+                         class="card-img-top" 
+                         alt="Proyecto 4"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/300x200/667eea/ffffff?text=Proyecto+4'">
                     <div class="card-body">
                         <h5 class="card-title">Proyecto 4</h5>
                         <p class="card-text">Reparación de fachada institucional.</p>
@@ -78,7 +98,10 @@
         <div class="row g-4 justify-content-center">
             <div class="col-md-4">
                 <div class="card h-100 text-center">
-                    <img src="<?= assetUrl('imgs/david-torres.jpg') ?>" alt="David Torres" class="card-img-top">
+                    <img src="https://via.placeholder.com/300x300/667eea/ffffff?text=David+Torres" 
+                         alt="David Torres" 
+                         class="card-img-top"
+                         loading="lazy">
                     <div class="card-body">
                         <h4 class="mb-2">David Torres</h4>
                         <p>Fundador y CEO. Apasionado por la construcción y la tecnología.</p>
@@ -89,7 +112,10 @@
             </div>
             <div class="col-md-4">
                 <div class="card h-100 text-center">
-                    <img src="<?= assetUrl('imgs/felipe-bermudez.jpg') ?>" alt="Felipe Bermudez" class="card-img-top">
+                    <img src="https://via.placeholder.com/300x300/667eea/ffffff?text=Felipe+Bermudez" 
+                         alt="Felipe Bermudez" 
+                         class="card-img-top"
+                         loading="lazy">
                     <div class="card-body">
                         <h4 class="mb-2">Felipe Bermudez</h4>
                         <p>Co-fundador. Experto en gestión de proyectos y redes sociales.</p>
@@ -100,7 +126,10 @@
             </div>
             <div class="col-md-4">
                 <div class="card h-100 text-center">
-                    <img src="<?= assetUrl('imgs/dilan-ruiz.jpg') ?>" alt="Dilan Ruiz" class="card-img-top">
+                    <img src="https://via.placeholder.com/300x300/667eea/ffffff?text=Dilan+Ruiz" 
+                         alt="Dilan Ruiz" 
+                         class="card-img-top"
+                         loading="lazy">
                     <div class="card-body">
                         <h4 class="mb-2">Dilan Ruiz</h4>
                         <p>Líder de operaciones. Conectando talento con oportunidades.</p>
@@ -162,29 +191,70 @@
 </section>
 
 <!-- Scripts -->
+<!-- Critical scripts loaded immediately -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtme10pzgKSPeJVJrG1O3tjR6lk98o4w8&callback=initMap"></script>
+
+<!-- Non-critical scripts loaded asynchronously -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js" defer></script>
+
+<!-- Google Maps loaded only when needed -->
 <script>
-    // Initialize WOW.js
-    new WOW().init();
+    // Initialize WOW.js when loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load WOW.js if available
+        if (typeof WOW !== 'undefined') {
+            new WOW().init();
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    });
+    
+    // Load Google Maps only when map section is visible
+    function loadGoogleMaps() {
+        if (typeof google === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCtme10pzgKSPeJVJrG1O3tjR6lk98o4w8&callback=initMap';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+    }
+    
     // Initialize Google Maps
     function initMap() {
-        const map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 4.7110, lng: -74.0721 }, // Bogotá coordinates
-            zoom: 12,
-        });
+        const mapElement = document.getElementById("map");
+        if (mapElement && typeof google !== 'undefined') {
+            const map = new google.maps.Map(mapElement, {
+                center: { lat: 4.7110, lng: -74.0721 }, // Bogotá coordinates
+                zoom: 12,
+            });
+        }
     }
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // Load maps when contact section is visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                loadGoogleMaps();
+                observer.unobserve(entry.target);
             }
         });
     });
+    
+    // Observe the contact section
+    const contactSection = document.getElementById('contacto');
+    if (contactSection) {
+        observer.observe(contactSection);
+    }
 </script>
 <?php require_once __DIR__ . '/partials/footer.php'; ?> 
