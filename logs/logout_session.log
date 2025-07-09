@@ -102,3 +102,18 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => admin
+    [nombre] => David
+    [apellido] => Antolinez
+    [admin_id] => 1
+    [auth_success] => Usuario actualizado correctamente
+)
+
+DESPUES: Array
+(
+)
+

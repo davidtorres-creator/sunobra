@@ -68,7 +68,23 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="/profile">Perfil</a></li>
+                                <?php
+                                $profileUrl = '/profile';
+                                if (isset($_SESSION['user_role'])) {
+                                    switch ($_SESSION['user_role']) {
+                                        case 'admin':
+                                            $profileUrl = '/admin/profile';
+                                            break;
+                                        case 'cliente':
+                                            $profileUrl = '/cliente/profile';
+                                            break;
+                                        case 'obrero':
+                                            $profileUrl = '/obrero/profile';
+                                            break;
+                                    }
+                                }
+                                ?>
+                                <li><a class="dropdown-item" href="<?= $profileUrl ?>">Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
                             </ul>

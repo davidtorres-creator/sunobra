@@ -48,6 +48,7 @@ $router->prefix('/admin')
         $router->delete('/users/{id}', 'AdminController@deleteUser');
         $router->get('/reports', 'AdminController@reports');
         $router->get('/settings', 'AdminController@settings');
+        $router->get('/profile', 'AdminController@profile'); // <-- nueva ruta
     });
 
 // ========================================

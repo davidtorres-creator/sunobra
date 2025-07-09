@@ -239,6 +239,53 @@ class AdminController extends BaseController {
         $this->render('admin/settings', $data);
     }
     
+    /**
+     * Perfil del administrador
+     */
+    public function profile() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'admin') {
+            $this->redirect('/login');
+            return;
+        }
+        $user = $this->getCurrentUser();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nombre = trim($_POST['nombre'] ?? '');
+            $apellido = trim($_POST['apellido'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            if (empty($nombre) || empty($apellido) || empty($email)) {
+                $_SESSION['auth_error'] = 'Nombre, apellido y email son requeridos';
+                $this->redirect('/admin/profile');
+                return;
+            }
+            try {
+                $userModel = new UserModel();
+                $updated = $userModel->updateUser($user['id'], [
+                    'nombre' => $nombre,
+                    'apellido' => $apellido,
+                    'email' => $email
+                ]);
+                if ($updated) {
+                    $_SESSION['auth_success'] = 'Perfil actualizado correctamente';
+                    // Actualizar sesión
+                    $_SESSION['nombre'] = $nombre;
+                    $_SESSION['apellido'] = $apellido;
+                    $_SESSION['email'] = $email;
+                } else {
+                    $_SESSION['auth_error'] = 'Error al actualizar el perfil';
+                }
+            } catch (Exception $e) {
+                $_SESSION['auth_error'] = 'Error del servidor: ' . $e->getMessage();
+            }
+            $this->redirect('/admin/profile');
+            return;
+        }
+        $data = [
+            'title' => 'Perfil de Administrador',
+            'user' => $this->getCurrentUser()
+        ];
+        $this->render('admin/profile', $data);
+    }
+
     // ========================================
     // MÉTODOS PRIVADOS
     // ========================================
