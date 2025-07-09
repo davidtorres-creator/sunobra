@@ -31,7 +31,7 @@ class Database {
             }
             
             // Establecer charset
-            $this->connection->set_charset("utf8");
+            $this->connection->set_charset("utf8mb4");
             
             // Configurar opciones de rendimiento
             $this->connection->query("SET SESSION sql_mode = ''");

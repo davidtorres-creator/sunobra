@@ -60,6 +60,7 @@ $router->prefix('/cliente')
         $router->get('/dashboard', 'ClienteController@dashboard');
         $router->get('/profile', 'ClienteController@profile');
         $router->post('/profile', 'ClienteController@updateProfile');
+        $router->post('/change-password', 'ClienteController@changePassword');
         $router->get('/services', 'ClienteController@services');
         $router->get('/services/{id}', 'ClienteController@showService');
         $router->post('/services/{id}/request', 'ClienteController@requestService');

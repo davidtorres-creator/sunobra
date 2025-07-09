@@ -1,0 +1,15 @@
+2025-07-08 21:07:03 - Iniciando updateUser para ID: 3
+2025-07-08 21:07:03 - Datos: Array
+(
+    [password] => $2y$10$oExFI7fioC9j0zly1mYfc.rZ9sapBvQI.7rbLjY8U5YeeWK4Jhgfy
+)
+
+2025-07-08 21:07:03 - SQL: UPDATE usuarios SET password = ? WHERE id = ?
+2025-07-08 21:07:03 - Tipos: si
+2025-07-08 21:07:03 - Valores: Array
+(
+    [0] => $2y$10$oExFI7fioC9j0zly1mYfc.rZ9sapBvQI.7rbLjY8U5YeeWK4Jhgfy
+    [1] => 3
+)
+
+2025-07-08 21:07:03 - ÉXITO: Filas afectadas: 1

@@ -1,5 +1,7 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
 
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -46,7 +48,7 @@
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Información Personal</h6>
+                            <h6 class="m-0 font-weight-bold">Información Personal</h6>
                         </div>
                         <div class="card-body">
                             <form action="/cliente/profile" method="POST">
@@ -150,7 +152,7 @@
                 <h5 class="modal-title">Cambiar Contraseña</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="/cliente/change-password" method="POST">
+            <form action="/cliente/change-password" method="POST" id="changePasswordForm">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Contraseña Actual</label>
@@ -158,20 +160,79 @@
                     </div>
                     <div class="mb-3">
                         <label for="new_password" class="form-label">Nueva Contraseña</label>
-                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required minlength="6">
+                        <div class="form-text">La contraseña debe tener al menos 6 caracteres</div>
                     </div>
                     <div class="mb-3">
                         <label for="confirm_password" class="form-label">Confirmar Nueva Contraseña</label>
                         <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        <div class="invalid-feedback" id="password-match-error">
+                            Las contraseñas no coinciden
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+                    <button type="submit" class="btn btn-primary" id="submitPasswordBtn">Cambiar Contraseña</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+// Validación del formulario de cambio de contraseña
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('changePasswordForm');
+    const newPassword = document.getElementById('new_password');
+    const confirmPassword = document.getElementById('confirm_password');
+    const submitBtn = document.getElementById('submitPasswordBtn');
+    const passwordMatchError = document.getElementById('password-match-error');
+    
+    function validatePasswords() {
+        const newPass = newPassword.value;
+        const confirmPass = confirmPassword.value;
+        
+        if (confirmPass && newPass !== confirmPass) {
+            confirmPassword.classList.add('is-invalid');
+            passwordMatchError.style.display = 'block';
+            submitBtn.disabled = true;
+            return false;
+        } else {
+            confirmPassword.classList.remove('is-invalid');
+            passwordMatchError.style.display = 'none';
+            submitBtn.disabled = false;
+            return true;
+        }
+    }
+    
+    // Validar cuando se escribe en el campo de confirmación
+    confirmPassword.addEventListener('input', validatePasswords);
+    newPassword.addEventListener('input', validatePasswords);
+    
+    // Validar antes de enviar el formulario
+    form.addEventListener('submit', function(e) {
+        if (!validatePasswords()) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Mostrar indicador de carga
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cambiando...';
+        submitBtn.disabled = true;
+    });
+    
+    // Resetear el formulario cuando se cierra el modal
+    const modal = document.getElementById('changePasswordModal');
+    modal.addEventListener('hidden.bs.modal', function() {
+        form.reset();
+        newPassword.classList.remove('is-invalid');
+        confirmPassword.classList.remove('is-invalid');
+        passwordMatchError.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Cambiar Contraseña';
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/../partials/footer.php'; ?> 

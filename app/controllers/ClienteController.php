@@ -100,6 +100,119 @@ class ClienteController extends BaseController {
     }
     
     /**
+     * Cambiar contraseña del cliente
+     */
+    public function changePassword() {
+        // Log para debugging
+        $logFile = __DIR__ . '/../../logs/change_password.log';
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - Iniciando cambio de contraseña\n", FILE_APPEND);
+        
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'cliente') {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Usuario no autenticado o no es cliente\n", FILE_APPEND);
+            $this->redirect('/login');
+            return;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Método no es POST\n", FILE_APPEND);
+            $this->redirect('/cliente/profile');
+            return;
+        }
+        
+        // Validar datos
+        $current_password = $_POST['current_password'] ?? '';
+        $new_password = $_POST['new_password'] ?? '';
+        $confirm_password = $_POST['confirm_password'] ?? '';
+        
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - Datos recibidos: current=" . (!empty($current_password) ? 'SI' : 'NO') . 
+            ", new=" . (!empty($new_password) ? 'SI' : 'NO') . ", confirm=" . (!empty($confirm_password) ? 'SI' : 'NO') . "\n", FILE_APPEND);
+        
+        if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Campos vacíos\n", FILE_APPEND);
+            $_SESSION['auth_error'] = 'Todos los campos son requeridos';
+            $this->redirect('/cliente/profile');
+            return;
+        }
+        
+        if ($new_password !== $confirm_password) {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Contraseñas no coinciden\n", FILE_APPEND);
+            $_SESSION['auth_error'] = 'Las contraseñas nuevas no coinciden';
+            $this->redirect('/cliente/profile');
+            return;
+        }
+        
+        if (strlen($new_password) < 6) {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Contraseña muy corta\n", FILE_APPEND);
+            $_SESSION['auth_error'] = 'La nueva contraseña debe tener al menos 6 caracteres';
+            $this->redirect('/cliente/profile');
+            return;
+        }
+        
+        try {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Usuario ID: " . $_SESSION['user_id'] . "\n", FILE_APPEND);
+            
+            // Verificar contraseña actual
+            $userModel = new UserModel();
+            $user = $userModel->getUserById($_SESSION['user_id']);
+            
+            if (!$user) {
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - Usuario no encontrado en BD\n", FILE_APPEND);
+                $_SESSION['auth_error'] = 'Usuario no encontrado';
+                $this->redirect('/cliente/profile');
+                return;
+            }
+            
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Usuario encontrado: " . $user['nombre'] . " " . $user['apellido'] . "\n", FILE_APPEND);
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Hash actual: " . substr($user['password'], 0, 50) . "...\n", FILE_APPEND);
+            
+            if (!password_verify($current_password, $user['password'])) {
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - Contraseña actual incorrecta\n", FILE_APPEND);
+                $_SESSION['auth_error'] = 'La contraseña actual es incorrecta';
+                $this->redirect('/cliente/profile');
+                return;
+            }
+            
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Contraseña actual verificada correctamente\n", FILE_APPEND);
+            
+            // Actualizar contraseña
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Nuevo hash generado: " . substr($hashed_password, 0, 50) . "...\n", FILE_APPEND);
+            
+            $updated = $userModel->updateUser($_SESSION['user_id'], [
+                'password' => $hashed_password
+            ]);
+            
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Resultado updateUser: " . ($updated ? 'TRUE' : 'FALSE') . "\n", FILE_APPEND);
+            
+            if ($updated) {
+                // Verificar que realmente se guardó
+                $updatedUser = $userModel->getUserById($_SESSION['user_id']);
+                $passwordChanged = password_verify($new_password, $updatedUser['password']);
+                
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - Verificación post-update: " . ($passwordChanged ? 'TRUE' : 'FALSE') . "\n", FILE_APPEND);
+                
+                if ($passwordChanged) {
+                    $_SESSION['auth_success'] = 'Contraseña actualizada correctamente';
+                    file_put_contents($logFile, date('Y-m-d H:i:s') . " - ÉXITO: Contraseña actualizada\n", FILE_APPEND);
+                } else {
+                    $_SESSION['auth_error'] = 'Error: La contraseña no se guardó correctamente';
+                    file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: Contraseña no se guardó\n", FILE_APPEND);
+                }
+            } else {
+                $_SESSION['auth_error'] = 'Error al actualizar la contraseña';
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: updateUser falló\n", FILE_APPEND);
+            }
+            
+        } catch (Exception $e) {
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - EXCEPCIÓN: " . $e->getMessage() . "\n", FILE_APPEND);
+            $_SESSION['auth_error'] = 'Error del servidor: ' . $e->getMessage();
+        }
+        
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - Redirigiendo a profile\n", FILE_APPEND);
+        $this->redirect('/cliente/profile');
+    }
+    
+    /**
      * Servicios disponibles
      */
     public function services() {

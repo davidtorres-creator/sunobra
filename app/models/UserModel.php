@@ -65,14 +65,18 @@ class UserModel {
      */
     public function verifyCredentials($email, $password, $userType) {
         try {
-            $sql = "SELECT * FROM usuarios WHERE correo = ? AND password = ? AND tipo_usuario = ?";
+            $sql = "SELECT * FROM usuarios WHERE correo = ? AND tipo_usuario = ?";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sss", $email, $password, $userType);
+            $stmt->bind_param("ss", $email, $userType);
             $stmt->execute();
             $result = $stmt->get_result();
             
             if ($result->num_rows > 0) {
-                return $result->fetch_assoc();
+                $user = $result->fetch_assoc();
+                // Verificar la contraseña usando password_verify
+                if (password_verify($password, $user['password'])) {
+                    return $user;
+                }
             }
             
             return null;
@@ -89,13 +93,24 @@ class UserModel {
      */
     public function createUser($userData) {
         try {
+            // Asegurar que la contraseña esté hasheada
+            if (!isset($userData['password']) || empty($userData['password'])) {
+                throw new Exception('La contraseña es requerida');
+            }
+            
+            // Hash de la contraseña si no está hasheada
+            $hashedPassword = $userData['password'];
+            if (!password_get_info($userData['password'])['algoName']) {
+                $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
+            }
+            
             $sql = "INSERT INTO usuarios (nombre, apellido, correo, password, tipo_usuario) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("sssss", 
                 $userData['nombre'], 
                 $userData['apellido'], 
                 $userData['email'], 
-                $userData['password'], 
+                $hashedPassword, 
                 $userData['userType']
             );
             
@@ -117,18 +132,80 @@ class UserModel {
      * @return bool
      */
     public function updateUser($id, $userData) {
+        // Log para debugging
+        $logFile = __DIR__ . '/../../logs/update_user.log';
+        
         try {
-            $sql = "UPDATE usuarios SET nombre = ?, apellido = ?, correo = ? WHERE id = ?";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("sssi", 
-                $userData['nombre'], 
-                $userData['apellido'], 
-                $userData['email'], 
-                $id
-            );
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Iniciando updateUser para ID: $id\n", FILE_APPEND);
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Datos: " . print_r($userData, true) . "\n", FILE_APPEND);
             
-            return $stmt->execute();
+            if (empty($userData)) {
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: userData está vacío\n", FILE_APPEND);
+                return false;
+            }
+            
+            // Construir la consulta SQL dinámicamente
+            $fields = [];
+            $types = '';
+            $values = [];
+            
+            foreach ($userData as $field => $value) {
+                // Validar que el campo existe en la tabla
+                $allowedFields = ['nombre', 'apellido', 'correo', 'telefono', 'direccion', 'password', 'tipo_usuario', 'estado'];
+                if (!in_array($field, $allowedFields)) {
+                    file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: Campo no permitido: $field\n", FILE_APPEND);
+                    continue;
+                }
+                
+                $fields[] = "$field = ?";
+                $types .= 's';
+                $values[] = $value;
+            }
+            
+            if (empty($fields)) {
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: No hay campos válidos para actualizar\n", FILE_APPEND);
+                return false;
+            }
+            
+            // Agregar el ID al final
+            $types .= 'i';
+            $values[] = $id;
+            
+            $sql = "UPDATE usuarios SET " . implode(', ', $fields) . " WHERE id = ?";
+            
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - SQL: $sql\n", FILE_APPEND);
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Tipos: $types\n", FILE_APPEND);
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Valores: " . print_r($values, true) . "\n", FILE_APPEND);
+            
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) {
+                $error = $this->db->getConnection()->error;
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR en prepare: $error\n", FILE_APPEND);
+                return false;
+            }
+            
+            $bindResult = $stmt->bind_param($types, ...$values);
+            if (!$bindResult) {
+                $error = $stmt->error;
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR en bind_param: $error\n", FILE_APPEND);
+                return false;
+            }
+            
+            $executeResult = $stmt->execute();
+            if (!$executeResult) {
+                $error = $stmt->error;
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR en execute: $error\n", FILE_APPEND);
+                return false;
+            }
+            
+            $affectedRows = $stmt->affected_rows;
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - ÉXITO: Filas afectadas: $affectedRows\n", FILE_APPEND);
+            
+            return $affectedRows > 0;
+            
         } catch (Exception $e) {
+            $logFile = __DIR__ . '/../../logs/update_user.log';
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - EXCEPCIÓN: " . $e->getMessage() . "\n", FILE_APPEND);
             error_log("Error en updateUser: " . $e->getMessage());
             return false;
         }

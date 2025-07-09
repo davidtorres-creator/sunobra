@@ -66,21 +66,12 @@ class AuthController extends BaseController {
         }
         
         try {
-            // Usar la clase Database unificada
-            require_once __DIR__ . '/../library/db.php';
-            $db = new Database();
-            $connection = $db->getConnection();
+            // Usar el modelo UserModel para verificar credenciales
+            $userModel = new UserModel();
+            $user = $userModel->verifyCredentials($email, $password, $userType);
             
-            // Consulta para verificar el usuario
-            $sql = "SELECT * FROM usuarios WHERE correo = ? AND password = ? AND tipo_usuario = ?";
-            $stmt = $connection->prepare($sql);
-            $stmt->bind_param("sss", $email, $password, $userType);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($result->num_rows > 0) {
+            if ($user) {
                 // Usuario encontrado, obtener datos
-                $user = $result->fetch_assoc();
                 
                 // Guardar datos en sesión
                 $_SESSION['user_id'] = $user['id'];
@@ -88,6 +79,11 @@ class AuthController extends BaseController {
                 $_SESSION['user_role'] = $userType;
                 $_SESSION['nombre'] = $user['nombre'];
                 $_SESSION['apellido'] = $user['apellido'];
+                
+                // Usar la clase Database unificada para verificar/crear registros específicos
+                require_once __DIR__ . '/../library/db.php';
+                $db = new Database();
+                $connection = $db->getConnection();
                 
                 // Redirigir según el tipo de usuario
                 switch ($userType) {
@@ -143,7 +139,6 @@ class AuthController extends BaseController {
                         break;
                 }
                 
-                $stmt->close();
                 $connection->close();
                 exit();
                 
@@ -152,9 +147,6 @@ class AuthController extends BaseController {
                 $_SESSION['auth_error'] = "Correo electrónico, contraseña o tipo de usuario incorrectos.";
                 $this->redirect('/login');
             }
-            
-            $stmt->close();
-            $connection->close();
             
         } catch (Exception $e) {
             error_log("Error en login: " . $e->getMessage());
@@ -238,6 +230,9 @@ class AuthController extends BaseController {
                 return;
             }
             
+            // Hash de la contraseña
+            $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
+            
             // Insertar nuevo usuario
             $sql_insert = "INSERT INTO usuarios (nombre, apellido, correo, telefono, direccion, password, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt_insert = $connection->prepare($sql_insert);
@@ -247,7 +242,7 @@ class AuthController extends BaseController {
                 $userData['email'],
                 $userData['telefono'],
                 $userData['direccion'],
-                $userData['password'], 
+                $hashedPassword, 
                 $userData['userType']
             );
             

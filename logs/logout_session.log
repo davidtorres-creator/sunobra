@@ -102,3 +102,48 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 2
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 2
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 1
+    [auth_success] => Perfil actualizado correctamente
+    [auth_error] => La contraseña actual es incorrecta
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Contraseña actualizada correctamente
+)
+
+DESPUES: Array
+(
+)
+

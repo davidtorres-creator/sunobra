@@ -9,6 +9,9 @@ class BaseController {
     protected $userModel;
     
     public function __construct() {
+        // Incluir configuración
+        require_once __DIR__ . '/../../config.php';
+        
         // Incluir modelos básicos
         require_once __DIR__ . '/../models/UserModel.php';
         $this->userModel = new UserModel();

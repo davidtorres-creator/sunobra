@@ -98,3 +98,34 @@
     [cliente_id] => 1
 )
 
+2025-07-08 20:14:51 Array
+(
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 1
+)
+
+2025-07-08 21:05:27 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Registro exitoso. ¡Bienvenido a SunObra!
+)
+
+2025-07-08 21:07:32 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
