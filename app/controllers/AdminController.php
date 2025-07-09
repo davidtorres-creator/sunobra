@@ -210,36 +210,27 @@ class AdminController extends BaseController {
      * Obtener todos los usuarios
      */
     private function getAllUsers() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'nombre' => 'Juan Pérez',
-                'apellido' => 'García',
-                'email' => 'juan@example.com',
-                'role' => 'cliente',
-                'status' => 'active',
-                'created_at' => '2024-01-15'
-            ],
-            [
-                'id' => 2,
-                'nombre' => 'María López',
-                'apellido' => 'Rodríguez',
-                'email' => 'maria@example.com',
-                'role' => 'obrero',
-                'status' => 'active',
-                'created_at' => '2024-01-10'
-            ],
-            [
-                'id' => 3,
-                'nombre' => 'Carlos',
-                'apellido' => 'González',
-                'email' => 'carlos@example.com',
-                'role' => 'admin',
-                'status' => 'active',
-                'created_at' => '2024-01-05'
-            ]
-        ];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        $users = [];
+        $sql = "SELECT id, nombre, apellido, correo, tipo_usuario, estado, fecha_registro FROM usuarios";
+        $result = $connection->query($sql);
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $users[] = [
+                    'id' => $row['id'],
+                    'nombre' => $row['nombre'],
+                    'apellido' => $row['apellido'],
+                    'email' => $row['correo'],
+                    'role' => $row['tipo_usuario'],
+                    'status' => $row['estado'] == 1 ? 'active' : 'inactive',
+                    'created_at' => $row['fecha_registro']
+                ];
+            }
+        }
+        // $connection->close(); // Eliminado para evitar doble cierre
+        return $users;
     }
     
     /**
