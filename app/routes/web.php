@@ -48,6 +48,8 @@ $router->prefix('/admin')
         $router->delete('/users/{id}', 'AdminController@deleteUser');
         $router->get('/reports', 'AdminController@reports');
         $router->get('/settings', 'AdminController@settings');
+        $router->get('/services/create', 'ServicioController@create');
+        $router->post('/services/create', 'ServicioController@store');
     });
 
 // ========================================
@@ -67,6 +69,8 @@ $router->prefix('/cliente')
         $router->get('/requests', 'ClienteController@requests');
         $router->get('/requests/{id}', 'ClienteController@showRequest');
         $router->get('/history', 'ClienteController@history');
+        $router->get('/services/create', 'ClienteController@createService');
+        $router->post('/services/create', 'ClienteController@storeService');
     });
 
 // ========================================
@@ -86,6 +90,8 @@ $router->prefix('/obrero')
         $router->get('/applications/{id}', 'ObreroController@showApplication');
         $router->get('/schedule', 'ObreroController@schedule');
         $router->get('/earnings', 'ObreroController@earnings');
+        $router->get('/services/create', 'ServicioController@create');
+        $router->post('/services/create', 'ServicioController@store');
     });
 
 // ========================================

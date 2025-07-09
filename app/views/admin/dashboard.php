@@ -42,6 +42,10 @@
                 </div>
             </div>
 
+            <a href="/admin/services/create" class="btn btn-success mb-3">
+                <i class="fas fa-plus"></i> Nuevo Servicio
+            </a>
+
             <!-- Welcome Section -->
             <div class="row mb-4">
                 <div class="col-12">

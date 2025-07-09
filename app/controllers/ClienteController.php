@@ -220,13 +220,16 @@ class ClienteController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
         $data = [
             'title' => 'Servicios Disponibles',
             'user' => $this->getCurrentUser(),
-            'services' => $this->getAvailableServices()
+            'services' => $this->getAvailableServices(),
+            'profesionales_verificados' => $obreroModel->countVerificados(),
+            'calificacion_promedio' => $obreroModel->getCalificacionPromedio(),
+            'tiempo_respuesta' => $obreroModel->getTiempoRespuestaPromedio()
         ];
-        
         $this->render('cliente/services', $data);
     }
     
@@ -348,6 +351,61 @@ class ClienteController extends BaseController {
         $this->render('cliente/history', $data);
     }
     
+    /**
+     * Mostrar formulario para crear un nuevo servicio
+     */
+    public function createService() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'cliente') {
+            $this->redirect('/login');
+            return;
+        }
+        $data = [
+            'title' => 'Crear Servicio',
+            'error' => $_SESSION['form_error'] ?? '',
+            'success' => $_SESSION['form_success'] ?? ''
+        ];
+        unset($_SESSION['form_error'], $_SESSION['form_success']);
+        $this->render('cliente/create-service', $data);
+    }
+
+    /**
+     * Procesar formulario de creación de servicio
+     */
+    public function storeService() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'cliente') {
+            $this->redirect('/login');
+            return;
+        }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/cliente/services/create');
+            return;
+        }
+        $nombre = trim($_POST['nombre'] ?? '');
+        $descripcion = trim($_POST['descripcion'] ?? '');
+        $precio_base = trim($_POST['precio_base'] ?? '');
+        if ($nombre === '' || $descripcion === '' || $precio_base === '' || !is_numeric($precio_base)) {
+            $_SESSION['form_error'] = 'Todos los campos son obligatorios y el precio debe ser numérico.';
+            $this->redirect('/cliente/services/create');
+            return;
+        }
+        require_once __DIR__ . '/../models/ServicioModel.php';
+        $servicioModel = new ServicioModel();
+        try {
+            $db = new Database();
+            $sql = "INSERT INTO servicios (nombre, descripcion, precio_base) VALUES (?, ?, ?)";
+            $stmt = $db->prepare($sql);
+            if (!$stmt) {
+                die("Error al preparar la consulta: " . $db->getConnection()->error . "<br>SQL: $sql");
+            }
+            $stmt->bind_param("ssi", $nombre, $descripcion, $precio_base);
+            $stmt->execute();
+            $_SESSION['form_success'] = 'Servicio creado correctamente.';
+        } catch (Exception $e) {
+            $_SESSION['form_error'] = 'Error al crear el servicio: ' . $e->getMessage();
+        }
+        $this->redirect('/cliente/services/create');
+    }
+    
     // ========================================
     // MÉTODOS PRIVADOS
     // ========================================
@@ -369,27 +427,9 @@ class ClienteController extends BaseController {
      * Obtener servicios disponibles
      */
     private function getAvailableServices() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'nombre' => 'Albañilería',
-                'descripcion' => 'Servicios de construcción y reparación',
-                'precio_base' => 50000
-            ],
-            [
-                'id' => 2,
-                'nombre' => 'Electricidad',
-                'descripcion' => 'Instalaciones y reparaciones eléctricas',
-                'precio_base' => 80000
-            ],
-            [
-                'id' => 3,
-                'nombre' => 'Plomería',
-                'descripcion' => 'Reparaciones de tuberías y fontanería',
-                'precio_base' => 60000
-            ]
-        ];
+        require_once __DIR__ . '/../models/ServicioModel.php';
+        $servicioModel = new ServicioModel();
+        return $servicioModel->getAllServicios();
     }
     
     /**

@@ -74,19 +74,19 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="stats-card">
-                        <div class="stats-number">50+</div>
+                        <div class="stats-number"><?= htmlspecialchars($profesionales_verificados) ?></div>
                         <div class="stats-label">Profesionales Verificados</div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="stats-card">
-                        <div class="stats-number">4.8</div>
+                        <div class="stats-number"><?= htmlspecialchars($calificacion_promedio) ?></div>
                         <div class="stats-label">Calificación Promedio</div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <div class="stats-card">
-                        <div class="stats-number">24h</div>
+                        <div class="stats-number"><?= htmlspecialchars($tiempo_respuesta) ?></div>
                         <div class="stats-label">Respuesta Garantizada</div>
                     </div>
                 </div>

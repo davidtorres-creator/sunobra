@@ -106,4 +106,54 @@ class ObreroModel {
             return [];
         }
     }
+
+    /**
+     * Contar obreros verificados
+     * @return int
+     */
+    public function countVerificados() {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM obreros WHERE verificado = 1";
+            $result = $this->db->query($sql);
+            $row = $result->fetch_assoc();
+            return (int)$row['total'];
+        } catch (Exception $e) {
+            error_log("Error en countVerificados: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    /**
+     * Calcular calificación promedio de todos los obreros
+     * @return float
+     */
+    public function getCalificacionPromedio() {
+        try {
+            $sql = "SELECT AVG(calificacion) as promedio FROM obreros WHERE calificacion IS NOT NULL";
+            $result = $this->db->query($sql);
+            $row = $result->fetch_assoc();
+            return $row['promedio'] ? round((float)$row['promedio'], 1) : 0.0;
+        } catch (Exception $e) {
+            error_log("Error en getCalificacionPromedio: " . $e->getMessage());
+            return 0.0;
+        }
+    }
+
+    /**
+     * Calcular tiempo de respuesta promedio en horas
+     * @return string Ejemplo: '24h', '3h', etc.
+     */
+    public function getTiempoRespuestaPromedio() {
+        try {
+            // Suponiendo que hay una tabla solicitudes con campos fecha_solicitud y fecha_respuesta
+            $sql = "SELECT AVG(TIMESTAMPDIFF(HOUR, fecha_solicitud, fecha_respuesta)) as horas FROM solicitudes WHERE fecha_respuesta IS NOT NULL";
+            $result = $this->db->query($sql);
+            $row = $result->fetch_assoc();
+            $horas = $row['horas'] ? round((float)$row['horas']) : 24;
+            return $horas . 'h';
+        } catch (Exception $e) {
+            error_log("Error en getTiempoRespuestaPromedio: " . $e->getMessage());
+            return '24h';
+        }
+    }
 } 
