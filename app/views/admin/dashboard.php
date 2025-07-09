@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-md-8">
-                                    <h4 class="card-title">¡Bienvenido, <?= htmlspecialchars($user['nombre'] ?? 'Administrador') ?>!</h4>
+                                    <h4 class="card-title">¡Bienvenido, <?= htmlspecialchars($user['nombre']) ?>!</h4>
                                     <p class="card-text">Gestiona el sistema, monitorea usuarios y genera reportes para optimizar la plataforma.</p>
                                 </div>
                                 <div class="col-md-4 text-center">
@@ -267,36 +267,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Juan Pérez García</td>
-                                            <td>juan@example.com</td>
-                                            <td><span class="badge bg-primary">Cliente</span></td>
-                                            <td><span class="badge bg-success">Activo</span></td>
-                                            <td>2024-01-15</td>
-                                            <td>
-                                                <a href="/admin/users/1" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>María López Rodríguez</td>
-                                            <td>maria@example.com</td>
-                                            <td><span class="badge bg-info">Obrero</span></td>
-                                            <td><span class="badge bg-success">Activo</span></td>
-                                            <td>2024-01-10</td>
-                                            <td>
-                                                <a href="/admin/users/2" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Carlos González</td>
-                                            <td>carlos@example.com</td>
-                                            <td><span class="badge bg-warning">Admin</span></td>
-                                            <td><span class="badge bg-success">Activo</span></td>
-                                            <td>2024-01-05</td>
-                                            <td>
-                                                <a href="/admin/users/3" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
-                                        </tr>
+<?php foreach ($recentUsers as $user): ?>
+    <tr>
+        <td><?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?></td>
+        <td><?= htmlspecialchars($user['email']) ?></td>
+        <td>
+            <?php
+            switch($user['role']) {
+                case 'admin': echo '<span class="badge bg-warning">Admin</span>'; break;
+                case 'cliente': echo '<span class="badge bg-primary">Cliente</span>'; break;
+                case 'obrero': echo '<span class="badge bg-info">Obrero</span>'; break;
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            $statusClass = $user['status'] === 'active' ? 'bg-success' : 'bg-danger';
+            $statusText = $user['status'] === 'active' ? 'Activo' : 'Inactivo';
+            ?>
+            <span class="badge <?= $statusClass ?>"><?= $statusText ?></span>
+        </td>
+        <td><?= htmlspecialchars($user['created_at']) ?></td>
+        <td>
+            <a href="/admin/users/<?= $user['id'] ?>" class="btn btn-sm btn-primary">Ver</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -316,27 +312,42 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <h6>Servicios</h6>
+                                    <?php $servicios_pct = isset($settings['services_pct']) ? (int)$settings['services_pct'] : 95; ?>
                                     <div class="progress mb-3">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 95%">95%</div>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: <?= $servicios_pct ?>%"><?= $servicios_pct ?>%</div>
                                     </div>
-                                    <p class="text-muted">Todos los servicios funcionando correctamente</p>
+                                    <p class="text-muted">
+                                        <?php if (!empty($settings['maintenance_mode'])): ?>
+                                            El sistema está en modo mantenimiento.
+                                        <?php else: ?>
+                                            Todos los servicios funcionando correctamente
+                                        <?php endif; ?>
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
                                     <h6>Base de Datos</h6>
+                                    <?php $db_pct = isset($settings['db_pct']) ? (int)$settings['db_pct'] : 88; ?>
                                     <div class="progress mb-3">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 88%">88%</div>
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: <?= $db_pct ?>%"><?= $db_pct ?>%</div>
                                     </div>
-                                    <p class="text-muted">Conexión estable, 12.3GB de 14GB usado</p>
+                                    <p class="text-muted">
+                                        <?= isset($settings['db_status']) ? htmlspecialchars($settings['db_status']) : 'Conexión estable, 12.3GB de 14GB usado' ?>
+                                    </p>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <h6>Uptime</h6>
-                                    <p class="text-success"><i class="fas fa-check-circle"></i> 99.9% - 15 días, 3 horas</p>
+                                    <p class="text-success">
+                                        <i class="fas fa-check-circle"></i>
+                                        <?= isset($settings['uptime']) ? htmlspecialchars($settings['uptime']) : '99.9% - 15 días, 3 horas' ?>
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
                                     <h6>Última Actualización</h6>
-                                    <p class="text-muted">Hace 2 horas</p>
+                                    <p class="text-muted">
+                                        <?= isset($settings['last_update']) ? htmlspecialchars($settings['last_update']) : 'Hace 2 horas' ?>
+                                    </p>
                                 </div>
                             </div>
                         </div>

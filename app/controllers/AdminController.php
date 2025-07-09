@@ -21,13 +21,13 @@ class AdminController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
         $data = [
             'title' => 'Dashboard - Administrador',
             'user' => $this->getCurrentUser(),
-            'stats' => $this->getAdminStats()
+            'stats' => $this->getAdminStats(),
+            'recentUsers' => $this->getRecentUsers(5),
+            'settings' => $this->getSystemSettings()
         ];
-        
         $this->render('admin/dashboard', $data);
     }
     
@@ -100,7 +100,7 @@ class AdminController extends BaseController {
             $updated = $userModel->updateUser($id, [
                 'nombre' => $nombre,
                 'apellido' => $apellido,
-                'correo' => $email,
+                'email' => $email, // corregido
                 'tipo_usuario' => $role,
                 'estado' => $status
             ]);
@@ -158,13 +158,47 @@ class AdminController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        // Usuarios por mes (últimos 12 meses)
+        $usersByMonth = [];
+        $result = $connection->query("SELECT DATE_FORMAT(fecha_registro, '%Y-%m') as mes, COUNT(*) as total FROM usuarios GROUP BY mes ORDER BY mes DESC LIMIT 12");
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $usersByMonth[$row['mes']] = (int)$row['total'];
+            }
+            $usersByMonth = array_reverse($usersByMonth, true);
+        }
+        // Solicitudes por estado
+        $requestsByStatus = [];
+        if ($connection->query("SHOW TABLES LIKE 'solicitudes'")->num_rows > 0) {
+            $result = $connection->query("SELECT estado, COUNT(*) as total FROM solicitudes GROUP BY estado");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $requestsByStatus[$row['estado']] = (int)$row['total'];
+                }
+            }
+        }
+        // Ingresos por mes (últimos 12 meses)
+        $revenueByMonth = [];
+        if ($connection->query("SHOW TABLES LIKE 'solicitudes'")->num_rows > 0) {
+            $result = $connection->query("SELECT DATE_FORMAT(fecha, '%Y-%m') as mes, SUM(monto) as total FROM solicitudes WHERE estado = 'completada' GROUP BY mes ORDER BY mes DESC LIMIT 12");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $revenueByMonth[$row['mes']] = (float)$row['total'];
+                }
+                $revenueByMonth = array_reverse($revenueByMonth, true);
+            }
+        }
         $data = [
             'title' => 'Reportes',
             'user' => $this->getCurrentUser(),
-            'reports' => $this->getAdminReports()
+            'reports' => $this->getAdminReports(),
+            'usersByMonth' => $usersByMonth,
+            'requestsByStatus' => $requestsByStatus,
+            'revenueByMonth' => $revenueByMonth
         ];
-        
         $this->render('admin/reports', $data);
     }
     
@@ -176,13 +210,32 @@ class AdminController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['settings']) && is_array($_POST['settings'])) {
+            $ok = true;
+            foreach ($_POST['settings'] as $key => $value) {
+                $stmt = $connection->prepare("UPDATE settings SET valor = ? WHERE clave = ?");
+                $stmt->bind_param('ss', $value, $key);
+                if (!$stmt->execute()) {
+                    $ok = false;
+                }
+                $stmt->close();
+            }
+            if ($ok) {
+                $_SESSION['settings_success'] = 'Configuración actualizada correctamente.';
+            } else {
+                $_SESSION['settings_error'] = 'Error al actualizar la configuración.';
+            }
+            $this->redirect('/admin/settings');
+            return;
+        }
         $data = [
             'title' => 'Configuraciones',
             'user' => $this->getCurrentUser(),
             'settings' => $this->getSystemSettings()
         ];
-        
         $this->render('admin/settings', $data);
     }
     
@@ -194,15 +247,40 @@ class AdminController extends BaseController {
      * Obtener estadísticas del administrador
      */
     private function getAdminStats() {
-        // Por ahora retornamos datos de ejemplo
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        // Total usuarios
+        $totalUsers = $connection->query("SELECT COUNT(*) as total FROM usuarios")->fetch_assoc()['total'] ?? 0;
+        // Total clientes
+        $totalClients = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'cliente'")->fetch_assoc()['total'] ?? 0;
+        // Total obreros
+        $totalWorkers = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'obrero'")->fetch_assoc()['total'] ?? 0;
+        // Total solicitudes
+        $totalRequests = 0;
+        $pendingRequests = 0;
+        $completedRequests = 0;
+        $totalRevenue = 0;
+        // Si existe la tabla solicitudes, obtener datos
+        if ($connection->query("SHOW TABLES LIKE 'solicitudes'")->num_rows > 0) {
+            $totalRequests = $connection->query("SELECT COUNT(*) as total FROM solicitudes")->fetch_assoc()['total'] ?? 0;
+            $pendingRequests = $connection->query("SELECT COUNT(*) as total FROM solicitudes WHERE estado = 'pendiente'")->fetch_assoc()['total'] ?? 0;
+            $completedRequests = $connection->query("SELECT COUNT(*) as total FROM solicitudes WHERE estado = 'completada'")->fetch_assoc()['total'] ?? 0;
+            // Si hay un campo monto o similar para ingresos
+            $result = $connection->query("SELECT SUM(monto) as total FROM solicitudes WHERE estado = 'completada'");
+            if ($result) {
+                $row = $result->fetch_assoc();
+                $totalRevenue = $row['total'] ?? 0;
+            }
+        }
         return [
-            'total_users' => 0,
-            'total_clients' => 0,
-            'total_workers' => 0,
-            'total_requests' => 0,
-            'pending_requests' => 0,
-            'completed_requests' => 0,
-            'total_revenue' => 0
+            'total_users' => $totalUsers,
+            'total_clients' => $totalClients,
+            'total_workers' => $totalWorkers,
+            'total_requests' => $totalRequests,
+            'pending_requests' => $pendingRequests,
+            'completed_requests' => $completedRequests,
+            'total_revenue' => $totalRevenue
         ];
     }
     
@@ -250,46 +328,75 @@ class AdminController extends BaseController {
      * Obtener reportes del administrador
      */
     private function getAdminReports() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'titulo' => 'Reporte de Usuarios',
-                'descripcion' => 'Estadísticas de usuarios registrados',
-                'fecha' => '2024-01-15',
-                'tipo' => 'usuarios'
-            ],
-            [
-                'id' => 2,
-                'titulo' => 'Reporte de Servicios',
-                'descripcion' => 'Estadísticas de servicios solicitados',
-                'fecha' => '2024-01-14',
-                'tipo' => 'servicios'
-            ],
-            [
-                'id' => 3,
-                'titulo' => 'Reporte de Ingresos',
-                'descripcion' => 'Estadísticas de ingresos del sistema',
-                'fecha' => '2024-01-13',
-                'tipo' => 'ingresos'
-            ]
-        ];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        $reports = [];
+        $sql = "SELECT id, titulo, descripcion, fecha, tipo FROM reportes ORDER BY fecha DESC, id DESC";
+        $result = $connection->query($sql);
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $reports[] = [
+                    'id' => $row['id'],
+                    'titulo' => $row['titulo'],
+                    'descripcion' => $row['descripcion'],
+                    'fecha' => $row['fecha'],
+                    'tipo' => $row['tipo']
+                ];
+            }
+        }
+        // $connection->close(); // No cerrar manualmente
+        return $reports;
     }
     
     /**
-     * Obtener configuraciones del sistema
+     * Obtener configuraciones del sistema de la base de datos
      */
     private function getSystemSettings() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            'site_name' => 'SunObra',
-            'site_description' => 'Plataforma de servicios de construcción',
-            'contact_email' => 'admin@sunobra.com',
-            'contact_phone' => '3138385779',
-            'maintenance_mode' => false,
-            'registration_enabled' => true,
-            'max_file_size' => 5242880, // 5MB
-            'allowed_file_types' => ['jpg', 'jpeg', 'png', 'pdf']
-        ];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        $settings = [];
+        $sql = "SELECT clave, valor FROM settings";
+        $result = $connection->query($sql);
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                // Convertir valores booleanos y numéricos si es necesario
+                $value = $row['valor'];
+                if ($value === 'true') $value = true;
+                elseif ($value === 'false') $value = false;
+                elseif (is_numeric($value)) $value = $value + 0;
+                $settings[$row['clave']] = $value;
+            }
+        }
+        // $connection->close(); // No cerrar manualmente
+        return $settings;
+    }
+
+    /**
+     * Obtener los usuarios más recientes
+     */
+    private function getRecentUsers($limit = 5) {
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        $users = [];
+        $sql = "SELECT id, nombre, apellido, correo, tipo_usuario, estado, fecha_registro FROM usuarios ORDER BY fecha_registro DESC, id DESC LIMIT ?";
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $users[] = [
+                'id' => $row['id'],
+                'nombre' => $row['nombre'],
+                'apellido' => $row['apellido'],
+                'email' => $row['correo'],
+                'role' => $row['tipo_usuario'],
+                'status' => $row['estado'] == 1 ? 'active' : 'inactive',
+                'created_at' => $row['fecha_registro']
+            ];
+        }
+        return $users;
     }
 } 

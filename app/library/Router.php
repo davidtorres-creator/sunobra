@@ -232,7 +232,7 @@ class Router {
      * Middleware para clientes
      */
     private function clienteMiddleware() {
-        var_dump($_SESSION); exit; // DEPURACIÓN
+        // var_dump($_SESSION); exit; // DEPURACIÓN
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'cliente') {
             $this->redirect('/login');
             return false;
