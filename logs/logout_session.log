@@ -60,3 +60,45 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 2
+    [email] => felipe@correo.com
+    [user_role] => obrero
+    [nombre] => Felipe
+    [apellido] => Bermúdez
+    [obrero_id] => 2
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => gabriel@correo.com
+    [user_role] => obrero
+    [nombre] => Gabriel
+    [apellido] => Arias
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => admin
+    [nombre] => David
+    [apellido] => Antolinez
+    [admin_id] => 1
+)
+
+DESPUES: Array
+(
+)
+
