@@ -104,6 +104,7 @@ DESPUES: Array
 
 ANTES: Array
 (
+<<<<<<< HEAD
     [user_id] => 3
     [email] => david@gmail.com
     [user_role] => cliente
@@ -138,6 +139,15 @@ ANTES: Array
     [nombre] => ivan
     [apellido] => ruiz
     [obrero_id] => 4
+=======
+    [user_id] => 1
+    [email] => david@gmail.com
+    [user_role] => admin
+    [nombre] => David
+    [apellido] => Antolinez
+    [admin_id] => 1
+    [auth_success] => Usuario actualizado correctamente
+>>>>>>> 1f4fddd0ddb0b52cccf221710594b3c49c97c95f
 )
 
 DESPUES: Array

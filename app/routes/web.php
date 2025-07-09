@@ -48,8 +48,6 @@ $router->prefix('/admin')
         $router->delete('/users/{id}', 'AdminController@deleteUser');
         $router->get('/reports', 'AdminController@reports');
         $router->get('/settings', 'AdminController@settings');
-        $router->get('/services/create', 'ServicioController@create');
-        $router->post('/services/create', 'ServicioController@store');
     });
 
 // ========================================

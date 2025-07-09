@@ -276,32 +276,10 @@ class AuthController extends BaseController {
                         break;
                 }
                 
-                // Iniciar sesión automáticamente después del registro exitoso
-                $_SESSION['user_id'] = $userId;
-                $_SESSION['email'] = $userData['email'];
-                $_SESSION['user_role'] = $userData['userType'];
-                $_SESSION['nombre'] = $userData['nombre'];
-                $_SESSION['apellido'] = $userData['apellido'];
-                
-                // Redirigir al dashboard correspondiente
-                switch ($userData['userType']) {
-                    case 'cliente':
-                        $_SESSION['cliente_id'] = $userId;
-                        $_SESSION['auth_success'] = 'Registro exitoso. ¡Bienvenido a SunObra!';
-                        $this->redirect('/cliente/dashboard');
-                        break;
-                        
-                    case 'obrero':
-                        $_SESSION['obrero_id'] = $userId;
-                        $_SESSION['auth_success'] = 'Registro exitoso. ¡Bienvenido a SunObra!';
-                        $this->redirect('/obrero/dashboard');
-                        break;
-                        
-                    default:
-                        $_SESSION['auth_success'] = 'Registro exitoso. ¡Bienvenido a SunObra!';
-                        $this->redirect('/login');
-                        break;
-                }
+                // Mensaje de éxito y redirección al login para todos los usuarios
+                $_SESSION['auth_success'] = 'Registro exitoso. ¡Ya puedes iniciar sesión!';
+                $this->redirect('/login');
+                return;
                 
             } else {
                 $_SESSION['auth_error'] = 'Error al crear la cuenta. Por favor, intente nuevamente.';
@@ -312,7 +290,7 @@ class AuthController extends BaseController {
             $connection->close();
             
         } catch (Exception $e) {
-            error_log("Error en registro: " . $e->getMessage());
+            error_log("Error en registro: " . $e->getMessage() . ' | Trace: ' . $e->getTraceAsString());
             $_SESSION['auth_error'] = 'Error interno del sistema. Por favor, intente más tarde.';
             $this->redirect('/register');
         }
