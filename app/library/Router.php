@@ -198,11 +198,18 @@ class Router {
      * Middleware de autenticación
      */
     private function authMiddleware() {
+        error_log("DEBUG: authMiddleware() ejecutado - Session ID: " . session_id());
+        error_log("DEBUG: authMiddleware() - user_id: " . ($_SESSION['user_id'] ?? 'NO DEFINIDO'));
+        error_log("DEBUG: authMiddleware() - user_role: " . ($_SESSION['user_role'] ?? 'NO DEFINIDO'));
+        
         if (!isset($_SESSION['user_id'])) {
+            error_log("DEBUG: authMiddleware() - REDIRIGIENDO A LOGIN - No hay user_id");
             $_SESSION['auth_error'] = 'Debe iniciar sesión para acceder a esta página.';
             $this->redirect('/login');
             return false;
         }
+        
+        error_log("DEBUG: authMiddleware() - AUTENTICACIÓN EXITOSA");
         return true;
     }
     
@@ -232,11 +239,16 @@ class Router {
      * Middleware para clientes
      */
     private function clienteMiddleware() {
-        // var_dump($_SESSION); exit; // DEPURACIÓN
+        error_log("DEBUG: clienteMiddleware() ejecutado - Session ID: " . session_id());
+        error_log("DEBUG: clienteMiddleware() - user_role: " . ($_SESSION['user_role'] ?? 'NO DEFINIDO'));
+        
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'cliente') {
+            error_log("DEBUG: clienteMiddleware() - REDIRIGIENDO A LOGIN - Rol incorrecto: " . ($_SESSION['user_role'] ?? 'NO DEFINIDO'));
             $this->redirect('/login');
             return false;
         }
+        
+        error_log("DEBUG: clienteMiddleware() - AUTORIZACIÓN EXITOSA");
         return true;
     }
     
@@ -244,10 +256,16 @@ class Router {
      * Middleware para obreros
      */
     private function obreroMiddleware() {
+        error_log("DEBUG: obreroMiddleware() ejecutado - Session ID: " . session_id());
+        error_log("DEBUG: obreroMiddleware() - user_role: " . ($_SESSION['user_role'] ?? 'NO DEFINIDO'));
+        
         if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'obrero') {
+            error_log("DEBUG: obreroMiddleware() - REDIRIGIENDO A LOGIN - Rol incorrecto: " . ($_SESSION['user_role'] ?? 'NO DEFINIDO'));
             $this->redirect('/login');
             return false;
         }
+        
+        error_log("DEBUG: obreroMiddleware() - AUTORIZACIÓN EXITOSA");
         return true;
     }
     

@@ -139,3 +139,443 @@
     [cliente_id] => 3
 )
 
+2025-07-09 13:50:25 Array
+(
+    [user_id] => 5
+    [email] => daniel@gmail.com
+    [user_role] => cliente
+    [nombre] => daniel
+    [apellido] => torres
+    [cliente_id] => 5
+)
+
+2025-07-09 13:52:13 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 14:55:07 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:43:43 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:43:55 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:44:03 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:50:23 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:50:24 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:50:25 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:53:54 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:53:57 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:53:57 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:53:58 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 15:53:58 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:15 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:20 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:20 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:20 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:20 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:20 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:21 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:21 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:21 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:34 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:43 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:02:53 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:03:49 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:38 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:39 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:42 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:48 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:49 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:49 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:08:53 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:09:12 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:18:23 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:18:35 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:28:25 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:32:22 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:32:26 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:32:33 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:33:18 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:35:43 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-09 16:35:54 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+

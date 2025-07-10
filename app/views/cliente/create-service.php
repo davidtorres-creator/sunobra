@@ -24,6 +24,18 @@
                             <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required maxlength="255"></textarea>
                         </div>
                         <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoría *</label>
+                            <select class="form-control" id="categoria" name="categoria" required>
+                                <option value="">Seleccione una categoría</option>
+                                <option value="Electricidad">Electricidad</option>
+                                <option value="Albañilería">Albañilería</option>
+                                <option value="Plomería">Plomería</option>
+                                <option value="Pintura">Pintura</option>
+                                <option value="Carpintería">Carpintería</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="precio_base" class="form-label">Precio Base *</label>
                             <input type="number" class="form-control" id="precio_base" name="precio_base" required min="0" step="1000">
                         </div>

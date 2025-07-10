@@ -372,7 +372,11 @@ class ClienteController extends BaseController {
      * Procesar formulario de creación de servicio
      */
     public function storeService() {
+        // Log de depuración
+        error_log("DEBUG: storeService() llamado - User ID: " . ($_SESSION['user_id'] ?? 'no definido') . ", Role: " . ($_SESSION['user_role'] ?? 'no definido'));
+        
         if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'cliente') {
+            error_log("DEBUG: Usuario no autenticado o rol incorrecto - Redirigiendo a login");
             $this->redirect('/login');
             return;
         }
@@ -382,8 +386,9 @@ class ClienteController extends BaseController {
         }
         $nombre = trim($_POST['nombre'] ?? '');
         $descripcion = trim($_POST['descripcion'] ?? '');
+        $categoria = trim($_POST['categoria'] ?? '');
         $precio_base = trim($_POST['precio_base'] ?? '');
-        if ($nombre === '' || $descripcion === '' || $precio_base === '' || !is_numeric($precio_base)) {
+        if ($nombre === '' || $descripcion === '' || $categoria === '' || $precio_base === '' || !is_numeric($precio_base)) {
             $_SESSION['form_error'] = 'Todos los campos son obligatorios y el precio debe ser numérico.';
             $this->redirect('/cliente/services/create');
             return;
@@ -391,18 +396,32 @@ class ClienteController extends BaseController {
         require_once __DIR__ . '/../models/ServicioModel.php';
         $servicioModel = new ServicioModel();
         try {
+            error_log("DEBUG: Intentando crear servicio - Nombre: $nombre, Categoría: $categoria, Precio: $precio_base");
+            
             $db = new Database();
-            $sql = "INSERT INTO servicios (nombre, descripcion, precio_base) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO servicios (nombre_servicio, descripcion, categoria, costo_base_referencial) VALUES (?, ?, ?, ?)";
             $stmt = $db->prepare($sql);
             if (!$stmt) {
+                error_log("DEBUG: Error al preparar consulta: " . $db->getConnection()->error);
                 die("Error al preparar la consulta: " . $db->getConnection()->error . "<br>SQL: $sql");
             }
-            $stmt->bind_param("ssi", $nombre, $descripcion, $precio_base);
-            $stmt->execute();
-            $_SESSION['form_success'] = 'Servicio creado correctamente.';
+            $stmt->bind_param("sssd", $nombre, $descripcion, $categoria, $precio_base);
+            $result = $stmt->execute();
+            
+            if ($result) {
+                $serviceId = $db->getConnection()->insert_id;
+                error_log("DEBUG: Servicio creado exitosamente - ID: $serviceId");
+                $_SESSION['form_success'] = 'Servicio creado correctamente.';
+            } else {
+                error_log("DEBUG: Error al ejecutar consulta: " . $stmt->error);
+                $_SESSION['form_error'] = 'Error al crear el servicio: ' . $stmt->error;
+            }
         } catch (Exception $e) {
+            error_log("DEBUG: Excepción al crear servicio: " . $e->getMessage());
             $_SESSION['form_error'] = 'Error al crear el servicio: ' . $e->getMessage();
         }
+        
+        error_log("DEBUG: Redirigiendo a /cliente/services/create");
         $this->redirect('/cliente/services/create');
     }
     
@@ -449,54 +468,23 @@ class ClienteController extends BaseController {
      * Obtener solicitudes del cliente
      */
     private function getClienteRequests() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'servicio' => 'Albañilería',
-                'fecha' => '2024-01-15',
-                'estado' => 'pendiente',
-                'descripcion' => 'Necesito reparar una pared que tiene grietas en mi sala de estar. La pared es de aproximadamente 3x4 metros.',
-                'presupuesto' => 300000,
-                'cotizaciones' => 2
-            ],
-            [
-                'id' => 2,
-                'servicio' => 'Electricidad',
-                'fecha' => '2024-01-12',
-                'estado' => 'aceptado',
-                'descripcion' => 'Instalación de nuevos tomacorrientes en la cocina y sala. Necesito 4 tomacorrientes adicionales.',
-                'presupuesto' => 450000,
-                'cotizaciones' => 3
-            ],
-            [
-                'id' => 3,
-                'servicio' => 'Plomería',
-                'fecha' => '2024-01-10',
-                'estado' => 'en-proceso',
-                'descripcion' => 'Reparación de fuga en el baño principal. El agua se está filtrando por el techo.',
-                'presupuesto' => 200000,
-                'cotizaciones' => 1
-            ],
-            [
-                'id' => 4,
-                'servicio' => 'Pintura',
-                'fecha' => '2024-01-08',
-                'estado' => 'completado',
-                'descripcion' => 'Pintura completa de la casa. 3 habitaciones, sala, comedor y cocina.',
-                'presupuesto' => 800000,
-                'cotizaciones' => 4
-            ],
-            [
-                'id' => 5,
-                'servicio' => 'Carpintería',
-                'fecha' => '2024-01-05',
-                'estado' => 'rechazado',
-                'descripcion' => 'Fabricación de estanterías para la biblioteca. Necesito 3 estanterías de 2 metros de alto.',
-                'presupuesto' => 600000,
-                'cotizaciones' => 0
-            ]
-        ];
+        $clienteId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $sql = "SELECT id, servicio, fecha, estado, descripcion, presupuesto, cotizaciones
+                FROM solicitudes_servicio
+                WHERE id_cliente = ?
+                ORDER BY fecha DESC";
+        $stmt = $db->prepare($sql);
+        if (!$stmt) return [];
+        $stmt->bind_param('i', $clienteId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $requests = [];
+        while ($row = $result->fetch_assoc()) {
+            $requests[] = $row;
+        }
+        return $requests;
     }
     
     /**
@@ -516,105 +504,24 @@ class ClienteController extends BaseController {
      * Obtener historial del cliente
      */
     private function getClienteHistory() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'servicio' => 'Pintura',
-                'fecha' => '2024-01-08',
-                'estado' => 'completado',
-                'precio' => 800000,
-                'descripcion' => 'Pintura completa de la casa. 3 habitaciones, sala, comedor y cocina.',
-                'obrero' => 'Carlos Mendoza',
-                'calificacion' => 5,
-                'comentario' => 'Excelente trabajo, muy profesional y puntual. La calidad de la pintura es superior.',
-                'duracion' => '5 días'
-            ],
-            [
-                'id' => 2,
-                'servicio' => 'Electricidad',
-                'fecha' => '2023-12-20',
-                'estado' => 'completado',
-                'precio' => 450000,
-                'descripcion' => 'Instalación de nuevos tomacorrientes en la cocina y sala. 4 tomacorrientes adicionales.',
-                'obrero' => 'Miguel Torres',
-                'calificacion' => 4,
-                'comentario' => 'Buen trabajo, instalación correcta. Un poco lento pero muy cuidadoso.',
-                'duracion' => '2 días'
-            ],
-            [
-                'id' => 3,
-                'servicio' => 'Albañilería',
-                'fecha' => '2023-12-15',
-                'estado' => 'completado',
-                'precio' => 320000,
-                'descripcion' => 'Reparación de pared con grietas en la sala de estar. Pared de 3x4 metros.',
-                'obrero' => 'Roberto Silva',
-                'calificacion' => 5,
-                'comentario' => 'Trabajo impecable, la pared quedó como nueva. Muy recomendado.',
-                'duracion' => '3 días'
-            ],
-            [
-                'id' => 4,
-                'servicio' => 'Plomería',
-                'fecha' => '2023-12-10',
-                'estado' => 'completado',
-                'precio' => 180000,
-                'descripcion' => 'Reparación de fuga en el baño principal. El agua se filtraba por el techo.',
-                'obrero' => 'Luis Ramírez',
-                'calificacion' => 4,
-                'comentario' => 'Solucionó el problema rápidamente. Precio justo por el trabajo.',
-                'duracion' => '1 día'
-            ],
-            [
-                'id' => 5,
-                'servicio' => 'Carpintería',
-                'fecha' => '2023-11-28',
-                'estado' => 'completado',
-                'precio' => 550000,
-                'descripcion' => 'Fabricación de estanterías para la biblioteca. 3 estanterías de 2 metros de alto.',
-                'obrero' => 'Fernando López',
-                'calificacion' => 5,
-                'comentario' => 'Excelente carpintero, las estanterías quedaron perfectas. Muy detallista.',
-                'duracion' => '7 días'
-            ],
-            [
-                'id' => 6,
-                'servicio' => 'Electricidad',
-                'fecha' => '2023-11-15',
-                'estado' => 'completado',
-                'precio' => 280000,
-                'descripcion' => 'Cambio de cableado en la habitación principal. Instalación de ventilador de techo.',
-                'obrero' => 'Miguel Torres',
-                'calificacion' => 4,
-                'comentario' => 'Buen trabajo, el ventilador funciona perfectamente.',
-                'duracion' => '2 días'
-            ],
-            [
-                'id' => 7,
-                'servicio' => 'Pintura',
-                'fecha' => '2023-11-05',
-                'estado' => 'completado',
-                'precio' => 350000,
-                'descripcion' => 'Pintura de la fachada de la casa. Dos colores, trabajo de altura.',
-                'obrero' => 'Carlos Mendoza',
-                'calificacion' => 5,
-                'comentario' => 'Increíble trabajo, la casa se ve completamente renovada.',
-                'duracion' => '4 días'
-            ],
-            [
-                'id' => 8,
-                'servicio' => 'Albañilería',
-                'fecha' => '2023-10-25',
-                'estado' => 'completado',
-                'precio' => 420000,
-                'descripcion' => 'Construcción de muro de contención en el jardín. 10 metros lineales.',
-                'obrero' => 'Roberto Silva',
-                'calificacion' => 5,
-                'comentario' => 'Muro sólido y bien construido. Muy profesional en su trabajo.',
-                'duracion' => '6 días'
-            ]
-        ];
+        $clienteId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $sql = "SELECT s.id, sv.nombre_servicio AS servicio, s.fecha, s.descripcion
+                FROM solicitudes_servicio s
+                JOIN servicios sv ON s.servicio_id = sv.id
+                WHERE s.cliente_id = ? AND s.estado = 'completado'
+                ORDER BY s.fecha DESC";
+        $stmt = $db->prepare($sql);
+        if (!$stmt) return [];
+        $stmt->bind_param('i', $clienteId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $history = [];
+        while ($row = $result->fetch_assoc()) {
+            $history[] = $row;
+        }
+        return $history;
     }
     
     /**

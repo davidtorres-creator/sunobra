@@ -13,7 +13,7 @@ class ServicioModel {
      */
     public function getAllServicios() {
         try {
-            $sql = "SELECT id, nombre, descripcion, precio_base FROM servicios ORDER BY nombre";
+            $sql = "SELECT id, nombre_servicio as nombre, descripcion, categoria, costo_base_referencial as precio_base FROM servicios ORDER BY nombre_servicio";
             $result = $this->db->query($sql);
             $servicios = [];
             while ($row = $result->fetch_assoc()) {
@@ -24,5 +24,19 @@ class ServicioModel {
             error_log("Error en getAllServicios: " . $e->getMessage());
             return [];
         }
+    }
+
+    public function getById($id) {
+        $db = new Database();
+        $sql = "SELECT id, nombre_servicio, descripcion, categoria, costo_base_referencial, fecha_creacion FROM servicios WHERE id = ? LIMIT 1";
+        $stmt = $db->prepare($sql);
+        if (!$stmt) return null;
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+        return null;
     }
 } 

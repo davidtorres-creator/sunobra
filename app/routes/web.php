@@ -33,6 +33,7 @@ $router->get('/logout', 'AuthController@logout');
 $router->get('/about', 'HomeController@about');
 $router->get('/contact', 'HomeController@contact');
 $router->get('/services', 'HomeController@services');
+$router->get('/services/{id}', 'ServicioController@show');
 
 // ========================================
 // RUTAS PROTEGIDAS - ADMIN

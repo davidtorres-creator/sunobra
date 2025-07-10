@@ -1,306 +1,230 @@
 <?php
 /**
- * Script de diagnóstico para rutas y autenticación
+ * Script para verificar las rutas de creación de servicio
  */
 
-// Configuración de errores
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Incluir configuración
+require_once 'config.php';
 
-// Iniciar sesión
+// Incluir el Router
+require_once 'app/library/Router.php';
+
+echo "<h1>Verificación de Rutas de Creación de Servicio</h1>";
+
+// Crear instancia del router
+$router = new Router();
+
+echo "<h2>1. Rutas de creación de servicio configuradas</h2>";
+
+echo "<h3>Rutas para Cliente:</h3>";
+echo "<ul>";
+echo "<li><strong>GET /cliente/services/create</strong> → ClienteController@createService</li>";
+echo "<li><strong>POST /cliente/services/create</strong> → ClienteController@storeService</li>";
+echo "</ul>";
+
+echo "<h3>Rutas para Obrero:</h3>";
+echo "<ul>";
+echo "<li><strong>GET /obrero/services/create</strong> → ServicioController@create</li>";
+echo "<li><strong>POST /obrero/services/create</strong> → ServicioController@store</li>";
+echo "</ul>";
+
+echo "<h2>2. Verificación de controladores</h2>";
+
+// Verificar si existen los controladores
+$controllers = [
+    'app/controllers/ClienteController.php' => 'ClienteController',
+    'app/controllers/ServicioController.php' => 'ServicioController'
+];
+
+foreach ($controllers as $file => $className) {
+    if (file_exists($file)) {
+        echo "<p style='color: green;'>✓ $className existe en $file</p>";
+        
+        // Verificar métodos
+        require_once $file;
+        $methods = get_class_methods($className);
+        
+        if ($className === 'ClienteController') {
+            if (in_array('createService', $methods)) {
+                echo "<p style='color: green;'>✓ Método createService() existe</p>";
+            } else {
+                echo "<p style='color: red;'>✗ Método createService() NO existe</p>";
+            }
+            
+            if (in_array('storeService', $methods)) {
+                echo "<p style='color: green;'>✓ Método storeService() existe</p>";
+            } else {
+                echo "<p style='color: red;'>✗ Método storeService() NO existe</p>";
+            }
+        } elseif ($className === 'ServicioController') {
+            if (in_array('create', $methods)) {
+                echo "<p style='color: green;'>✓ Método create() existe</p>";
+            } else {
+                echo "<p style='color: red;'>✗ Método create() NO existe</p>";
+            }
+            
+            if (in_array('store', $methods)) {
+                echo "<p style='color: green;'>✓ Método store() existe</p>";
+            } else {
+                echo "<p style='color: red;'>✗ Método store() NO existe</p>";
+            }
+        }
+    } else {
+        echo "<p style='color: red;'>✗ $className NO existe en $file</p>";
+    }
+}
+
+echo "<h2>3. Verificación de middleware</h2>";
+
+// Verificar middleware de autenticación
+echo "<h3>Middleware requerido:</h3>";
+echo "<ul>";
+echo "<li><strong>auth</strong>: Verifica que el usuario esté autenticado</li>";
+echo "<li><strong>cliente</strong>: Verifica que el usuario tenga rol 'cliente'</li>";
+echo "<li><strong>obrero</strong>: Verifica que el usuario tenga rol 'obrero'</li>";
+echo "</ul>";
+
+echo "<h2>4. Verificación de vistas</h2>";
+
+// Verificar si existen las vistas
+$views = [
+    'app/views/cliente/create-service.php' => 'Vista de creación de servicio (Cliente)',
+    'app/views/services/create.php' => 'Vista de creación de servicio (Obrero)'
+];
+
+foreach ($views as $file => $description) {
+    if (file_exists($file)) {
+        echo "<p style='color: green;'>✓ $description existe en $file</p>";
+        
+        // Verificar que el formulario tenga la acción correcta
+        $content = file_get_contents($file);
+        if (strpos($content, 'action="/cliente/services/create"') !== false) {
+            echo "<p style='color: green;'>✓ Formulario tiene acción correcta para cliente</p>";
+        } elseif (strpos($content, 'action=""') !== false) {
+            echo "<p style='color: orange;'>⚠ Formulario tiene acción vacía (puede ser correcto)</p>";
+        } else {
+            echo "<p style='color: red;'>✗ Formulario no tiene acción correcta</p>";
+        }
+        
+        // Verificar campos del formulario
+        if (strpos($content, 'name="nombre"') !== false) {
+            echo "<p style='color: green;'>✓ Campo 'nombre' existe</p>";
+        } else {
+            echo "<p style='color: red;'>✗ Campo 'nombre' NO existe</p>";
+        }
+        
+        if (strpos($content, 'name="descripcion"') !== false) {
+            echo "<p style='color: green;'>✓ Campo 'descripcion' existe</p>";
+        } else {
+            echo "<p style='color: red;'>✗ Campo 'descripcion' NO existe</p>";
+        }
+        
+        if (strpos($content, 'name="categoria"') !== false) {
+            echo "<p style='color: green;'>✓ Campo 'categoria' existe</p>";
+        } else {
+            echo "<p style='color: red;'>✗ Campo 'categoria' NO existe</p>";
+        }
+        
+        if (strpos($content, 'name="precio_base"') !== false) {
+            echo "<p style='color: green;'>✓ Campo 'precio_base' existe</p>";
+        } else {
+            echo "<p style='color: red;'>✗ Campo 'precio_base' NO existe</p>";
+        }
+        
+                            } else {
+        echo "<p style='color: red;'>✗ $description NO existe en $file</p>";
+    }
+}
+
+echo "<h2>5. Verificación de URL actual</h2>";
+
+// Obtener la URL actual
+$currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+echo "<p>URL actual: $currentUrl</p>";
+
+// Verificar si la URL coincide con alguna ruta de creación de servicio
+$serviceRoutes = [
+    '/cliente/services/create',
+    '/obrero/services/create'
+];
+
+$isServiceRoute = false;
+foreach ($serviceRoutes as $route) {
+    if ($currentUrl === $route) {
+        $isServiceRoute = true;
+        echo "<p style='color: green;'>✓ URL actual coincide con ruta de servicio: $route</p>";
+                                    break;
+                            }
+}
+
+if (!$isServiceRoute) {
+    echo "<p style='color: orange;'>⚠ URL actual no es una ruta de creación de servicio</p>";
+}
+
+echo "<h2>6. Verificación de método HTTP</h2>";
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+echo "<p>Método HTTP actual: $method</p>";
+
+if ($method === 'POST') {
+    echo "<p style='color: green;'>✓ Método POST detectado (envío de formulario)</p>";
+} else {
+    echo "<p style='color: blue;'>ℹ Método GET detectado (visualización de formulario)</p>";
+}
+
+echo "<h2>7. Verificación de sesión</h2>";
+
+// Iniciar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Incluir archivos necesarios
-require_once 'config.php';
-require_once 'app/controllers/BaseController.php';
-require_once 'app/controllers/IndexController.php';
-require_once 'app/controllers/ClienteController.php';
-require_once 'app/controllers/ObreroController.php';
-require_once 'app/controllers/AdminController.php';
+if (isset($_SESSION['user_id'])) {
+    echo "<p style='color: green;'>✓ Usuario autenticado: " . $_SESSION['user_id'] . "</p>";
+    echo "<p>Rol: " . ($_SESSION['user_role'] ?? 'No definido') . "</p>";
+    
+    // Verificar si el usuario puede acceder a las rutas de servicio
+    $userRole = $_SESSION['user_role'] ?? '';
+    if ($userRole === 'cliente') {
+        echo "<p style='color: green;'>✓ Usuario puede acceder a /cliente/services/create</p>";
+    } elseif ($userRole === 'obrero') {
+        echo "<p style='color: green;'>✓ Usuario puede acceder a /obrero/services/create</p>";
+    } else {
+        echo "<p style='color: red;'>✗ Usuario con rol '$userRole' no puede acceder a rutas de servicio</p>";
+    }
+} else {
+    echo "<p style='color: red;'>✗ No hay usuario autenticado</p>";
+}
 
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debug Rutas - SunObra</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1><i class="fas fa-bug"></i> Debug de Rutas y Autenticación</h1>
-        
-        <!-- Información de la URL -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-link"></i> Información de URL</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>REQUEST_URI:</strong> <?= $_SERVER['REQUEST_URI'] ?? 'N/A' ?></p>
-                        <p><strong>SCRIPT_NAME:</strong> <?= $_SERVER['SCRIPT_NAME'] ?? 'N/A' ?></p>
-                        <p><strong>HTTP_HOST:</strong> <?= $_SERVER['HTTP_HOST'] ?? 'N/A' ?></p>
-                        <p><strong>SERVER_PORT:</strong> <?= $_SERVER['SERVER_PORT'] ?? 'N/A' ?></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>REQUEST_METHOD:</strong> <?= $_SERVER['REQUEST_METHOD'] ?? 'N/A' ?></p>
-                        <p><strong>QUERY_STRING:</strong> <?= $_SERVER['QUERY_STRING'] ?? 'N/A' ?></p>
-                        <p><strong>PATH_INFO:</strong> <?= $_SERVER['PATH_INFO'] ?? 'N/A' ?></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+echo "<h2>8. Pruebas de acceso</h2>";
+echo "<p>Pruebe acceder a estas URLs:</p>";
+echo "<ul>";
+echo "<li><a href='/cliente/services/create'>Crear Servicio (Cliente)</a></li>";
+echo "<li><a href='/obrero/services/create'>Crear Servicio (Obrero)</a></li>";
+echo "</ul>";
 
-        <!-- Información de Sesión -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-user"></i> Información de Sesión</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Session ID:</strong> <?= session_id() ?? 'N/A' ?></p>
-                        <p><strong>Session Status:</strong> <?= session_status() === PHP_SESSION_ACTIVE ? 'Activa' : 'Inactiva' ?></p>
-                        <p><strong>User ID:</strong> <?= $_SESSION['user_id'] ?? 'No definido' ?></p>
-                        <p><strong>User Role:</strong> <?= $_SESSION['user_role'] ?? 'No definido' ?></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>User Email:</strong> <?= $_SESSION['user_email'] ?? 'No definido' ?></p>
-                        <p><strong>User Name:</strong> <?= $_SESSION['user_name'] ?? 'No definido' ?></p>
-                        <p><strong>Auth Success:</strong> <?= $_SESSION['auth_success'] ?? 'No definido' ?></p>
-                        <p><strong>Auth Error:</strong> <?= $_SESSION['auth_error'] ?? 'No definido' ?></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+echo "<h2>9. Análisis de posibles problemas</h2>";
 
-        <!-- Pruebas de Controladores -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-cogs"></i> Pruebas de Controladores</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6>IndexController</h6>
-                        <?php
-                        try {
-                            $indexController = new IndexController();
-                            echo '<span class="badge bg-success">✓ Cargado correctamente</span>';
-                        } catch (Exception $e) {
-                            echo '<span class="badge bg-danger">✗ Error: ' . $e->getMessage() . '</span>';
-                        }
-                        ?>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>ClienteController</h6>
-                        <?php
-                        try {
-                            $clienteController = new ClienteController();
-                            echo '<span class="badge bg-success">✓ Cargado correctamente</span>';
-                        } catch (Exception $e) {
-                            echo '<span class="badge bg-danger">✗ Error: ' . $e->getMessage() . '</span>';
-                        }
-                        ?>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>ObreroController</h6>
-                        <?php
-                        try {
-                            $obreroController = new ObreroController();
-                            echo '<span class="badge bg-success">✓ Cargado correctamente</span>';
-                        } catch (Exception $e) {
-                            echo '<span class="badge bg-danger">✗ Error: ' . $e->getMessage() . '</span>';
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <h6>AdminController</h6>
-                        <?php
-                        try {
-                            $adminController = new AdminController();
-                            echo '<span class="badge bg-success">✓ Cargado correctamente</span>';
-                        } catch (Exception $e) {
-                            echo '<span class="badge bg-danger">✗ Error: ' . $e->getMessage() . '</span>';
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
+echo "<h3>Problemas comunes:</h3>";
+echo "<ul>";
+echo "<li><strong>Ruta no encontrada:</strong> El Router no encuentra la ruta</li>";
+echo "<li><strong>Middleware falla:</strong> El usuario no está autenticado o no tiene el rol correcto</li>";
+echo "<li><strong>Controlador no existe:</strong> El archivo del controlador no existe</li>";
+echo "<li><strong>Método no existe:</strong> El método del controlador no existe</li>";
+echo "<li><strong>Vista no existe:</strong> El archivo de vista no existe</li>";
+echo "<li><strong>Error en el controlador:</strong> Hay un error en el código del controlador</li>";
+echo "</ul>";
 
-        <!-- Pruebas de Autenticación -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-shield-alt"></i> Pruebas de Autenticación</h5>
-            </div>
-            <div class="card-body">
-                <?php
-                // Funciones globales para verificar autenticación
-                function isUserAuthenticated() {
-                    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
-                }
-                
-                function getCurrentUserData() {
-                    if (!isUserAuthenticated()) {
-                        return null;
-                    }
-                    
-                    require_once 'app/models/UserModel.php';
-                    $userModel = new UserModel();
-                    return $userModel->getUserById($_SESSION['user_id']);
-                }
-                
-                $indexController = new IndexController();
-                ?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Estado de Autenticación</h6>
-                        <p><strong>isAuthenticated():</strong> 
-                            <?= isUserAuthenticated() ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>' ?>
-                        </p>
-                        <p><strong>getCurrentUser():</strong> 
-                            <?php
-                            $user = getCurrentUserData();
-                            if ($user) {
-                                echo '<span class="badge bg-success">Usuario encontrado</span>';
-                            } else {
-                                echo '<span class="badge bg-warning">No hay usuario</span>';
-                            }
-                            ?>
-                        </p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Redirección de Dashboard</h6>
-                        <p><strong>Rol actual:</strong> <?= $_SESSION['user_role'] ?? 'No definido' ?></p>
-                        <p><strong>Dashboard correspondiente:</strong>
-                            <?php
-                            $role = $_SESSION['user_role'] ?? '';
-                            switch ($role) {
-                                case 'admin':
-                                    echo '/admin/dashboard';
-                                    break;
-                                case 'cliente':
-                                    echo '/cliente/dashboard';
-                                    break;
-                                case 'obrero':
-                                    echo '/obrero/dashboard';
-                                    break;
-                                default:
-                                    echo 'No definido';
-                                    break;
-                            }
-                            ?>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+echo "<h2>10. Recomendaciones</h2>";
+echo "<ul>";
+echo "<li>Verifique que esté autenticado antes de acceder a las rutas</li>";
+echo "<li>Verifique que tenga el rol correcto (cliente u obrero)</li>";
+echo "<li>Revise los logs de error para más detalles</li>";
+echo "<li>Use el modo debug para ver errores en pantalla</li>";
+echo "</ul>";
 
-        <!-- Enlaces de Prueba -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-external-link-alt"></i> Enlaces de Prueba</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6>Dashboards</h6>
-                        <a href="/cliente/dashboard" class="btn btn-primary btn-sm mb-2">Cliente Dashboard</a><br>
-                        <a href="/obrero/dashboard" class="btn btn-info btn-sm mb-2">Obrero Dashboard</a><br>
-                        <a href="/admin/dashboard" class="btn btn-warning btn-sm mb-2">Admin Dashboard</a>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Perfiles</h6>
-                        <a href="/cliente/profile" class="btn btn-outline-primary btn-sm mb-2">Cliente Profile</a><br>
-                        <a href="/obrero/profile" class="btn btn-outline-info btn-sm mb-2">Obrero Profile</a><br>
-                        <a href="/admin/users" class="btn btn-outline-warning btn-sm mb-2">Admin Users</a>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Otros</h6>
-                        <a href="/cliente/services" class="btn btn-outline-success btn-sm mb-2">Cliente Services</a><br>
-                        <a href="/obrero/jobs" class="btn btn-outline-secondary btn-sm mb-2">Obrero Jobs</a><br>
-                        <a href="/" class="btn btn-outline-dark btn-sm mb-2">Home</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Información de Archivos -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-folder"></i> Verificación de Archivos</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Controladores</h6>
-                        <p><strong>IndexController.php:</strong> 
-                            <?= file_exists('app/controllers/IndexController.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                        <p><strong>ClienteController.php:</strong> 
-                            <?= file_exists('app/controllers/ClienteController.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                        <p><strong>ObreroController.php:</strong> 
-                            <?= file_exists('app/controllers/ObreroController.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                        <p><strong>AdminController.php:</strong> 
-                            <?= file_exists('app/controllers/AdminController.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Vistas</h6>
-                        <p><strong>cliente/dashboard.php:</strong> 
-                            <?= file_exists('app/views/cliente/dashboard.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                        <p><strong>obrero/dashboard.php:</strong> 
-                            <?= file_exists('app/views/obrero/dashboard.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                        <p><strong>admin/dashboard.php:</strong> 
-                            <?= file_exists('app/views/admin/dashboard.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                        <p><strong>partials/header.php:</strong> 
-                            <?= file_exists('app/views/partials/header.php') ? '<span class="badge bg-success">✓ Existe</span>' : '<span class="badge bg-danger">✗ No existe</span>' ?>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Debug de Rutas -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fas fa-route"></i> Debug de Rutas</h5>
-            </div>
-            <div class="card-body">
-                <p><strong>Rutas configuradas:</strong></p>
-                <ul>
-                    <li>/cliente/dashboard → ClienteController@dashboard</li>
-                    <li>/obrero/dashboard → ObreroController@dashboard</li>
-                    <li>/admin/dashboard → AdminController@dashboard</li>
-                    <li>/cliente/profile → ClienteController@profile</li>
-                    <li>/obrero/jobs → ObreroController@jobs</li>
-                    <li>/admin/users → AdminController@users</li>
-                </ul>
-                
-                <p><strong>Problema identificado:</strong> Si se muestra el index, puede ser por:</p>
-                <ul>
-                    <li>Usuario no autenticado (redirige a login)</li>
-                    <li>Rol incorrecto (redirige a login)</li>
-                    <li>Error en el router (no encuentra la ruta)</li>
-                    <li>Error en el controlador (excepción no manejada)</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html> 
+echo "<h2>11. Enlaces útiles</h2>";
+echo "<p><a href='/debug-authentication.php'>Diagnóstico de Autenticación</a></p>";
+echo "<p><a href='/debug-service-creation.php'>Diagnóstico de Creación de Servicios</a></p>";
+echo "<p><a href='/enable-debug-mode.php'>Activar Modo Debug</a></p>";
+echo "<p><a href='/check-error-logs.php'>Verificar Logs de Error</a></p>";
+?> 
