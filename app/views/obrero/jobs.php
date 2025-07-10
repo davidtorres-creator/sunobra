@@ -74,7 +74,7 @@
                             <div class="stats-icon applied">
                                 <i class="fas fa-paper-plane"></i>
                             </div>
-                            <div class="stats-number">12</div>
+                            <div class="stats-number"><?= $stats['total_applications'] ?? 0 ?></div>
                             <div class="stats-label">Aplicaciones Enviadas</div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                             <div class="stats-icon accepted">
                                 <i class="fas fa-check-circle"></i>
                             </div>
-                            <div class="stats-number">5</div>
+                            <div class="stats-number"><?= $stats['accepted_applications'] ?? 0 ?></div>
                             <div class="stats-label">Trabajos Aceptados</div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                             <div class="stats-icon earnings">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <div class="stats-number">$2.5M</div>
+                            <div class="stats-number">$<?= number_format($stats['total_earnings'] ?? 0) ?></div>
                             <div class="stats-label">Ganancias Totales</div>
                         </div>
                     </div>

@@ -421,3 +421,18 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+

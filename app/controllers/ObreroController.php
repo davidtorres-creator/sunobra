@@ -175,7 +175,8 @@ class ObreroController extends BaseController {
         $data = [
             'title' => 'Trabajos Disponibles',
             'user' => $this->getCurrentUser(),
-            'jobs' => $this->getAvailableJobs()
+            'jobs' => $this->getAvailableJobs(),
+            'stats' => $this->getObreroStats()
         ];
         
         $this->render('obrero/jobs', $data);
@@ -193,7 +194,8 @@ class ObreroController extends BaseController {
         $data = [
             'title' => 'Trabajos Disponibles - Vista de Tabla',
             'user' => $this->getCurrentUser(),
-            'jobs' => $this->getAvailableJobs()
+            'jobs' => $this->getAvailableJobs(),
+            'stats' => $this->getObreroStats()
         ];
         
         $this->render('obrero/jobs-table', $data);
@@ -361,12 +363,47 @@ class ObreroController extends BaseController {
      * Obtener estadísticas del obrero
      */
     private function getObreroStats() {
-        // Por ahora retornamos datos de ejemplo
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+
+        // Total de cotizaciones enviadas
+        $sqlTotal = "SELECT COUNT(*) as total FROM cotizaciones WHERE obrero_id = ?";
+        $stmtTotal = $db->prepare($sqlTotal);
+        $stmtTotal->bind_param('i', $userId);
+        $stmtTotal->execute();
+        $resultTotal = $stmtTotal->get_result();
+        $totalApplications = $resultTotal->fetch_assoc()['total'] ?? 0;
+
+        // Cotizaciones pendientes
+        $sqlPendientes = "SELECT COUNT(*) as pendientes FROM cotizaciones WHERE obrero_id = ? AND estado = 'pendiente'";
+        $stmtPendientes = $db->prepare($sqlPendientes);
+        $stmtPendientes->bind_param('i', $userId);
+        $stmtPendientes->execute();
+        $resultPendientes = $stmtPendientes->get_result();
+        $pendingApplications = $resultPendientes->fetch_assoc()['pendientes'] ?? 0;
+
+        // Cotizaciones aprobadas (aceptadas)
+        $sqlAceptadas = "SELECT COUNT(*) as aceptadas FROM cotizaciones WHERE obrero_id = ? AND estado = 'aprobada'";
+        $stmtAceptadas = $db->prepare($sqlAceptadas);
+        $stmtAceptadas->bind_param('i', $userId);
+        $stmtAceptadas->execute();
+        $resultAceptadas = $stmtAceptadas->get_result();
+        $acceptedApplications = $resultAceptadas->fetch_assoc()['aceptadas'] ?? 0;
+
+        // Ganancias totales: suma de monto_estimado de cotizaciones aprobadas
+        $sqlGanancias = "SELECT SUM(monto_estimado) as total_ganancias FROM cotizaciones WHERE obrero_id = ? AND estado = 'aprobada'";
+        $stmtGanancias = $db->prepare($sqlGanancias);
+        $stmtGanancias->bind_param('i', $userId);
+        $stmtGanancias->execute();
+        $resultGanancias = $stmtGanancias->get_result();
+        $totalEarnings = $resultGanancias->fetch_assoc()['total_ganancias'] ?? 0;
+
         return [
-            'total_applications' => 0,
-            'pending_applications' => 0,
-            'accepted_applications' => 0,
-            'total_earnings' => 0
+            'total_applications' => $totalApplications,
+            'pending_applications' => $pendingApplications,
+            'accepted_applications' => $acceptedApplications,
+            'total_earnings' => $totalEarnings
         ];
     }
     

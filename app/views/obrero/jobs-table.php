@@ -89,7 +89,7 @@
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Aplicaciones Enviadas
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $stats['total_applications'] ?? 0 ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-paper-plane fa-2x text-gray-300"></i>
@@ -106,7 +106,7 @@
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                         Trabajos Aceptados
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $stats['accepted_applications'] ?? 0 ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-check-circle fa-2x text-gray-300"></i>
@@ -123,7 +123,7 @@
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                         Ganancias Totales
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$2.5M</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$<?= number_format($stats['total_earnings'] ?? 0) ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
