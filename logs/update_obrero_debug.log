@@ -1,0 +1,68 @@
+
+==== NUEVA SOLICITUD ====2025-07-09 20:51:46
+POST: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 2143612421
+    [direccion] => calle1
+    [especialidad] => General
+    [experiencia] => 10
+    [tarifa_hora] => 500000
+    [certificaciones] => x
+    [disponibilidad] => 1
+)
+
+updateUser: OK
+updateObrero: FAIL
+
+==== NUEVA SOLICITUD ====2025-07-09 20:57:14
+POST: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 3212459975
+    [direccion] => calle 1
+    [especialidad] => General
+    [experiencia] => 10
+    [tarifa_hora] => 500000
+    [certificaciones] => x
+    [disponibilidad] => 1
+)
+
+updateUser: OK
+updateObrero: FAIL
+
+==== NUEVA SOLICITUD ====2025-07-09 21:00:56
+POST: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 3204060266
+    [direccion] => calle 1
+    [especialidad] => General
+    [experiencia] => 10
+    [tarifa_hora] => 50000
+    [certificaciones] => x
+    [disponibilidad] => 1
+)
+
+updateUser: OK
+updateObrero: OK
+
+==== NUEVA SOLICITUD ====2025-07-09 21:19:55
+POST: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 
+    [direccion] => bogota
+    [especialidad] => 
+    [experiencia] => 
+    [tarifa_hora] => 50000
+    [disponibilidad] => 
+    [certificaciones] => x
+)
+
+updateUser: OK
+updateObrero: OK

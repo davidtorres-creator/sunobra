@@ -49,6 +49,8 @@ $router->prefix('/admin')
         $router->delete('/users/{id}', 'AdminController@deleteUser');
         $router->get('/reports', 'AdminController@reports');
         $router->get('/settings', 'AdminController@settings');
+        $router->post('/cotizaciones/{id}/aceptar', 'AdminController@aceptarCotizacion');
+        $router->post('/cotizaciones/{id}/rechazar', 'AdminController@rechazarCotizacion');
     });
 
 // ========================================
@@ -64,9 +66,12 @@ $router->prefix('/cliente')
         $router->post('/change-password', 'ClienteController@changePassword');
         $router->get('/services', 'ClienteController@services');
         $router->get('/services/{id}', 'ClienteController@showService');
+        $router->get('/services/{id}/request', 'ClienteController@showRequestForm');
         $router->post('/services/{id}/request', 'ClienteController@requestService');
         $router->get('/requests', 'ClienteController@requests');
         $router->get('/requests/{id}', 'ClienteController@showRequest');
+        $router->post('/cotizaciones/{id}/aceptar', 'ClienteController@aceptarCotizacion');
+        $router->post('/cotizaciones/{id}/rechazar', 'ClienteController@rechazarCotizacion');
         $router->get('/history', 'ClienteController@history');
         $router->get('/services/create', 'ClienteController@createService');
         $router->post('/services/create', 'ClienteController@storeService');
@@ -81,9 +86,12 @@ $router->prefix('/obrero')
     ->group(function($router) {
         $router->get('/dashboard', 'ObreroController@dashboard');
         $router->get('/profile', 'ObreroController@profile');
+        $router->get('/profile/edit', 'ObreroController@editProfile');
         $router->post('/profile', 'ObreroController@updateProfile');
         $router->get('/jobs', 'ObreroController@jobs');
+        $router->get('/jobs-table', 'ObreroController@jobsTable');
         $router->get('/jobs/{id}', 'ObreroController@showJob');
+        $router->get('/jobs/{id}/apply', 'ObreroController@showApplyForm');
         $router->post('/jobs/{id}/apply', 'ObreroController@applyJob');
         $router->get('/applications', 'ObreroController@applications');
         $router->get('/applications/{id}', 'ObreroController@showApplication');

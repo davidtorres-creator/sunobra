@@ -50,6 +50,11 @@
                     <h1 class="display-5 fw-bold mb-3">Trabajos Disponibles</h1>
                     <p class="lead mb-0">Encuentra las mejores oportunidades laborales en tu área</p>
                 </div>
+                <div class="text-center mt-3">
+                    <a href="/obrero/jobs-table" class="btn btn-outline-primary">
+                        <i class="fas fa-table"></i> Ver en Tabla
+                    </a>
+                </div>
             </div>
 
             <!-- Stats Section -->
@@ -253,7 +258,7 @@
                             </div>
                             
                             <div class="job-actions">
-                                <a href="/obrero/jobs/<?= $job['id'] ?>" class="btn-apply">
+                                <a href="/obrero/jobs/<?= $job['id'] ?>/apply" class="btn-apply">
                                     <i class="fas fa-paper-plane"></i>
                                     Aplicar Ahora
                                 </a>

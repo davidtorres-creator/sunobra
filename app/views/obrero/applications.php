@@ -52,202 +52,52 @@
                 </div>
             </div>
 
-            <!-- Stats Section -->
-            <div class="stats-section">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <div class="stats-card">
-                            <div class="stats-icon total">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div class="stats-number"><?= count($applications) ?></div>
-                            <div class="stats-label">Total Aplicaciones</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stats-card">
-                            <div class="stats-icon pending">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="stats-number"><?= count(array_filter($applications, function($app) { return $app['estado'] === 'pendiente'; })) ?></div>
-                            <div class="stats-label">Pendientes</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stats-card">
-                            <div class="stats-icon accepted">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="stats-number"><?= count(array_filter($applications, function($app) { return $app['estado'] === 'aceptada'; })) ?></div>
-                            <div class="stats-label">Aceptadas</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stats-card">
-                            <div class="stats-icon rejected">
-                                <i class="fas fa-times-circle"></i>
-                            </div>
-                            <div class="stats-number"><?= count(array_filter($applications, function($app) { return $app['estado'] === 'rechazada'; })) ?></div>
-                            <div class="stats-label">Rechazadas</div>
-                        </div>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Listado de Aplicaciones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Trabajo</th>
+                                    <th>Estado</th>
+                                    <th>Fecha</th>
+                                    <th>Propuesta</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php if (!empty($aplicaciones)): ?>
+                                <?php foreach ($aplicaciones as $app): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($app['trabajo']) ?></td>
+                                        <td>
+                                            <?php if ($app['estado'] == 'pendiente'): ?>
+                                                <span class="badge bg-warning">Pendiente</span>
+                                            <?php elseif ($app['estado'] == 'aceptada'): ?>
+                                                <span class="badge bg-success">Aceptada</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary"><?= htmlspecialchars($app['estado']) ?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= htmlspecialchars(date('Y-m-d', strtotime($app['fecha']))) ?></td>
+                                        <td><?= htmlspecialchars($app['propuesta']) ?></td>
+                                        <td>
+                                            <a href="/obrero/applications/<?= $app['id'] ?>" class="btn btn-sm btn-info">Ver</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No tienes aplicaciones registradas</td>
+                                </tr>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-
-            <!-- Filters Section -->
-            <div class="filters-section">
-                <h6 class="fw-bold mb-3">Filtrar por Estado</h6>
-                <div class="filter-chips">
-                    <div class="filter-chip active" data-filter="all">
-                        <i class="fas fa-list"></i> Todas
-                    </div>
-                    <div class="filter-chip" data-filter="pendiente">
-                        <i class="fas fa-clock"></i> Pendientes
-                    </div>
-                    <div class="filter-chip" data-filter="aceptada">
-                        <i class="fas fa-check-circle"></i> Aceptadas
-                    </div>
-                    <div class="filter-chip" data-filter="rechazada">
-                        <i class="fas fa-times-circle"></i> Rechazadas
-                    </div>
-                    <div class="filter-chip" data-filter="en_proceso">
-                        <i class="fas fa-tools"></i> En Proceso
-                    </div>
-                </div>
-            </div>
-
-            <!-- Applications List -->
-            <div class="row" id="applicationsContainer">
-                <?php if (empty($applications)): ?>
-                <div class="col-12">
-                    <div class="no-applications">
-                        <div class="no-applications-icon">
-                            <i class="fas fa-clipboard-list"></i>
-                        </div>
-                        <h3 class="no-applications-title">No tienes aplicaciones aún</h3>
-                        <p class="no-applications-text">Comienza a aplicar a trabajos disponibles para ver tus aplicaciones aquí.</p>
-                        <a href="/obrero/jobs" class="btn-apply-now">
-                            <i class="fas fa-search"></i> Buscar Trabajos
-                        </a>
-                    </div>
-                </div>
-                <?php else: ?>
-                <?php foreach ($applications as $application): ?>
-                <div class="col-lg-6 mb-4 application-item" data-status="<?= $application['estado'] ?>">
-                    <div class="application-card">
-                        <div class="application-card-header">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h3 class="application-title"><?= htmlspecialchars($application['titulo_trabajo']) ?></h3>
-                                <div class="status-badge <?= $application['estado'] ?>">
-                                    <i class="fas fa-<?= 
-                                        $application['estado'] === 'pendiente' ? 'clock' : 
-                                        ($application['estado'] === 'aceptada' ? 'check-circle' : 
-                                        ($application['estado'] === 'rechazada' ? 'times-circle' : 'tools')) 
-                                    ?>"></i>
-                                    <?= ucfirst(str_replace('_', ' ', $application['estado'])) ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="application-card-body">
-                            <div class="application-info-grid">
-                                <div class="application-info-item">
-                                    <div class="application-info-icon">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="application-info-content">
-                                        <div class="application-info-label">Cliente</div>
-                                        <div class="application-info-value"><?= htmlspecialchars($application['cliente']) ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="application-info-item">
-                                    <div class="application-info-icon">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                    </div>
-                                    <div class="application-info-content">
-                                        <div class="application-info-label">Ubicación</div>
-                                        <div class="application-info-value"><?= htmlspecialchars($application['ubicacion']) ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="application-info-item">
-                                    <div class="application-info-icon">
-                                        <i class="fas fa-calendar"></i>
-                                    </div>
-                                    <div class="application-info-content">
-                                        <div class="application-info-label">Fecha de Aplicación</div>
-                                        <div class="application-info-value"><?= htmlspecialchars($application['fecha_aplicacion']) ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="application-info-item">
-                                    <div class="application-info-icon">
-                                        <i class="fas fa-clock"></i>
-                                    </div>
-                                    <div class="application-info-content">
-                                        <div class="application-info-label">Tiempo Estimado</div>
-                                        <div class="application-info-value"><?= htmlspecialchars($application['tiempo_estimado']) ?></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="price-comparison">
-                                <div class="price-item original">
-                                    <div class="price-label">Presupuesto Original</div>
-                                    <div class="price-value">$<?= number_format($application['presupuesto_original']) ?></div>
-                                </div>
-                                <div class="price-item proposed">
-                                    <div class="price-label">Tu Propuesta</div>
-                                    <div class="price-value proposed">$<?= number_format($application['precio_propuesto']) ?></div>
-                                </div>
-                            </div>
-                            
-                            <div class="proposal-section">
-                                <div class="proposal-title">
-                                    <i class="fas fa-file-alt"></i>
-                                    Tu Propuesta
-                                </div>
-                                <div class="proposal-text"><?= htmlspecialchars($application['propuesta']) ?></div>
-                            </div>
-                            
-                            <div class="application-tags">
-                                <div class="application-tag">
-                                    <i class="fas fa-hammer"></i>
-                                    <?= htmlspecialchars($application['categoria']) ?>
-                                </div>
-                                <div class="application-tag">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    Límite: <?= htmlspecialchars($application['fecha_limite']) ?>
-                                </div>
-                            </div>
-                            
-                            <div class="application-actions">
-                                <a href="/obrero/applications/<?= $application['id'] ?>" class="btn-primary-action">
-                                    <i class="fas fa-eye"></i>
-                                    Ver Detalles
-                                </a>
-                                
-                                <?php if ($application['estado'] === 'pendiente'): ?>
-                                <a href="/obrero/applications/<?= $application['id'] ?>/edit" class="btn-secondary-action">
-                                    <i class="fas fa-edit"></i>
-                                    Editar
-                                </a>
-                                <a href="/obrero/applications/<?= $application['id'] ?>/cancel" class="btn-danger-action">
-                                    <i class="fas fa-times"></i>
-                                    Cancelar
-                                </a>
-                                <?php elseif ($application['estado'] === 'aceptada'): ?>
-                                <a href="/obrero/schedule" class="btn-secondary-action">
-                                    <i class="fas fa-calendar"></i>
-                                    Ver Calendario
-                                </a>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-                <?php endif; ?>
             </div>
         </main>
     </div>

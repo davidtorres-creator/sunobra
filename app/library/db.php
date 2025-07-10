@@ -6,7 +6,7 @@ class Database {
     private $host = 'localhost';
     private $username = 'root';
     private $password = '';
-    private $database = 'SunObra';
+    private $database = 'sunobra';
     private $connection;
     
     public function __construct() {

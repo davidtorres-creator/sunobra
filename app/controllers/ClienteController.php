@@ -24,10 +24,17 @@ class ClienteController extends BaseController {
             return;
         }
         
+        // Obtener cotizaciones pendientes
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $cotizacionesPendientes = $obreroModel->getCotizacionesPendientesCliente($_SESSION['user_id']);
+        
         $data = [
             'title' => 'Dashboard - Cliente',
             'user' => $this->getCurrentUser(),
-            'stats' => $this->getClienteStats()
+            'stats' => $this->getClienteStats(),
+            'recent_requests' => $this->getClienteRecentRequests(5),
+            'cotizaciones_pendientes' => $cotizacionesPendientes
         ];
         
         $this->render('cliente/dashboard', $data);
@@ -252,6 +259,34 @@ class ClienteController extends BaseController {
     }
     
     /**
+     * Mostrar formulario de solicitud de servicio
+     */
+    public function showRequestForm($id) {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'cliente') {
+            $this->redirect('/login');
+            return;
+        }
+        
+        $service = $this->getServiceById($id);
+        if (!$service) {
+            $_SESSION['auth_error'] = 'Servicio no encontrado';
+            $this->redirect('/cliente/services');
+            return;
+        }
+        
+        $data = [
+            'title' => 'Solicitar Servicio',
+            'user' => $this->getCurrentUser(),
+            'service' => $service,
+            'error' => $_SESSION['auth_error'] ?? '',
+            'success' => $_SESSION['auth_success'] ?? ''
+        ];
+        
+        unset($_SESSION['auth_error'], $_SESSION['auth_success']);
+        $this->render('cliente/request-form', $data);
+    }
+    
+    /**
      * Solicitar servicio
      */
     public function requestService($id) {
@@ -277,18 +312,33 @@ class ClienteController extends BaseController {
         }
         
         try {
-            // Crear solicitud de servicio
-            $requestData = [
-                'cliente_id' => $_SESSION['user_id'],
-                'servicio_id' => $id,
-                'descripcion' => $descripcion,
-                'fecha_solicitud' => $fecha_solicitud,
-                'presupuesto' => $presupuesto,
-                'estado' => 'pendiente'
-            ];
+            // Verificar que el servicio existe
+            $service = $this->getServiceById($id);
+            if (!$service) {
+                $_SESSION['auth_error'] = 'Servicio no encontrado';
+                $this->redirect('/cliente/services/' . $id . '/request');
+                return;
+            }
             
-            // Aquí iría la lógica para guardar la solicitud
-            $_SESSION['auth_success'] = 'Solicitud enviada correctamente';
+            // Crear solicitud de servicio
+            require_once __DIR__ . '/../library/db.php';
+            $db = new Database();
+            
+            $sql = "INSERT INTO solicitudes_servicio (cliente_id, servicio_id, descripcion, estado) VALUES (?, ?, ?, 'pendiente')";
+            $stmt = $db->prepare($sql);
+            
+            if (!$stmt) {
+                throw new Exception("Error al preparar la consulta: " . $db->getConnection()->error);
+            }
+            
+            $stmt->bind_param("iis", $_SESSION['user_id'], $id, $descripcion);
+            $result = $stmt->execute();
+            
+            if ($result) {
+                $_SESSION['auth_success'] = 'Solicitud enviada correctamente. Te notificaremos cuando un obrero esté disponible.';
+            } else {
+                throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+            }
             
         } catch (Exception $e) {
             $_SESSION['auth_error'] = 'Error al enviar la solicitud: ' . $e->getMessage();
@@ -306,13 +356,21 @@ class ClienteController extends BaseController {
             return;
         }
         
+        // Verificar si se solicita vista de tabla
+        $view = $_GET['view'] ?? 'cards';
+        
         $data = [
             'title' => 'Mis Solicitudes',
             'user' => $this->getCurrentUser(),
             'requests' => $this->getClienteRequests()
         ];
         
-        $this->render('cliente/requests', $data);
+        // Renderizar vista según el parámetro
+        if ($view === 'table') {
+            $this->render('cliente/requests-table', $data);
+        } else {
+            $this->render('cliente/requests', $data);
+        }
     }
     
     /**
@@ -425,6 +483,22 @@ class ClienteController extends BaseController {
         $this->redirect('/cliente/services/create');
     }
     
+    public function aceptarCotizacion($id) {
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $ok = $obreroModel->cambiarEstadoCotizacion($id, 'aceptada');
+        $_SESSION['auth_success'] = $ok ? 'Cotización aceptada correctamente.' : 'No se pudo aceptar la cotización.';
+        $this->redirect('/cliente/requests'); // Cambia la ruta si tu panel es diferente
+    }
+
+    public function rechazarCotizacion($id) {
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $ok = $obreroModel->cambiarEstadoCotizacion($id, 'rechazada');
+        $_SESSION['auth_success'] = $ok ? 'Cotización rechazada correctamente.' : 'No se pudo rechazar la cotización.';
+        $this->redirect('/cliente/requests'); // Cambia la ruta si tu panel es diferente
+    }
+    
     // ========================================
     // MÉTODOS PRIVADOS
     // ========================================
@@ -455,13 +529,9 @@ class ClienteController extends BaseController {
      * Obtener servicio por ID
      */
     private function getServiceById($id) {
-        $services = $this->getAvailableServices();
-        foreach ($services as $service) {
-            if ($service['id'] == $id) {
-                return $service;
-            }
-        }
-        return null;
+        require_once __DIR__ . '/../models/ServicioModel.php';
+        $servicioModel = new ServicioModel();
+        return $servicioModel->getById($id);
     }
     
     /**
@@ -471,10 +541,11 @@ class ClienteController extends BaseController {
         $clienteId = $_SESSION['user_id'];
         require_once __DIR__ . '/../library/db.php';
         $db = new Database();
-        $sql = "SELECT id, servicio, fecha, estado, descripcion, presupuesto, cotizaciones
-                FROM solicitudes_servicio
-                WHERE id_cliente = ?
-                ORDER BY fecha DESC";
+        $sql = "SELECT ss.id, ss.servicio_id, ss.fecha, ss.estado, ss.descripcion, s.nombre_servicio, s.costo_base_referencial
+                FROM solicitudes_servicio ss
+                JOIN servicios s ON ss.servicio_id = s.id
+                WHERE ss.cliente_id = ?
+                ORDER BY ss.fecha DESC";
         $stmt = $db->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('i', $clienteId);
@@ -491,11 +562,26 @@ class ClienteController extends BaseController {
      * Obtener solicitud por ID
      */
     private function getRequestById($id) {
-        $requests = $this->getClienteRequests();
-        foreach ($requests as $request) {
-            if ($request['id'] == $id) {
-                return $request;
-            }
+        $clienteId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $db = new Database();
+        $sql = "SELECT ss.id, ss.servicio_id, ss.fecha, ss.estado, ss.descripcion, s.nombre_servicio
+                FROM solicitudes_servicio ss
+                JOIN servicios s ON ss.servicio_id = s.id
+                WHERE ss.cliente_id = ? AND ss.id = ?
+                LIMIT 1";
+        $stmt = $db->prepare($sql);
+        if (!$stmt) return null;
+        $stmt->bind_param('ii', $clienteId, $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            $request = $result->fetch_assoc();
+            // Obtener cotizaciones asociadas a la solicitud
+            $obreroModel = new ObreroModel();
+            $request['cotizaciones'] = $obreroModel->getCotizacionesPorSolicitud($id);
+            return $request;
         }
         return null;
     }
@@ -522,6 +608,31 @@ class ClienteController extends BaseController {
             $history[] = $row;
         }
         return $history;
+    }
+    
+    /**
+     * Obtener solicitudes recientes del cliente (para dashboard)
+     */
+    private function getClienteRecentRequests($limit = 5) {
+        $clienteId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $sql = "SELECT ss.id, ss.servicio_id, ss.fecha, ss.estado, ss.descripcion, s.nombre_servicio, s.costo_base_referencial
+                FROM solicitudes_servicio ss
+                JOIN servicios s ON ss.servicio_id = s.id
+                WHERE ss.cliente_id = ?
+                ORDER BY ss.fecha DESC
+                LIMIT ?";
+        $stmt = $db->prepare($sql);
+        if (!$stmt) return [];
+        $stmt->bind_param('ii', $clienteId, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $requests = [];
+        while ($row = $result->fetch_assoc()) {
+            $requests[] = $row;
+        }
+        return $requests;
     }
     
     /**

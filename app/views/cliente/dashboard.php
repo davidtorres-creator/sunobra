@@ -196,24 +196,46 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php if (empty($recent_requests)): ?>
                                         <tr>
-                                            <td>Reparación de pared</td>
-                                            <td><span class="badge bg-warning">Pendiente</span></td>
-                                            <td>2024-01-15</td>
-                                            <td>$150,000</td>
-                                            <td>
-                                                <a href="#" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
+                                            <td colspan="5" class="text-center text-muted">No hay actividad reciente</td>
                                         </tr>
-                                        <tr>
-                                            <td>Instalación eléctrica</td>
-                                            <td><span class="badge bg-success">Completado</span></td>
-                                            <td>2024-01-10</td>
-                                            <td>$200,000</td>
-                                            <td>
-                                                <a href="#" class="btn btn-sm btn-info">Ver</a>
-                                            </td>
-                                        </tr>
+                                    <?php else: ?>
+                                        <?php foreach ($recent_requests as $req): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($req['nombre_servicio']) ?></td>
+                                                <td>
+                                                    <?php
+                                                    $badgeClass = '';
+                                                    switch ($req['estado']) {
+                                                        case 'pendiente':
+                                                            $badgeClass = 'bg-warning';
+                                                            break;
+                                                        case 'completado':
+                                                            $badgeClass = 'bg-success';
+                                                            break;
+                                                        case 'en_proceso':
+                                                            $badgeClass = 'bg-info';
+                                                            break;
+                                                        case 'cancelado':
+                                                            $badgeClass = 'bg-danger';
+                                                            break;
+                                                        default:
+                                                            $badgeClass = 'bg-secondary';
+                                                    }
+                                                    ?>
+                                                    <span class="badge <?= $badgeClass ?>">
+                                                        <?= ucfirst($req['estado']) ?>
+                                                    </span>
+                                                </td>
+                                                <td><?= date('Y-m-d', strtotime($req['fecha'])) ?></td>
+                                                <td>$<?= number_format($req['costo_base_referencial'], 0, ',', '.') ?></td>
+                                                <td>
+                                                    <a href="/cliente/requests/<?= $req['id'] ?>" class="btn btn-sm btn-primary">Ver</a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -221,6 +243,58 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Cotizaciones Pendientes -->
+            <?php if (!empty($cotizaciones_pendientes)): ?>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-warning">Cotizaciones Pendientes</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Servicio</th>
+                                            <th>Obrero</th>
+                                            <th>Detalle</th>
+                                            <th>Monto Estimado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($cotizaciones_pendientes as $cotizacion): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($cotizacion['nombre_servicio']) ?></td>
+                                                <td><?= htmlspecialchars($cotizacion['nombre_obrero']) ?></td>
+                                                <td><?= htmlspecialchars($cotizacion['detalle']) ?></td>
+                                                <td>$<?= number_format($cotizacion['monto_estimado'], 0, ',', '.') ?></td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/aceptar" style="display: inline;">
+                                                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('¿Estás seguro de aceptar esta cotización?')">
+                                                                <i class="fas fa-check"></i> Aceptar
+                                                            </button>
+                                                        </form>
+                                                        <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/rechazar" style="display: inline;">
+                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de rechazar esta cotización?')">
+                                                                <i class="fas fa-times"></i> Rechazar
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </main>
     </div>
 </div>

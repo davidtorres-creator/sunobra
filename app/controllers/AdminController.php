@@ -21,12 +21,19 @@ class AdminController extends BaseController {
             $this->redirect('/login');
             return;
         }
+        
+        // Obtener cotizaciones pendientes
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $cotizacionesPendientes = $obreroModel->getCotizacionesPendientesAdmin();
+        
         $data = [
             'title' => 'Dashboard - Administrador',
             'user' => $this->getCurrentUser(),
             'stats' => $this->getAdminStats(),
             'recentUsers' => $this->getRecentUsers(5),
-            'settings' => $this->getSystemSettings()
+            'settings' => $this->getSystemSettings(),
+            'cotizaciones_pendientes' => $cotizacionesPendientes
         ];
         $this->render('admin/dashboard', $data);
     }
@@ -239,6 +246,38 @@ class AdminController extends BaseController {
         $this->render('admin/settings', $data);
     }
     
+    /**
+     * Aceptar cotización (admin)
+     */
+    public function aceptarCotizacion($id) {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'admin') {
+            $this->redirect('/login');
+            return;
+        }
+        
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $ok = $obreroModel->cambiarEstadoCotizacion($id, 'aceptada');
+        $_SESSION['auth_success'] = $ok ? 'Cotización aceptada correctamente.' : 'No se pudo aceptar la cotización.';
+        $this->redirect('/admin/dashboard');
+    }
+
+    /**
+     * Rechazar cotización (admin)
+     */
+    public function rechazarCotizacion($id) {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'admin') {
+            $this->redirect('/login');
+            return;
+        }
+        
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $ok = $obreroModel->cambiarEstadoCotizacion($id, 'rechazada');
+        $_SESSION['auth_success'] = $ok ? 'Cotización rechazada correctamente.' : 'No se pudo rechazar la cotización.';
+        $this->redirect('/admin/dashboard');
+    }
+
     /**
      * Perfil del administrador
      */

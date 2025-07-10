@@ -206,37 +206,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Reparación de pared</td>
-                                            <td>Juan Pérez</td>
-                                            <td>Bogotá, Colombia</td>
-                                            <td>$150,000</td>
-                                            <td>2024-02-15</td>
-                                            <td>
-                                                <a href="/obrero/jobs/1" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Instalación eléctrica</td>
-                                            <td>María García</td>
-                                            <td>Bogotá, Colombia</td>
-                                            <td>$200,000</td>
-                                            <td>2024-02-20</td>
-                                            <td>
-                                                <a href="/obrero/jobs/2" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Reparación de tubería</td>
-                                            <td>Carlos López</td>
-                                            <td>Bogotá, Colombia</td>
-                                            <td>$120,000</td>
-                                            <td>2024-02-18</td>
-                                            <td>
-                                                <a href="/obrero/jobs/3" class="btn btn-sm btn-primary">Ver</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+<?php if (!empty($jobs)): ?>
+    <?php foreach ($jobs as $job): ?>
+        <tr>
+            <td><?= htmlspecialchars($job['titulo']) ?></td>
+            <td><?= htmlspecialchars($job['cliente']) ?></td>
+            <td><?= htmlspecialchars($job['ubicacion']) ?></td>
+            <td>$<?= number_format($job['presupuesto'], 0, ',', '.') ?></td>
+            <td><?= htmlspecialchars($job['fecha_limite'] ?? $job['fecha']) ?></td>
+            <td>
+                <a href="/obrero/jobs/<?= $job['id'] ?>" class="btn btn-sm btn-primary">Ver</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="6" class="text-center text-muted">No hay trabajos disponibles</td>
+    </tr>
+<?php endif; ?>
+</tbody>
                                 </table>
                             </div>
                         </div>
@@ -264,25 +252,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Reparación de pared</td>
-                                            <td><span class="badge bg-warning">Pendiente</span></td>
-                                            <td>2024-01-15</td>
-                                            <td>Puedo hacer el trabajo en 2 días</td>
-                                            <td>
-                                                <a href="/obrero/applications/1" class="btn btn-sm btn-info">Ver</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Instalación eléctrica</td>
-                                            <td><span class="badge bg-success">Aceptada</span></td>
-                                            <td>2024-01-10</td>
-                                            <td>Experiencia en instalaciones residenciales</td>
-                                            <td>
-                                                <a href="/obrero/applications/2" class="btn btn-sm btn-success">Ver</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+<?php if (!empty($aplicaciones)): ?>
+    <?php foreach ($aplicaciones as $app): ?>
+        <tr>
+            <td><?= htmlspecialchars($app['trabajo']) ?></td>
+            <td>
+                <?php if ($app['estado'] == 'pendiente'): ?>
+                    <span class="badge bg-warning">Pendiente</span>
+                <?php elseif ($app['estado'] == 'aceptada'): ?>
+                    <span class="badge bg-success">Aceptada</span>
+                <?php else: ?>
+                    <span class="badge bg-secondary"><?= htmlspecialchars($app['estado']) ?></span>
+                <?php endif; ?>
+            </td>
+            <td><?= htmlspecialchars(date('Y-m-d', strtotime($app['fecha']))) ?></td>
+            <td><?= htmlspecialchars($app['propuesta']) ?></td>
+            <td>
+                <a href="/obrero/applications/<?= $app['id'] ?>" class="btn btn-sm btn-info">Ver</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="5" class="text-center text-muted">No tienes aplicaciones recientes</td>
+    </tr>
+<?php endif; ?>
+</tbody>
                                 </table>
                             </div>
                         </div>

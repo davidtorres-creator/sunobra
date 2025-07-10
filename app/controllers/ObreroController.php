@@ -21,13 +21,16 @@ class ObreroController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $aplicaciones = $obreroModel->getAplicacionesObrero($_SESSION['user_id']);
         $data = [
             'title' => 'Dashboard - Obrero',
             'user' => $this->getCurrentUser(),
-            'stats' => $this->getObreroStats()
+            'stats' => $this->getObreroStats(),
+            'jobs' => $this->getAvailableJobs(),
+            'aplicaciones' => $aplicaciones
         ];
-        
         $this->render('obrero/dashboard', $data);
     }
     
@@ -39,25 +42,66 @@ class ObreroController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        $user = $this->getCurrentUser();
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $obreroId = $user['id'];
+        $calificacion = $obreroModel->getCalificacionYResenas($obreroId);
+        $trabajosCompletados = $obreroModel->getTrabajosCompletados($obreroId);
+        $tiempoPromedio = $obreroModel->getTiempoPromedioTrabajo($obreroId);
+        $clientesSatisfechos = $obreroModel->getClientesSatisfechos($obreroId);
         $data = [
             'title' => 'Mi Perfil',
-            'user' => $this->getCurrentUser()
+            'user' => $user,
+            'calificacion' => $calificacion,
+            'trabajosCompletados' => $trabajosCompletados,
+            'tiempoPromedio' => $tiempoPromedio,
+            'clientesSatisfechos' => $clientesSatisfechos
+        ];
+        $this->render('obrero/profile', $data);
+    }
+    
+    /**
+     * Formulario de edición del perfil del obrero
+     */
+    public function editProfile() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'obrero') {
+            $this->redirect('/login');
+            return;
+        }
+        
+        $user = $this->getCurrentUser();
+        
+        // Obtener datos específicos del obrero
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $obreroData = $obreroModel->getObreroById($user['id']);
+        
+        // Combinar datos del usuario con datos del obrero
+        $userData = array_merge($user, $obreroData ?: []);
+        
+        $data = [
+            'title' => 'Editar Perfil - Obrero',
+            'user' => $userData
         ];
         
-        $this->render('obrero/profile', $data);
+        $this->render('obrero/edit-profile', $data);
     }
     
     /**
      * Actualizar perfil del obrero
      */
     public function updateProfile() {
+        $debugLog = __DIR__ . '/../../logs/update_obrero_debug.log';
+        file_put_contents($debugLog, "\n==== NUEVA SOLICITUD ====".date('Y-m-d H:i:s')."\n", FILE_APPEND);
         if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'obrero') {
+            file_put_contents($debugLog, "No autenticado o no obrero\n", FILE_APPEND);
             $this->redirect('/login');
             return;
         }
         
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            file_put_contents($debugLog, "No es POST\n", FILE_APPEND);
             $this->redirect('/obrero/profile');
             return;
         }
@@ -67,12 +111,16 @@ class ObreroController extends BaseController {
         $apellido = trim($_POST['apellido'] ?? '');
         $telefono = trim($_POST['telefono'] ?? '');
         $direccion = trim($_POST['direccion'] ?? '');
-        $especialidades = $_POST['especialidades'] ?? [];
-        $experiencia = $_POST['experiencia'] ?? '';
-        $tarifa_hora = $_POST['tarifa_hora'] ?? '';
-        $descripcion = trim($_POST['descripcion'] ?? '');
+        $especialidad = trim($_POST['especialidad'] ?? '');
+        $experiencia = trim($_POST['experiencia'] ?? '');
+        $tarifa_hora = trim($_POST['tarifa_hora'] ?? '');
+        $certificaciones = trim($_POST['certificaciones'] ?? '');
+        $disponibilidad = trim($_POST['disponibilidad'] ?? '');
+        
+        file_put_contents($debugLog, "POST: ".print_r($_POST, true)."\n", FILE_APPEND);
         
         if (empty($nombre) || empty($apellido)) {
+            file_put_contents($debugLog, "Falta nombre o apellido\n", FILE_APPEND);
             $_SESSION['auth_error'] = 'Nombre y apellido son requeridos';
             $this->redirect('/obrero/profile');
             return;
@@ -87,16 +135,28 @@ class ObreroController extends BaseController {
                 'telefono' => $telefono,
                 'direccion' => $direccion
             ]);
+            file_put_contents($debugLog, "updateUser: ".($updated ? 'OK' : 'FAIL')."\n", FILE_APPEND);
             
             // Actualizar datos específicos del obrero
-            if ($updated) {
-                // Aquí iría la lógica para actualizar datos del obrero
+            require_once __DIR__ . '/../models/ObreroModel.php';
+            $obreroModel = new ObreroModel();
+            $updatedObrero = $obreroModel->updateObrero($_SESSION['user_id'], [
+                'especialidad' => $especialidad,
+                'experiencia' => $experiencia,
+                'tarifa_hora' => $tarifa_hora,
+                'certificaciones' => $certificaciones,
+                'disponibilidad' => $disponibilidad
+            ]);
+            file_put_contents($debugLog, "updateObrero: ".($updatedObrero ? 'OK' : 'FAIL')."\n", FILE_APPEND);
+            
+            if ($updated || $updatedObrero) {
                 $_SESSION['auth_success'] = 'Perfil actualizado correctamente';
             } else {
                 $_SESSION['auth_error'] = 'Error al actualizar el perfil';
             }
             
         } catch (Exception $e) {
+            file_put_contents($debugLog, "EXCEPCION: ".$e->getMessage()."\n", FILE_APPEND);
             $_SESSION['auth_error'] = 'Error del servidor: ' . $e->getMessage();
         }
         
@@ -122,6 +182,24 @@ class ObreroController extends BaseController {
     }
     
     /**
+     * Vista de tabla de trabajos disponibles
+     */
+    public function jobsTable() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'obrero') {
+            $this->redirect('/login');
+            return;
+        }
+        
+        $data = [
+            'title' => 'Trabajos Disponibles - Vista de Tabla',
+            'user' => $this->getCurrentUser(),
+            'jobs' => $this->getAvailableJobs()
+        ];
+        
+        $this->render('obrero/jobs-table', $data);
+    }
+    
+    /**
      * Ver trabajo específico
      */
     public function showJob($id) {
@@ -137,6 +215,27 @@ class ObreroController extends BaseController {
         ];
         
         $this->render('obrero/job-details', $data);
+    }
+    
+    /**
+     * Mostrar formulario para aplicar a un trabajo
+     */
+    public function showApplyForm($id) {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'obrero') {
+            $this->redirect('/login');
+            return;
+        }
+        $job = $this->getJobById($id);
+        if (!$job) {
+            $this->redirect('/obrero/jobs');
+            return;
+        }
+        $data = [
+            'title' => 'Aplicar a Trabajo',
+            'user' => $this->getCurrentUser(),
+            'job' => $job
+        ];
+        $this->render('obrero/apply-job', $data);
     }
     
     /**
@@ -156,32 +255,28 @@ class ObreroController extends BaseController {
         // Validar datos de la aplicación
         $propuesta = trim($_POST['propuesta'] ?? '');
         $precio_propuesto = $_POST['precio_propuesto'] ?? '';
-        $tiempo_estimado = $_POST['tiempo_estimado'] ?? '';
-        
-        if (empty($propuesta)) {
-            $_SESSION['auth_error'] = 'La propuesta es requerida';
-            $this->redirect('/obrero/jobs/' . $id);
+        if (empty($propuesta) || $precio_propuesto === '' || !is_numeric($precio_propuesto)) {
+            $_SESSION['auth_error'] = 'La propuesta y el monto son requeridos y el monto debe ser numérico';
+            $this->redirect('/obrero/jobs/' . $id . '/apply');
             return;
         }
-        
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
         try {
-            // Crear aplicación al trabajo
-            $applicationData = [
-                'obrero_id' => $_SESSION['user_id'],
-                'trabajo_id' => $id,
-                'propuesta' => $propuesta,
-                'precio_propuesto' => $precio_propuesto,
-                'tiempo_estimado' => $tiempo_estimado,
-                'estado' => 'pendiente'
-            ];
-            
-            // Aquí iría la lógica para guardar la aplicación
-            $_SESSION['auth_success'] = 'Aplicación enviada correctamente';
-            
+            $ok = $obreroModel->crearCotizacion(
+                $_SESSION['user_id'],
+                $id,
+                $propuesta,
+                $precio_propuesto
+            );
+            if ($ok) {
+                $_SESSION['auth_success'] = 'Cotización enviada correctamente';
+            } else {
+                $_SESSION['auth_error'] = 'No se pudo enviar la cotización';
+            }
         } catch (Exception $e) {
-            $_SESSION['auth_error'] = 'Error al enviar la aplicación: ' . $e->getMessage();
+            $_SESSION['auth_error'] = 'Error al enviar la cotización: ' . $e->getMessage();
         }
-        
         $this->redirect('/obrero/applications');
     }
     
@@ -193,13 +288,14 @@ class ObreroController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $aplicaciones = $obreroModel->getAplicacionesObrero($_SESSION['user_id']);
         $data = [
             'title' => 'Mis Aplicaciones',
             'user' => $this->getCurrentUser(),
-            'applications' => $this->getObreroApplications()
+            'aplicaciones' => $aplicaciones
         ];
-        
         $this->render('obrero/applications', $data);
     }
     
@@ -278,49 +374,118 @@ class ObreroController extends BaseController {
      * Obtener trabajos disponibles
      */
     private function getAvailableJobs() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'titulo' => 'Reparación de pared',
-                'descripcion' => 'Se necesita reparar una pared dañada',
-                'cliente' => 'Juan Pérez',
-                'ubicacion' => 'Bogotá, Colombia',
-                'presupuesto' => 150000,
-                'fecha_limite' => '2024-02-15'
-            ],
-            [
-                'id' => 2,
-                'titulo' => 'Instalación eléctrica',
-                'descripcion' => 'Instalación de tomas y luces',
-                'cliente' => 'María García',
-                'ubicacion' => 'Bogotá, Colombia',
-                'presupuesto' => 200000,
-                'fecha_limite' => '2024-02-20'
-            ],
-            [
-                'id' => 3,
-                'titulo' => 'Reparación de tubería',
-                'descripcion' => 'Fuga en tubería principal',
-                'cliente' => 'Carlos López',
-                'ubicacion' => 'Bogotá, Colombia',
-                'presupuesto' => 120000,
-                'fecha_limite' => '2024-02-18'
-            ]
-        ];
+        try {
+            require_once __DIR__ . '/../library/db.php';
+            $db = new Database();
+            
+            // Consulta para obtener solicitudes de servicio disponibles (pendientes)
+            $sql = "SELECT 
+                        ss.id,
+                        ss.descripcion,
+                        ss.fecha,
+                        ss.estado,
+                        s.nombre_servicio as titulo,
+                        s.categoria,
+                        s.costo_base_referencial as presupuesto,
+                        CONCAT(u.nombre, ' ', u.apellido) as cliente,
+                        u.direccion as ubicacion,
+                        u.telefono as telefono_cliente
+                    FROM solicitudes_servicio ss
+                    INNER JOIN servicios s ON ss.servicio_id = s.id
+                    INNER JOIN clientes c ON ss.cliente_id = c.id
+                    INNER JOIN usuarios u ON c.id = u.id
+                    WHERE ss.estado = 'pendiente'
+                    ORDER BY ss.fecha DESC";
+            
+            $result = $db->query($sql);
+            
+            $jobs = [];
+            while ($row = $result->fetch_assoc()) {
+                // Calcular fecha límite (7 días después de la fecha de solicitud)
+                $fecha_solicitud = new DateTime($row['fecha']);
+                $fecha_limite = $fecha_solicitud->add(new DateInterval('P7D'));
+                
+                $jobs[] = [
+                    'id' => $row['id'],
+                    'titulo' => $row['titulo'],
+                    'descripcion' => $row['descripcion'],
+                    'cliente' => $row['cliente'],
+                    'ubicacion' => $row['ubicacion'] ?: 'Ubicación no especificada',
+                    'presupuesto' => (int)$row['presupuesto'],
+                    'fecha_limite' => $fecha_limite->format('Y-m-d'),
+                    'categoria' => $row['categoria'],
+                    'telefono_cliente' => $row['telefono_cliente'],
+                    'fecha_solicitud' => $row['fecha'],
+                    'estado' => $row['estado']
+                ];
+            }
+            
+            return $jobs;
+            
+        } catch (Exception $e) {
+            error_log("Error en getAvailableJobs: " . $e->getMessage());
+            return [];
+        }
     }
     
     /**
      * Obtener trabajo por ID
      */
     private function getJobById($id) {
-        $jobs = $this->getAvailableJobs();
-        foreach ($jobs as $job) {
-            if ($job['id'] == $id) {
-                return $job;
+        try {
+            require_once __DIR__ . '/../library/db.php';
+            $db = new Database();
+            
+            $sql = "SELECT 
+                        ss.id,
+                        ss.descripcion,
+                        ss.fecha,
+                        ss.estado,
+                        s.nombre_servicio as titulo,
+                        s.categoria,
+                        s.costo_base_referencial as presupuesto,
+                        CONCAT(u.nombre, ' ', u.apellido) as cliente,
+                        u.direccion as ubicacion,
+                        u.telefono as telefono_cliente
+                    FROM solicitudes_servicio ss
+                    INNER JOIN servicios s ON ss.servicio_id = s.id
+                    INNER JOIN clientes c ON ss.cliente_id = c.id
+                    INNER JOIN usuarios u ON c.id = u.id
+                    WHERE ss.id = ? AND ss.estado = 'pendiente'";
+            
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                
+                // Calcular fecha límite (7 días después de la fecha de solicitud)
+                $fecha_solicitud = new DateTime($row['fecha']);
+                $fecha_limite = $fecha_solicitud->add(new DateInterval('P7D'));
+                
+                return [
+                    'id' => $row['id'],
+                    'titulo' => $row['titulo'],
+                    'descripcion' => $row['descripcion'],
+                    'cliente' => $row['cliente'],
+                    'ubicacion' => $row['ubicacion'] ?: 'Ubicación no especificada',
+                    'presupuesto' => (int)$row['presupuesto'],
+                    'fecha_limite' => $fecha_limite->format('Y-m-d'),
+                    'categoria' => $row['categoria'],
+                    'telefono_cliente' => $row['telefono_cliente'],
+                    'fecha_solicitud' => $row['fecha'],
+                    'estado' => $row['estado']
+                ];
             }
+            
+            return null;
+            
+        } catch (Exception $e) {
+            error_log("Error en getJobById: " . $e->getMessage());
+            return null;
         }
-        return null;
     }
     
     /**
@@ -680,5 +845,17 @@ class ObreroController extends BaseController {
                 'ganancia_neta' => 135000
             ]
         ];
+    }
+
+    /**
+     * Obtener el usuario obrero autenticado con datos extendidos
+     */
+    protected function getCurrentUser() {
+        if (!isset($_SESSION['user_id'])) {
+            return null;
+        }
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        return $obreroModel->getObreroById($_SESSION['user_id']);
     }
 } 

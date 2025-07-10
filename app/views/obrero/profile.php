@@ -2,6 +2,23 @@
 
 <link href="assets/css/obrero-profile.css" rel="stylesheet">
 
+<?php if (!empty($_SESSION['auth_success'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <?= htmlspecialchars($_SESSION['auth_success']) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['auth_success']); ?>
+<?php endif; ?>
+<?php if (!empty($_SESSION['auth_error'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <?= htmlspecialchars($_SESSION['auth_error']) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['auth_error']); ?>
+<?php endif; ?>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -164,7 +181,9 @@
                                 </div>
                                 <div class="info-content">
                                     <div class="info-label">Años de Experiencia</div>
-                                    <div class="info-value">5 años</div>
+                                    <div class="info-value">
+                                        <?= htmlspecialchars($user['experiencia'] ?? 'No especificado') ?>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -174,7 +193,9 @@
                                 </div>
                                 <div class="info-content">
                                     <div class="info-label">Tarifa por Hora</div>
-                                    <div class="info-value">$25,000 COP</div>
+                                    <div class="info-value">
+                                        <?= isset($user['tarifa_hora']) ? '$' . number_format($user['tarifa_hora'], 0, ',', '.') . ' COP' : 'No especificado' ?>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -184,7 +205,9 @@
                                 </div>
                                 <div class="info-content">
                                     <div class="info-label">Certificaciones</div>
-                                    <div class="info-value">SENA Construcción, Seguridad Industrial</div>
+                                    <div class="info-value">
+                                        <?= htmlspecialchars($user['certificaciones'] ?? 'No especificado') ?>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -195,25 +218,87 @@
                                 <div class="info-content">
                                     <div class="info-label">Especialidades</div>
                                     <div class="specialties-grid">
-                                        <div class="specialty-badge">
-                                            <i class="fas fa-hammer"></i>
-                                            Albañilería
-                                        </div>
-                                        <div class="specialty-badge">
-                                            <i class="fas fa-bolt"></i>
-                                            Electricidad
-                                        </div>
-                                        <div class="specialty-badge">
-                                            <i class="fas fa-paint-brush"></i>
-                                            Pintura
-                                        </div>
-                                        <div class="specialty-badge">
-                                            <i class="fas fa-tint"></i>
-                                            Plomería
-                                        </div>
+                                        <?php if (!empty($user['especialidad'])): ?>
+                                            <div class="specialty-badge">
+                                                <i class="fas fa-hammer"></i>
+                                                <?= htmlspecialchars($user['especialidad']) ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <span class="text-muted">No especificado</span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label">Disponibilidad</div>
+                                    <div class="info-value">
+                                        <?= htmlspecialchars($user['disponibilidad'] ?? 'No especificado') ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Edición de Datos Profesionales -->
+                <div class="col-lg-12 mb-4">
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <h3 class="profile-card-title">
+                                <i class="fas fa-edit"></i>
+                                Editar Información Profesional
+                            </h3>
+                        </div>
+                        <div class="profile-card-body">
+                            <form method="POST" action="/obrero/profile">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" value="<?= htmlspecialchars($user['nombre'] ?? '') ?>" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="apellido" class="form-label">Apellido</label>
+                                        <input type="text" class="form-control" id="apellido" name="apellido" value="<?= htmlspecialchars($user['apellido'] ?? '') ?>" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="telefono" class="form-label">Teléfono</label>
+                                        <input type="text" class="form-control" id="telefono" name="telefono" value="<?= htmlspecialchars($user['telefono'] ?? '') ?>">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="direccion" class="form-label">Dirección</label>
+                                        <input type="text" class="form-control" id="direccion" name="direccion" value="<?= htmlspecialchars($user['direccion'] ?? '') ?>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="especialidad" class="form-label">Especialidad</label>
+                                        <input type="text" class="form-control" id="especialidad" name="especialidad" value="<?= htmlspecialchars($user['especialidad'] ?? '') ?>">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="experiencia" class="form-label">Años de Experiencia</label>
+                                        <input type="text" class="form-control" id="experiencia" name="experiencia" value="<?= htmlspecialchars($user['experiencia'] ?? '') ?>">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="tarifa_hora" class="form-label">Tarifa por Hora (COP)</label>
+                                        <input type="number" class="form-control" id="tarifa_hora" name="tarifa_hora" value="<?= htmlspecialchars($user['tarifa_hora'] ?? '') ?>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="certificaciones" class="form-label">Certificaciones</label>
+                                        <input type="text" class="form-control" id="certificaciones" name="certificaciones" value="<?= htmlspecialchars($user['certificaciones'] ?? '') ?>">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="disponibilidad" class="form-label">Disponibilidad</label>
+                                        <input type="text" class="form-control" id="disponibilidad" name="disponibilidad" value="<?= htmlspecialchars($user['disponibilidad'] ?? '') ?>">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar Cambios</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -230,16 +315,24 @@
                         <div class="profile-card-body">
                             <div class="rating-section">
                                 <div class="rating-stars">
-                                    <i class="fas fa-star star filled"></i>
-                                    <i class="fas fa-star star filled"></i>
-                                    <i class="fas fa-star star filled"></i>
-                                    <i class="fas fa-star star filled"></i>
-                                    <i class="fas fa-star star filled"></i>
+                                    <?php
+                                    $filled = round($calificacion['promedio']);
+                                    for ($i = 1; $i <= 5; $i++) {
+                                        if ($i <= $filled) {
+                                            echo '<i class="fas fa-star star filled"></i>';
+                                        } else {
+                                            echo '<i class="fas fa-star star"></i>';
+                                        }
+                                    }
+                                    ?>
                                 </div>
-                                <div class="rating-text">4.8 de 5 estrellas</div>
-                                <div class="rating-count">Basado en 12 reseñas</div>
+                                <div class="rating-text">
+                                    <?= $calificacion['promedio'] ?> de 5 estrellas
+                                </div>
+                                <div class="rating-count">
+                                    Basado en <?= $calificacion['total'] ?> reseñas
+                                </div>
                             </div>
-                            
                             <div class="mt-3">
                                 <div class="info-item">
                                     <div class="info-icon">
@@ -247,27 +340,25 @@
                                     </div>
                                     <div class="info-content">
                                         <div class="info-label">Trabajos Completados</div>
-                                        <div class="info-value">24 trabajos exitosos</div>
+                                        <div class="info-value"><?= $trabajosCompletados ?> trabajos exitosos</div>
                                     </div>
                                 </div>
-                                
                                 <div class="info-item">
                                     <div class="info-icon">
                                         <i class="fas fa-clock"></i>
                                     </div>
                                     <div class="info-content">
                                         <div class="info-label">Tiempo Promedio</div>
-                                        <div class="info-value">2.5 días por trabajo</div>
+                                        <div class="info-value"><?= $tiempoPromedio ?> días por trabajo</div>
                                     </div>
                                 </div>
-                                
                                 <div class="info-item">
                                     <div class="info-icon">
                                         <i class="fas fa-award"></i>
                                     </div>
                                     <div class="info-content">
                                         <div class="info-label">Recomendaciones</div>
-                                        <div class="info-value">18 clientes satisfechos</div>
+                                        <div class="info-value"><?= $clientesSatisfechos ?> clientes satisfechos</div>
                                     </div>
                                 </div>
                             </div>

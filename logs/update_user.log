@@ -13,3 +13,129 @@
 )
 
 2025-07-08 21:07:03 - ÉXITO: Filas afectadas: 1
+2025-07-09 20:31:57 - Iniciando updateUser para ID: 4
+2025-07-09 20:31:57 - Datos: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 3204060266
+    [direccion] => calle 15
+)
+
+2025-07-09 20:31:57 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-09 20:31:57 - Tipos: ssssi
+2025-07-09 20:31:57 - Valores: Array
+(
+    [0] => ivan
+    [1] => ruiz
+    [2] => 3204060266
+    [3] => calle 15
+    [4] => 4
+)
+
+2025-07-09 20:31:57 - ÉXITO: Filas afectadas: 1
+2025-07-09 20:40:48 - Iniciando updateUser para ID: 4
+2025-07-09 20:40:48 - Datos: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 3024060266
+    [direccion] => calle 1
+)
+
+2025-07-09 20:40:48 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-09 20:40:48 - Tipos: ssssi
+2025-07-09 20:40:48 - Valores: Array
+(
+    [0] => ivan
+    [1] => ruiz
+    [2] => 3024060266
+    [3] => calle 1
+    [4] => 4
+)
+
+2025-07-09 20:40:48 - ÉXITO: Filas afectadas: 1
+2025-07-09 20:51:46 - Iniciando updateUser para ID: 4
+2025-07-09 20:51:46 - Datos: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 2143612421
+    [direccion] => calle1
+)
+
+2025-07-09 20:51:46 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-09 20:51:46 - Tipos: ssssi
+2025-07-09 20:51:46 - Valores: Array
+(
+    [0] => ivan
+    [1] => ruiz
+    [2] => 2143612421
+    [3] => calle1
+    [4] => 4
+)
+
+2025-07-09 20:51:46 - ÉXITO: Filas afectadas: 1
+2025-07-09 20:57:14 - Iniciando updateUser para ID: 4
+2025-07-09 20:57:14 - Datos: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 3212459975
+    [direccion] => calle 1
+)
+
+2025-07-09 20:57:14 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-09 20:57:14 - Tipos: ssssi
+2025-07-09 20:57:14 - Valores: Array
+(
+    [0] => ivan
+    [1] => ruiz
+    [2] => 3212459975
+    [3] => calle 1
+    [4] => 4
+)
+
+2025-07-09 20:57:14 - ÉXITO: Filas afectadas: 1
+2025-07-09 21:00:56 - Iniciando updateUser para ID: 4
+2025-07-09 21:00:56 - Datos: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 3204060266
+    [direccion] => calle 1
+)
+
+2025-07-09 21:00:56 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-09 21:00:56 - Tipos: ssssi
+2025-07-09 21:00:56 - Valores: Array
+(
+    [0] => ivan
+    [1] => ruiz
+    [2] => 3204060266
+    [3] => calle 1
+    [4] => 4
+)
+
+2025-07-09 21:00:56 - ÉXITO: Filas afectadas: 1
+2025-07-09 21:19:55 - Iniciando updateUser para ID: 4
+2025-07-09 21:19:55 - Datos: Array
+(
+    [nombre] => ivan
+    [apellido] => ruiz
+    [telefono] => 
+    [direccion] => bogota
+)
+
+2025-07-09 21:19:55 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-09 21:19:55 - Tipos: ssssi
+2025-07-09 21:19:55 - Valores: Array
+(
+    [0] => ivan
+    [1] => ruiz
+    [2] => 
+    [3] => bogota
+    [4] => 4
+)
+
+2025-07-09 21:19:55 - ÉXITO: Filas afectadas: 1

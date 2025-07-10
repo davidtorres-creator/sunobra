@@ -305,6 +305,58 @@
                 </div>
             </div>
 
+            <!-- Cotizaciones Pendientes -->
+            <?php if (!empty($cotizaciones_pendientes)): ?>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-warning">Cotizaciones Pendientes</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Servicio</th>
+                                            <th>Obrero</th>
+                                            <th>Detalle</th>
+                                            <th>Monto Estimado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($cotizaciones_pendientes as $cotizacion): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($cotizacion['nombre_servicio']) ?></td>
+                                                <td><?= htmlspecialchars($cotizacion['nombre_obrero']) ?></td>
+                                                <td><?= htmlspecialchars($cotizacion['detalle']) ?></td>
+                                                <td>$<?= number_format($cotizacion['monto_estimado'], 0, ',', '.') ?></td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <form method="POST" action="/admin/cotizaciones/<?= $cotizacion['id'] ?>/aceptar" style="display: inline;">
+                                                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('¿Estás seguro de aceptar esta cotización?')">
+                                                                <i class="fas fa-check"></i> Aceptar
+                                                            </button>
+                                                        </form>
+                                                        <form method="POST" action="/admin/cotizaciones/<?= $cotizacion['id'] ?>/rechazar" style="display: inline;">
+                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de rechazar esta cotización?')">
+                                                                <i class="fas fa-times"></i> Rechazar
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <!-- System Status -->
             <div class="row">
                 <div class="col-12">

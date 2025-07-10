@@ -27,16 +27,20 @@ class ServicioModel {
     }
 
     public function getById($id) {
-        $db = new Database();
-        $sql = "SELECT id, nombre_servicio, descripcion, categoria, costo_base_referencial, fecha_creacion FROM servicios WHERE id = ? LIMIT 1";
-        $stmt = $db->prepare($sql);
-        if (!$stmt) return null;
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            return $result->fetch_assoc();
+        try {
+            $sql = "SELECT id, nombre_servicio, descripcion, categoria, costo_base_referencial FROM servicios WHERE id = ? LIMIT 1";
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) return null;
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                return $result->fetch_assoc();
+            }
+            return null;
+        } catch (Exception $e) {
+            error_log("Error en getById: " . $e->getMessage());
+            return null;
         }
-        return null;
     }
 } 
