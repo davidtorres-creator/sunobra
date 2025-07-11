@@ -1,69 +1,46 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
+
 <style>
 .superprof-history-container {
-    max-width: 900px;
+    background: #fff !important;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10);
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
     margin: 2.5rem auto;
-    padding: 0 1rem;
+    max-width: 900px;
 }
 .superprof-history-title {
+    color: #ff6f00 !important;
     font-size: 2.2rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
-    color: #23235b;
     text-align: center;
-}
-.superprof-history-card {
-    background: #fff;
-    border-radius: 22px;
-    box-shadow: 0 8px 32px rgba(60, 60, 120, 0.10);
-    padding: 2rem 2rem 1.5rem 2rem;
-    margin-bottom: 2rem;
-    position: relative;
-    transition: box-shadow 0.2s;
-}
-.superprof-history-card:hover {
-    box-shadow: 0 16px 40px rgba(60, 60, 120, 0.18);
-}
-.superprof-history-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.2rem;
-}
-.superprof-history-service {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #23235b;
-    text-transform: capitalize;
-}
-.superprof-history-date {
-    color: #7b7b93;
-    font-size: 1rem;
-    font-weight: 500;
-}
-.superprof-history-desc {
-    color: #4a5568;
-    font-size: 1.08rem;
-    margin-bottom: 1.2rem;
-    min-height: 2.2em;
 }
 .superprof-empty-state {
     text-align: center;
-    color: #7b7b93;
-    margin-top: 4rem;
+    color: #232323 !important;
+    margin-top: 3rem;
 }
 .superprof-empty-state i {
+    color: #ff6f00 !important;
     font-size: 3.5rem;
-    color: #cbd5e0;
     margin-bottom: 1rem;
+    display: block;
 }
 .superprof-empty-state h3 {
+    color: #232323 !important;
     font-size: 1.4rem;
     font-weight: 700;
-    color: #4a5568;
     margin-bottom: 0.5rem;
 }
+.superprof-empty-state p {
+    color: #4a5568 !important;
+    font-size: 1.08rem;
+    margin-bottom: 0;
+}
 </style>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->

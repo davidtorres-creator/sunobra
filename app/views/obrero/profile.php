@@ -1,6 +1,8 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
 
 <link href="assets/css/obrero-profile.css" rel="stylesheet">
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
+
 <style>
 .superprof-profile-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -140,6 +142,43 @@
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+.obrero-profile-container {
+    background: #fff !important;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10);
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+    margin: 2.5rem auto;
+    max-width: 900px;
+}
+.obrero-profile-title {
+    color: #ff6f00 !important;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.obrero-empty-state {
+    text-align: center;
+    color: #232323 !important;
+    margin-top: 3rem;
+}
+.obrero-empty-state i {
+    color: #ff6f00 !important;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+.obrero-empty-state h3 {
+    color: #232323 !important;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.obrero-empty-state p {
+    color: #4a5568 !important;
+    font-size: 1.08rem;
+    margin-bottom: 0;
 }
 </style>
 

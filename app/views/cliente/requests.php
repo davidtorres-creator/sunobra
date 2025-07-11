@@ -1,145 +1,78 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
+
 <style>
-.superprof-requests-container {
-    max-width: 900px;
-    margin: 2.5rem auto;
-    padding: 0 1rem;
+/* --- Unificación estilo worker/home para Mis Solicitudes --- */
+.section-title, .card-title, .table thead th {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
 }
-.superprof-requests-title {
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    color: #23235b;
-    text-align: center;
+.section-subtitle, .stats-label, .card-text, .table tbody td, .table tbody th {
+    color: #232323 !important;
 }
-.superprof-request-card {
-    background: #fff;
-    border-radius: 22px;
-    box-shadow: 0 8px 32px rgba(60, 60, 120, 0.10);
-    padding: 2rem 2rem 1.5rem 2rem;
-    margin-bottom: 2rem;
-    position: relative;
-    transition: box-shadow 0.2s;
+
+.card, .stats-card {
+    background: #fffde7 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    border: none !important;
 }
-.superprof-request-card:hover {
-    box-shadow: 0 16px 40px rgba(60, 60, 120, 0.18);
-}
-.superprof-request-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.2rem;
-}
-.superprof-request-service {
-    font-size: 1.3rem;
+
+.btn-primary, .btn-info, .btn-success, .btn-warning {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
     font-weight: 700;
-    color: #23235b;
-    text-transform: capitalize;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.08);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-.superprof-request-date {
-    color: #7b7b93;
-    font-size: 1rem;
-    font-weight: 500;
+.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-warning:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
 }
-.superprof-request-status {
-    position: absolute;
-    top: 1.5rem;
-    right: 2rem;
-    padding: 0.4rem 1.2rem;
-    border-radius: 14px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.superprof-request-status.pendiente { background: #fef3c7; color: #d97706; }
-.superprof-request-status.aceptado { background: #d1fae5; color: #059669; }
-.superprof-request-status.rechazado { background: #fee2e2; color: #dc2626; }
-.superprof-request-status.completado { background: #dbeafe; color: #2563eb; }
-.superprof-request-status['en-proceso'] { background: #f3e8ff; color: #7c3aed; }
-.superprof-request-desc {
-    color: #4a5568;
-    font-size: 1.08rem;
-    margin-bottom: 1.2rem;
-    min-height: 2.2em;
-}
-.superprof-request-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-}
-.superprof-btn-details {
-    display: inline-block;
-    background: linear-gradient(90deg, #6a82fb 0%, #fc5c7d 100%);
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    border-radius: 24px;
-    padding: 0.7rem 2rem;
-    font-size: 1.05rem;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(60, 60, 120, 0.10);
-    transition: background 0.2s;
-    text-decoration: none;
-}
-.superprof-btn-details:hover {
-    background: linear-gradient(90deg, #fc5c7d 0%, #6a82fb 100%);
-}
-.superprof-empty-state {
-    text-align: center;
-    color: #7b7b93;
-    margin-top: 4rem;
-}
-.superprof-empty-state i {
-    font-size: 3.5rem;
-    color: #cbd5e0;
-    margin-bottom: 1rem;
-}
-.superprof-empty-state h3 {
-    font-size: 1.4rem;
+
+.badge, .badge.bg-warning, .badge.bg-success, .badge.bg-info, .badge.bg-danger, .badge.bg-secondary {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
     font-weight: 700;
-    color: #4a5568;
-    margin-bottom: 0.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    padding: 4px 16px;
 }
 
-.btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 6px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    transition: all 0.3s ease;
+.table thead th {
+    background: #232323 !important;
+    color: #ffe082 !important;
+    border: none !important;
+}
+.table tbody tr {
+    background: #fffde7 !important;
+    color: #232323 !important;
+}
+.table-bordered {
+    border: none !important;
 }
 
-.btn-sm {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
+.sidebar {
+    background: #232323 !important;
+}
+.sidebar .nav-link, .sidebar .nav-link i {
+    color: #ffe082 !important;
+}
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+}
+.sidebar .nav-link.active i, .sidebar .nav-link:hover i {
+    color: #232323 !important;
 }
 
-.btn-primary {
-    background: #6a82fb;
-    color: white;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: #5a6fd8;
-    color: white;
-    text-decoration: none;
-}
-
-.btn-secondary {
-    background: #6c757d;
-    color: white;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background: #5a6268;
-    color: white;
-    text-decoration: none;
+.text-muted {
+    color: #bdbdbd !important;
 }
 </style>
 <div class="container-fluid">

@@ -1,4 +1,77 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
+
+<style>
+/* === ESTILO WORKER/HOME PARA DASHBOARD CLIENTE === */
+.card.bg-gradient-primary, .card.bg-gradient-primary.text-white {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    border: none !important;
+}
+.card.bg-gradient-primary .card-title, .card.bg-gradient-primary .card-text {
+    color: #232323 !important;
+}
+.card.bg-gradient-primary i {
+    color: #ff6f00 !important;
+    background: #fffde7;
+    border-radius: 50%;
+    padding: 12px;
+    font-size: 2.5rem;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.10);
+}
+
+.h2, .card-title, .font-weight-bold, .worker-section-title, .text-primary {
+    color: #ff6f00 !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em;
+}
+
+.btn-primary, .btn-info, .btn-success, .btn-warning {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    font-weight: 700;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(34,34,34,0.06);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-warning:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
+}
+
+.card .fa-clipboard-list, .card .fa-clock, .card .fa-check-circle, .card .fa-dollar-sign, .sidebar .nav-link i {
+    color: #ffb300 !important;
+}
+
+.card, .card-header, .table, .table-bordered {
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(34,34,34,0.10) !important;
+    border: none !important;
+}
+
+.sidebar .nav-link, .sidebar .nav-link i, .text-info, .text-success, .text-warning {
+    color: #ffb300 !important;
+}
+
+.table thead th {
+    background: #232323 !important;
+    color: #ffe082 !important;
+    border: none !important;
+}
+.table tbody tr {
+    background: #fffde7 !important;
+    color: #232323 !important;
+}
+
+.text-muted {
+    color: #bdbdbd !important;
+}
+</style>
 
 <div class="container-fluid">
     <div class="row">

@@ -1,6 +1,84 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
 
 <link href="<?= assetUrl('css/cliente-services.css') ?>" rel="stylesheet">
+
+<style>
+/* --- Unificación estilo worker/home para servicios --- */
+.section-title, .service-title, .step-title {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
+}
+.section-subtitle, .stats-label, .service-description, .step-description {
+    color: #232323 !important;
+}
+
+.service-card, .stats-card, .step-card {
+    background: #fffde7 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    border: none !important;
+}
+
+.service-icon, .step-number {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+}
+
+.category-badge {
+    background: #ffb300 !important;
+    color: #232323 !important;
+    font-weight: 700;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px rgba(255,179,0,0.10);
+}
+
+.btn-ver-detalles, .filter-btn {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    font-weight: 700;
+    border-radius: 25px !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.08);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-ver-detalles:hover, .filter-btn:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
+}
+
+.stats-number {
+    color: #ff6f00 !important;
+    font-weight: 900 !important;
+}
+
+.search-section {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+}
+.search-input {
+    color: #232323 !important;
+    background: #fffde7 !important;
+    border: 1.5px solid #ffb300 !important;
+}
+
+.sidebar {
+    background: #232323 !important;
+}
+.sidebar .nav-link, .sidebar .nav-link i {
+    color: #ffe082 !important;
+}
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+}
+.sidebar .nav-link.active i, .sidebar .nav-link:hover i {
+    color: #232323 !important;
+}
+</style>
 
 <div class="container-fluid">
     <div class="row">
