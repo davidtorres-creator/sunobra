@@ -1015,3 +1015,17 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+

@@ -1,8 +1,69 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
 
 <link href="assets/css/obrero-jobs.css" rel="stylesheet">
+<link href="assets/css/obrero-profile.css" rel="stylesheet">
+<link href="<?= assetUrl('css/cliente-profile.css') ?>" rel="stylesheet">
 
 <style>
+/* Fondo claro para header y contenedores principales */
+.superprof-header, .jobs-main-header, .jobs-header, .jobs-section, .jobs-container, .job-list-section {
+    background: #fff !important;
+    color: #232323 !important;
+}
+.superprof-header *, .jobs-main-header *, .jobs-header *, .jobs-section *, .jobs-container *, .job-list-section * {
+    color: #232323 !important;
+}
+
+/* Títulos e íconos worker */
+.jobs-section-title, .job-card-title, .job-title, .section-title, h2, h3, .superprof-header h2, .superprof-header .section-title {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
+}
+.superprof-header i, .jobs-section-title i, .job-card-title i, .job-title i, .section-title i {
+    color: #ff6f00 !important;
+}
+
+/* Si hay secciones con fondo oscuro, textos claros */
+.jobs-dark-section, .jobs-dark-section *, .job-card-dark, .job-card-dark * {
+    color: #fff !important;
+}
+
+/* Estilo worker para trabajos */
+.job-card, .job-list-card, .job-info-card {
+    background: #fff !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10) !important;
+    border: none !important;
+    color: #232323 !important;
+}
+.job-card-title i, .job-title i, .job-info-card i, .job-list-card i, .section-title i, .jobs-section-title i {
+    color: #ff6f00 !important;
+}
+.job-card .btn, .job-list-card .btn, .job-info-card .btn {
+    color: #fff !important;
+    font-weight: 700;
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.job-card .btn-aplicar {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+}
+.job-card .btn-detalles {
+    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+}
+.job-card .btn:hover, .job-list-card .btn:hover, .job-info-card .btn:hover {
+    filter: brightness(1.08) saturate(1.2);
+    transform: translateY(-2px);
+}
 .superprof-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 20px;
@@ -108,6 +169,273 @@
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+
+/* Botón Ver en Tabla estilo worker */
+.btn-ver-tabla {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    font-weight: 700;
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    padding: 0.7rem 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.btn-ver-tabla i {
+    color: #fff !important;
+}
+.btn-ver-tabla:hover {
+    filter: brightness(1.08) saturate(1.2);
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+}
+.superprof-header .superprof-btn {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    font-weight: 700;
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    padding: 0.7rem 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none !important;
+}
+.superprof-header .superprof-btn i {
+    color: #fff !important;
+}
+.superprof-header .superprof-btn:hover {
+    filter: brightness(1.08) saturate(1.2);
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+}
+
+/* --- MEJORA DE ESTILO Y ALINEACIÓN PARA STATS-CARD --- */
+.stats-section .row {
+    gap: 0;
+    justify-content: center;
+    align-items: stretch;
+}
+.stats-card {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10) !important;
+    border: none !important;
+    padding: 22px 18px 18px 18px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 120px;
+    min-width: 180px;
+    margin-bottom: 0 !important;
+    margin-right: 18px;
+}
+.stats-card:last-child { margin-right: 0; }
+.stats-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+.stats-number {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    width: 100%;
+}
+.stats-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #232323 !important;
+    opacity: 0.85;
+    width: 100%;
+}
+@media (max-width: 991px) {
+    .stats-card {
+        min-width: 140px;
+        padding: 16px 10px 12px 10px !important;
+        margin-right: 0;
+        margin-bottom: 16px !important;
+    }
+    .stats-section .row { gap: 0; }
+}
+/* VISIBILIDAD PARA STATS-CARD EN FONDO CLARO */
+.stats-card {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10) !important;
+    border: none !important;
+}
+.stats-card *, .stats-card .stats-label, .stats-card .stats-number {
+    color: #232323 !important;
+    text-shadow: none;
+}
+.stats-card .stats-icon.available i { color: #ffb300 !important; }
+.stats-card .stats-icon.applied i { color: #ff6f00 !important; }
+.stats-card .stats-icon.accepted i { color: #43e97b !important; }
+.stats-card .stats-icon.earnings i { color: #38a169 !important; }
+
+/* --- ESTILO CLARO Y MODERNO PARA FILTROS RÁPIDOS --- */
+.filters-section {
+    background: #fff !important;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.08);
+    padding: 18px 24px 10px 24px;
+    margin-bottom: 24px;
+}
+.filters-section h6 {
+    color: #232323 !important;
+    font-weight: 700;
+}
+.filter-chips {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.filter-chip {
+    background: #f5f5f5;
+    color: #232323;
+    border-radius: 10px;
+    padding: 7px 18px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(60,60,120,0.06);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border: none;
+}
+.filter-chip.active {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%);
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(255, 191, 0, 0.10);
+}
+.filter-chip i {
+    color: inherit !important;
+}
+
+/* --- BOTÓN CARGAR MÁS TRABAJOS CLARO Y MODERNO --- */
+.btn-search {
+    background: #fff !important;
+    color: #ff6f00 !important;
+    border: 2px solid #ffb300 !important;
+    font-weight: 700;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.08);
+    transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+}
+.btn-search i {
+    color: #ffb300 !important;
+    transition: color 0.2s;
+}
+.btn-search:hover, .btn-search:focus {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    border: 2px solid #ffb300 !important;
+    box-shadow: 0 4px 18px rgba(255,191,0,0.13);
+}
+.btn-search:hover i, .btn-search:focus i {
+    color: #fff !important;
+}
+
+/* --- FORMULARIOS CLAROS Y TEXTO NEGRO --- */
+.form-label {
+    color: #232323 !important;
+    font-weight: 600;
+}
+.form-control {
+    background: #fff !important;
+    color: #232323 !important;
+    border: 1.5px solid #ffb300 !important;
+    border-radius: 10px !important;
+    font-weight: 600;
+    box-shadow: 0 1px 6px rgba(60,60,120,0.10);
+    transition: border 0.2s, box-shadow 0.2s;
+    opacity: 1 !important;
+    caret-color: #ffb300;
+}
+.form-control:focus {
+    border: 1.5px solid #ff6f00 !important;
+    box-shadow: 0 2px 12px rgba(255,191,0,0.13);
+    color: #232323 !important;
+    background: #fff !important;
+    opacity: 1 !important;
+}
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:focus {
+    -webkit-text-fill-color: #232323 !important;
+    box-shadow: 0 0 0 1000px #fff inset !important;
+    background-color: #fff !important;
+    color: #232323 !important;
+}
+::placeholder {
+    color: #ffb300 !important;
+    opacity: 1;
+}
+/* Solución definitiva: forzar texto negro en todos los inputs de texto */
+body input.form-control,
+body input[type="text"].form-control,
+body input[type="text"],
+body input[type="text"]:focus,
+body input.form-control:focus,
+body input[type="text"].form-control:focus,
+body input[type="text"]:-webkit-autofill,
+body input[type="text"]:-webkit-autofill:focus {
+    color: #232323 !important;
+    background: #fff !important;
+    -webkit-text-fill-color: #232323 !important;
+    box-shadow: 0 0 0 1000px #fff inset !important;
+    border: 1.5px solid #ffb300 !important;
+    font-weight: 600;
+    opacity: 1 !important;
+    caret-color: #ffb300;
+}
+body input.form-control::placeholder,
+body input[type="text"].form-control::placeholder,
+body input[type="text"]::placeholder {
+    color: #ffb300 !important;
+    opacity: 1;
+}
+
+/* Forzar fondo blanco puro y texto negro en todos los inputs de texto */
+body input.form-control,
+body input[type="text"].form-control,
+body input[type="text"],
+body input[type="text"]:focus,
+body input.form-control:focus,
+body input[type="text"].form-control:focus,
+body input[type="text"]:-webkit-autofill,
+body input[type="text"]:-webkit-autofill:focus {
+    color: #232323 !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    -webkit-text-fill-color: #232323 !important;
+    box-shadow: 0 0 0 1000px #fff inset !important;
+    border: 1.5px solid #ffb300 !important;
+    font-weight: 600;
+    opacity: 1 !important;
+    caret-color: #ffb300;
+}
+body input.form-control::placeholder,
+body input[type="text"].form-control::placeholder,
+body input[type="text"]::placeholder {
+    color: #ffb300 !important;
+    opacity: 1;
 }
 </style>
 

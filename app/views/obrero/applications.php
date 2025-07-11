@@ -3,63 +3,308 @@
 <link href="assets/css/obrero-applications.css" rel="stylesheet">
 
 <style>
-.superprof-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 30px;
-    color: white;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+/* === ESTILO DASHBOARD OBRERO PARA MIS APLICACIONES (FONDO OSCURO) === */
+body, .container-fluid {
+    background: #181818 !important;
+    color: #fff !important;
 }
-.superprof-table {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+.sidebar, .bg-light.sidebar {
+    background: #232323 !important;
+    color: #fff !important;
+    min-height: 100vh;
+    border-right: none !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
-.superprof-table th {
-    background: #f7fafc;
-    color: #4a5568;
-    font-weight: 700;
-    border-bottom: 2px solid #e2e8f0;
-}
-.superprof-table td, .superprof-table th {
-    vertical-align: middle;
-    padding: 16px 12px;
-    border-bottom: 1px solid #e2e8f0;
-}
-.superprof-table tr:last-child td {
-    border-bottom: none;
-}
-.superprof-badge {
+.sidebar .nav-link {
+    color: #ffe082 !important;
+    font-weight: 500;
     border-radius: 12px;
-    padding: 6px 16px;
-    font-weight: 600;
-    font-size: 0.95rem;
+    margin: 4px 12px;
+    transition: all 0.3s ease;
+}
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255,179,0,0.12);
+}
+.sidebar .nav-link i {
+    color: #ffe082 !important;
+}
+
+.superprof-header {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    padding: 38px 0 28px 0 !important;
+    margin-bottom: 32px !important;
+    text-align: center;
+}
+.superprof-header h1,
+.superprof-header .display-5,
+.superprof-header .fw-bold {
+    color: #fff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.superprof-header p,
+.superprof-header .lead {
+    color: #232323 !important;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Ajuste tabla para coherencia total con dashboard obrero */
+.superprof-table, .table, .card {
+    background: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18) !important;
+    border: none !important;
+    color: #fff !important;
+}
+.table thead th, .superprof-table th {
+    background: #181818 !important;
+    color: #ffe082 !important;
+    border: none !important;
+    font-weight: 800 !important;
+    font-size: 1.08rem !important;
+    letter-spacing: 0.04em;
+}
+.table tbody tr, .superprof-table tbody tr {
+    background: #232323 !important;
+    color: #fff !important;
+}
+.table td, .superprof-table td {
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-size: 1.05rem !important;
+    border-bottom: 1px solid #333 !important;
+}
+.table tr:last-child td, .superprof-table tr:last-child td {
+    border-bottom: none !important;
+}
+
+/* Botón worker sobre fondo oscuro */
+.btn-primary, .btn-info, .btn-success, .btn-warning, .superprof-btn {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    font-weight: 700;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-warning:hover, .superprof-btn:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
+}
+
+.badge, .superprof-badge {
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 7px 18px !important;
+    color: #fff !important;
+}
+.badge-success, .superprof-badge.success { background: #43e97b !important; }
+.badge-warning, .superprof-badge.warning { background: #ffb300 !important; color: #232323 !important; }
+.badge-danger, .superprof-badge.danger { background: #e53e3e !important; }
+.badge-info, .superprof-badge.info { background: #38a169 !important; }
+.badge-primary, .superprof-badge.primary { background: #ff6f00 !important; }
+.badge-secondary, .superprof-badge.secondary { background: #a0aec0 !important; }
+
+/* === ESTILO WORKER PARA TABLA DE MIS APLICACIONES === */
+.table, .superprof-table {
+    background: #232323 !important;
+    border-radius: 0 0 18px 18px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18) !important;
+    border: none !important;
+    color: #fff !important;
+}
+.table thead th {
+    background: #181818 !important;
+    color: #FFD966 !important;
+    font-weight: 800 !important;
+    font-size: 1.08rem !important;
+    letter-spacing: 0.04em;
+    border: none !important;
+}
+.table tbody tr {
+    background: #232323 !important;
+    color: #fff !important;
+    transition: background 0.2s;
+}
+.table tbody tr:nth-child(even) {
+    background: #282828 !important;
+}
+.table td {
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-size: 1.05rem !important;
+    border-bottom: 1px solid #292929 !important;
+}
+.table tr:last-child td {
+    border-bottom: none !important;
+    border-radius: 0 0 16px 16px;
+}
+/* Botón worker en tabla */
+.table .btn, .table .btn-ver {
+    background: #FFA500 !important;
+    color: #181818 !important;
+    border-radius: 12px !important;
+    padding: 4px 14px !important;
+    font-weight: bold !important;
+    border: none !important;
+    transition: background 0.2s;
+}
+.table .btn:hover, .table .btn-ver:hover {
+    background: #FFD966 !important;
+    color: #181818 !important;
+}
+/* Badge worker */
+.table .badge-success, .table .superprof-badge.success {
+    background: #2ecc40 !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    padding: 4px 14px !important;
+    font-weight: bold !important;
+    border: none !important;
+}
+
+/* === ESTILO: Listado de aplicaciones fondo blanco, texto negro, cabecera worker === */
+.card.superprof-table, .superprof-table, .table {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10) !important;
+    border: none !important;
+}
+.card-header, .superprof-table .card-header {
+    background: #fff !important;
+    color: #232323 !important;
+    border-bottom: 2px solid #ececec !important;
+}
+.table thead th {
+    background: #181818 !important;
+    color: #FFD966 !important;
+    font-weight: 800 !important;
+    font-size: 1.08rem !important;
+    letter-spacing: 0.04em;
+    border: none !important;
+}
+.table tbody tr, .table tbody td {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transition: background 0.2s;
+}
+.table tbody tr:nth-child(even) td {
+    background: #f7f7f7 !important;
+}
+.table td {
+    color: #232323 !important;
+    font-weight: 500 !important;
+    font-size: 1.05rem !important;
+    border-bottom: 1px solid #ececec !important;
+}
+.table tr:last-child td {
+    border-bottom: none !important;
+    border-radius: 0 0 16px 16px;
+}
+/* Botón worker en tabla */
+.table .btn, .table .btn-ver {
+    background: #FFA500 !important;
+    color: #181818 !important;
+    border-radius: 12px !important;
+    padding: 4px 14px !important;
+    font-weight: bold !important;
+    border: none !important;
+    transition: background 0.2s;
+}
+.table .btn:hover, .table .btn-ver:hover {
+    background: #FFD966 !important;
+    color: #181818 !important;
+}
+/* Badge worker */
+.table .badge-success, .table .superprof-badge.success {
+    background: #2ecc40 !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    padding: 4px 14px !important;
+    font-weight: bold !important;
+    border: none !important;
+}
+
+/* --- AJUSTE: Forzar fondo oscuro y quitar esquinas redondeadas en filas de tabla --- */
+.table tbody tr, .table tbody td {
+    background: #232323 !important;
+    color: #fff !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+.table tbody tr:nth-child(even) td {
+    background: #282828 !important;
+}
+.table tbody tr td {
+    border-radius: 0 !important;
+    background-clip: padding-box !important;
+}
+.table {
+    border-radius: 0 0 18px 18px !important;
+    overflow: hidden !important;
+}
+.card, .superprof-table {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+}
+/* Título worker para el listado */
+.worker-title {
+    color: #ff9800 !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em;
+}
+.card-header {
+    background: #fff !important;
+    color: #232323 !important;
+    border-bottom: 2px solid #ececec !important;
+    padding: 18px 24px 14px 24px !important;
+    border-radius: 18px 18px 0 0 !important;
+}
+.card.superprof-table, .superprof-table, .table {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10) !important;
+    border: none !important;
+}
+
+/* Botón worker mejorado para 'Ver' en la tabla de aplicaciones */
+.table .superprof-btn.btn-sm {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 6px 22px !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 10px rgba(255,179,0,0.10);
+    letter-spacing: 0.01em;
+    transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+    outline: none !important;
+    text-shadow: none !important;
     display: inline-block;
 }
-.superprof-badge.warning { background: #fbbf24; color: #fff; }
-.superprof-badge.success { background: #38a169; color: #fff; }
-.superprof-badge.danger { background: #e53e3e; color: #fff; }
-.superprof-badge.secondary { background: #a0aec0; color: #fff; }
-.superprof-badge.info { background: #4299e1; color: #fff; }
-.superprof-badge.primary { background: #667eea; color: #fff; }
-.superprof-btn {
-    border-radius: 10px;
-    padding: 6px 18px;
-    font-weight: 600;
-    border: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    transition: box-shadow 0.2s, transform 0.2s;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
-}
-.superprof-btn:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+.table .superprof-btn.btn-sm:hover, .table .superprof-btn.btn-sm:focus {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 18px rgba(255,179,0,0.18);
+    text-decoration: none !important;
 }
 </style>
 
@@ -112,8 +357,8 @@
             </div>
 
             <div class="card mt-4 superprof-table">
-                <div class="card-header" style="background: #f7fafc; border-bottom: 2px solid #e2e8f0;">
-                    <h5 class="mb-0" style="color: #4a5568; font-weight: 700;">Listado de Aplicaciones</h5>
+                <div class="card-header">
+                    <h5 class="mb-0 worker-title">Listado de Aplicaciones</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

@@ -3,423 +3,304 @@
 <link href="assets/css/obrero-calendar.css" rel="stylesheet">
 
 <style>
-.superprof-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 30px;
-    color: white;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+/* Fondo general y sidebar worker */
+body, .container-fluid {
+    background: #181818 !important;
+    color: #fff !important;
 }
-.superprof-schedule-card {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 24px 28px;
-    margin-bottom: 24px;
-    transition: box-shadow 0.2s, transform 0.2s;
-    border: none;
+.sidebar, .bg-light.sidebar {
+    background: #232323 !important;
+    color: #fff !important;
+    min-height: 100vh;
+    border-right: none !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
-.superprof-schedule-card:hover {
-    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
-    transform: translateY(-4px);
-}
-.superprof-schedule-title {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 8px;
-}
-.superprof-schedule-badge {
-    background: #fbbf24;
-    color: #fff;
-    border-radius: 12px;
-    padding: 6px 18px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    display: inline-block;
-}
-.superprof-schedule-info-label {
-    color: #718096;
+.sidebar .nav-link {
+    color: #ffe082 !important;
     font-weight: 500;
-    font-size: 0.9rem;
+    border-radius: 12px;
+    margin: 4px 12px;
+    transition: all 0.3s ease;
 }
-.superprof-schedule-info-value {
-    color: #2d3748;
-    font-weight: 600;
-    font-size: 1rem;
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255,179,0,0.12);
 }
-.superprof-schedule-tag {
-    background: #667eea;
-    color: #fff;
-    border-radius: 10px;
-    padding: 5px 14px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-right: 8px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+.sidebar .nav-link i {
+    color: #ffe082 !important;
 }
-.superprof-schedule-tag.urgent { background: #e53e3e; }
-.superprof-schedule-actions {
-    margin-top: 18px;
-    display: flex;
-    gap: 12px;
+
+/* Header principal tipo dashboard */
+.worker-header {
+    color: #ff9800 !important;
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
-.superprof-btn {
-    border-radius: 10px;
-    padding: 7px 22px;
-    font-weight: 600;
-    border: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    transition: box-shadow 0.2s, transform 0.2s;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
-    font-size: 1rem;
+
+/* Tarjetas blancas y calendario */
+.superprof-schedule-card, .profile-card, .calendar-section {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10) !important;
+    border: none !important;
+    padding: 28px 32px !important;
+    margin-bottom: 24px !important;
+}
+
+/* Títulos worker en tarjetas y calendario */
+.superprof-schedule-title, .profile-card-title, .calendar-title, .fw-bold, h4, h3, h6 {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.01em;
+}
+
+/* Botones worker */
+.superprof-btn, .calendar-nav .btn-nav, .btn-find-jobs {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    padding: 8px 22px !important;
+    font-size: 1rem !important;
     display: inline-flex;
     align-items: center;
     gap: 7px;
 }
-.superprof-btn:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    color: #fff;
+.superprof-btn:hover, .calendar-nav .btn-nav:hover, .btn-find-jobs:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
+    text-decoration: none !important;
 }
 
-/* Estilos del calendario dinámico */
-.calendar-section {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 30px;
-    margin-bottom: 30px;
+/* Badges worker */
+.superprof-schedule-badge, .specialty-badge {
+    background: #ffb300 !important;
+    color: #232323 !important;
+    border-radius: 12px !important;
+    padding: 6px 18px !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    display: inline-block;
 }
 
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #f0f4fa;
-}
-
-.calendar-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.calendar-nav {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.btn-nav {
-    background: #f0f4fa;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-    color: #667eea;
+/* Chips de filtro worker */
+.filter-chip {
+    background: #232323 !important;
+    color: #FFD966 !important;
+    border-radius: 16px !important;
+    padding: 8px 18px !important;
+    font-weight: 700 !important;
+    margin-right: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
+    border: 2px solid #FFD966 !important;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 7px;
+}
+.filter-chip.active, .filter-chip:hover {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border-color: #ffb300 !important;
 }
 
-.btn-nav:hover {
-    background: #e0eaff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-}
-
-.current-month {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #2d3748;
-    min-width: 120px;
+/* Mensaje vacío worker */
+.no-schedule {
+    background: #fff3e0 !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.08);
+    padding: 32px 24px !important;
     text-align: center;
+    margin-top: 24px;
+}
+.no-schedule-icon i {
+    color: #ffb300 !important;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+.no-schedule-title {
+    color: #ff6f00 !important;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.no-schedule-text {
+    color: #4a5568 !important;
+    font-size: 1.08rem;
+    margin-bottom: 1.5rem;
 }
 
+/* Calendario worker compacto */
 .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    background: transparent !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    gap: 2px !important;
 }
-
 .calendar-day-header {
-    text-align: center;
-    font-weight: 700;
-    color: #667eea;
-    padding: 12px 8px;
-    font-size: 0.9rem;
-    background: #f8fafd;
-    border-radius: 10px;
+    font-size: 0.98rem !important;
+    padding: 7px 0 !important;
+    margin-bottom: 1px;
+}
+.calendar-day {
+    min-height: 36px !important;
+    font-size: 1rem !important;
+    border-radius: 10px !important;
+    margin-bottom: 1px;
+    padding: 0 !important;
+}
+.calendar-day .day-number {
+    font-size: 1rem !important;
+    padding: 0 !important;
+}
+.calendar-day.other-month {
+    background: #f7f7f7 !important;
+    color: #bdbdbd !important;
+    border: 2px solid #f0f0f0 !important;
+    opacity: 0.7;
+}
+.calendar-day.today {
+    border-color: #ffb300 !important;
+    background: linear-gradient(135deg, #fffde7 0%, #fff3e0 100%) !important;
+    color: #ff6f00 !important;
+    box-shadow: 0 4px 18px rgba(255,179,0,0.10);
+}
+.calendar-day:hover {
+    border-color: #ffb300 !important;
+    background: #fffbe7 !important;
+    color: #ff6f00 !important;
+    box-shadow: 0 6px 18px rgba(255,179,0,0.13);
+    z-index: 3;
 }
 
+/* Calendario minimalista con fondo oscuro y números visibles */
+.calendar-section {
+    max-width: 340px;
+    margin: 0 auto 18px auto !important;
+    padding: 4px 0 8px 0 !important;
+    background: #232323 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10) !important;
+}
+.calendar-header {
+    padding-bottom: 2px !important;
+    margin-bottom: 2px !important;
+}
+.calendar-title {
+    font-size: 0.98rem !important;
+    margin-bottom: 0 !important;
+    color: #ff9800 !important;
+    font-weight: 800 !important;
+}
+.calendar-grid {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 0 !important;
+    justify-items: center;
+    align-items: center;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+.calendar-day-header {
+    font-size: 0.85rem !important;
+    padding: 2px 0 !important;
+    margin-bottom: 0;
+    border-radius: 0 !important;
+    width: 28px;
+    text-align: center;
+    background: transparent !important;
+    color: #ffb300 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em;
+}
 .calendar-day {
-    aspect-ratio: 1;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
+    width: 28px !important;
+    aspect-ratio: 1 / 1 !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    background: #181818 !important;
+    color: #ffe082 !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0;
+    padding: 0 !important;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: none !important;
+    box-shadow: none !important;
     cursor: pointer;
-    transition: all 0.3s ease;
     position: relative;
-    background: white;
-    padding: 8px;
-    min-height: 60px;
+    transition: color 0.15s, background 0.15s;
 }
-
-.calendar-day:hover {
-    border-color: #667eea;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+.calendar-day .day-number {
+    font-size: 0.95rem !important;
+    font-weight: 700;
+    color: #ffe082 !important;
+    padding: 0 !important;
+    z-index: 2;
+    position: relative;
 }
-
-/* Animaciones para el calendario */
-.calendar-day {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.calendar-day:nth-child(1) { animation-delay: 0.1s; }
-.calendar-day:nth-child(2) { animation-delay: 0.2s; }
-.calendar-day:nth-child(3) { animation-delay: 0.3s; }
-.calendar-day:nth-child(4) { animation-delay: 0.4s; }
-.calendar-day:nth-child(5) { animation-delay: 0.5s; }
-.calendar-day:nth-child(6) { animation-delay: 0.6s; }
-.calendar-day:nth-child(7) { animation-delay: 0.7s; }
-.calendar-day:nth-child(8) { animation-delay: 0.8s; }
-.calendar-day:nth-child(9) { animation-delay: 0.9s; }
-.calendar-day:nth-child(10) { animation-delay: 1.0s; }
-.calendar-day:nth-child(11) { animation-delay: 1.1s; }
-.calendar-day:nth-child(12) { animation-delay: 1.2s; }
-.calendar-day:nth-child(13) { animation-delay: 1.3s; }
-.calendar-day:nth-child(14) { animation-delay: 1.4s; }
-.calendar-day:nth-child(15) { animation-delay: 1.5s; }
-.calendar-day:nth-child(16) { animation-delay: 1.6s; }
-.calendar-day:nth-child(17) { animation-delay: 1.7s; }
-.calendar-day:nth-child(18) { animation-delay: 1.8s; }
-.calendar-day:nth-child(19) { animation-delay: 1.9s; }
-.calendar-day:nth-child(20) { animation-delay: 2.0s; }
-.calendar-day:nth-child(21) { animation-delay: 2.1s; }
-.calendar-day:nth-child(22) { animation-delay: 2.2s; }
-.calendar-day:nth-child(23) { animation-delay: 2.3s; }
-.calendar-day:nth-child(24) { animation-delay: 2.4s; }
-.calendar-day:nth-child(25) { animation-delay: 2.5s; }
-.calendar-day:nth-child(26) { animation-delay: 2.6s; }
-.calendar-day:nth-child(27) { animation-delay: 2.7s; }
-.calendar-day:nth-child(28) { animation-delay: 2.8s; }
-.calendar-day:nth-child(29) { animation-delay: 2.9s; }
-.calendar-day:nth-child(30) { animation-delay: 3.0s; }
-.calendar-day:nth-child(31) { animation-delay: 3.1s; }
-.calendar-day:nth-child(32) { animation-delay: 3.2s; }
-.calendar-day:nth-child(33) { animation-delay: 3.3s; }
-.calendar-day:nth-child(34) { animation-delay: 3.4s; }
-.calendar-day:nth-child(35) { animation-delay: 3.5s; }
-.calendar-day:nth-child(36) { animation-delay: 3.6s; }
-.calendar-day:nth-child(37) { animation-delay: 3.7s; }
-.calendar-day:nth-child(38) { animation-delay: 3.8s; }
-.calendar-day:nth-child(39) { animation-delay: 3.9s; }
-.calendar-day:nth-child(40) { animation-delay: 4.0s; }
-.calendar-day:nth-child(41) { animation-delay: 4.1s; }
-.calendar-day:nth-child(42) { animation-delay: 4.2s; }
-
 .calendar-day.other-month {
-    color: #cbd5e0;
-    background: #f7fafc;
-    border-color: #f0f0f0;
+    background: #232323 !important;
+    color: #757575 !important;
+    opacity: 0.4;
 }
-
-.calendar-day.today {
-    border-color: #667eea;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-    font-weight: 700;
-    color: #667eea;
-}
-
-.calendar-day.has-events {
-    border-color: #38a169;
-    background: linear-gradient(135deg, rgba(56, 161, 105, 0.1) 0%, rgba(47, 133, 90, 0.1) 100%);
-}
-
-.day-number {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.today-indicator {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
-    background: #667eea;
+.calendar-day.today .day-number {
+    background: #ff9800 !important;
+    color: #232323 !important;
     border-radius: 50%;
-}
-
-.day-events {
+    width: 22px;
+    height: 22px;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-top: 4px;
-    width: 100%;
-}
-
-.event-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #667eea;
-    margin: 0 auto;
-}
-
-.event-dot.aceptada {
-    background: #38a169;
-}
-
-.event-dot.pendiente {
-    background: #fbbf24;
-}
-
-.event-dot.urgent {
-    background: #e53e3e;
-}
-
-.event-dot.confirmado {
-    background: #38a169;
-}
-
-/* Modal para eventos del día */
-.event-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.event-modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 30px;
-    border-radius: 18px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-.event-modal-header {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #f0f4fa;
+    justify-content: center;
+    margin: 0 auto;
+    font-weight: 800;
+    box-shadow: 0 1px 4px rgba(255,179,0,0.10);
 }
-
-.event-modal-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2d3748;
+.calendar-day:hover .day-number {
+    text-decoration: underline;
+    color: #ffb300 !important;
 }
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #718096;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.close-modal:hover {
-    background: #f0f4fa;
-    color: #2d3748;
-}
-
-.event-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.event-item {
-    background: #f8fafd;
-    border-radius: 12px;
-    padding: 15px;
-    border-left: 4px solid #667eea;
-}
-
-.event-item.aceptada {
-    border-left-color: #38a169;
-}
-
-.event-item.pendiente {
-    border-left-color: #fbbf24;
-}
-
-.event-item.urgent {
-    border-left-color: #e53e3e;
-}
-
-.event-title {
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 8px;
-}
-
-.event-time {
-    color: #718096;
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-}
-
-.event-client {
-    color: #4a5568;
-    font-weight: 500;
-}
-
-.event-location {
-    color: #718096;
-    font-size: 0.85rem;
-    margin-bottom: 5px;
-}
-
-.event-price {
-    color: #38a169;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.no-events {
+.superprof-header {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    border-radius: 28px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    padding: 38px 0 28px 0 !important;
+    margin-bottom: 32px !important;
     text-align: center;
-    color: #718096;
-    font-style: italic;
-    padding: 20px;
+}
+.superprof-header h1,
+.superprof-header .display-5,
+.superprof-header .fw-bold {
+    color: #fff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.superprof-header p,
+.superprof-header .lead {
+    color: #fff !important;
+    font-weight: 500;
+    text-shadow: none;
 }
 </style>
 
@@ -465,10 +346,10 @@
 
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header Section -->
+            <!-- Header visual worker -->
             <div class="superprof-header">
-                <h1 class="display-5 fw-bold mb-2">Mi Calendario</h1>
-                <p class="lead mb-0">Visualiza y gestiona tus trabajos programados</p>
+                <h1 class="display-5 fw-bold mb-2">Calendario - Obrero</h1>
+                <p class="lead mb-0">Gestiona y visualiza tus trabajos programados</p>
             </div>
 
             <!-- Stats Section -->

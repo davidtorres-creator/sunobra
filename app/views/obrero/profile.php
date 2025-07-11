@@ -180,6 +180,192 @@
     font-size: 1.08rem;
     margin-bottom: 0;
 }
+
+/* Elimina morados/azules y aplica worker */
+.superprof-profile-header,
+.card,
+.card-header,
+.obrero-profile-container {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10) !important;
+    border: none !important;
+}
+.card-header, .superprof-profile-header {
+    border-bottom: 1.5px solid #ffe082 !important;
+}
+
+.btn-primary, .btn-info, .btn-success, .btn-warning {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    font-weight: 700;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.08);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-warning:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
+}
+
+/* Refuerzo: todos los íconos y títulos worker */
+[class^="fa"], [class*=" fa-"],
+.info-title i, .card-title i, .superprof-profile-header i {
+    color: #ff6f00 !important;
+}
+h1, h2, h3, h4, h5, h6,
+.info-title, .section-title, .card-title, .obrero-profile-title, .superprof-profile-header h2, .superprof-profile-header .info-title {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
+}
+
+/* Textos y estados en el header del perfil obrero */
+.superprof-profile-header .superprof-profile-name,
+.superprof-profile-header .superprof-profile-title,
+.superprof-profile-header .superprof-profile-status,
+.superprof-profile-header .superprof-verification-badge,
+.superprof-profile-header .superprof-profile-status *,
+.superprof-profile-header .superprof-profile-title *,
+.superprof-profile-header .superprof-profile-name * {
+    color: #232323 !important;
+    font-weight: 700;
+    opacity: 1 !important;
+}
+
+/* Refuerzo para profile-card */
+.profile-card, .profile-card-header, .profile-card-body, .profile-card-title, .info-label, .info-value, .rating-section, .rating-text, .rating-count, .info-content, .info-item, .info-icon {
+    color: #232323 !important;
+}
+.profile-card-title, .profile-card-title i {
+    color: #ff6f00 !important;
+}
+.rating-stars .fa-star {
+    color: #ff6f00 !important;
+}
+
+/* Textos sobre fondo claro */
+.card, .card *, .obrero-profile-container, .obrero-profile-container * {
+    color: #232323 !important;
+}
+
+/* Fondo blanco para tarjetas y contenedores principales */
+.card, .obrero-profile-container, .superprof-profile-header {
+    background: #fff !important;
+}
+
+label, .form-label {
+    color: #232323 !important;
+    font-weight: 600;
+}
+input, textarea, select, .form-control {
+    background: #fffde7 !important;
+    color: #232323 !important;
+    border: 1.5px solid #ffb300 !important;
+    border-radius: 12px !important;
+}
+input:focus, textarea:focus, select:focus, .form-control:focus {
+    border-color: #ff6f00 !important;
+    box-shadow: 0 0 0 2px #ffe082 !important;
+}
+
+.text-muted {
+    color: #7b7b93 !important;
+}
+
+/* Refuerzo: títulos, íconos y textos worker */
+.text-primary, .section-title, .card-title, .obrero-profile-title, .info-title, .superprof-profile-header h2, .superprof-profile-header .info-title {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
+}
+.superprof-profile-header i, .info-title i, .card-title i, .fa-hard-hat, .fa-user, .fa-envelope, .fa-briefcase, .fa-calendar, .fa-star, .fa-phone, .fa-map-marker-alt {
+    color: #ff6f00 !important;
+}
+
+/* Estadísticas y textos sobre fondo oscuro */
+.stats-section, .stats-section *, .superprof-profile-header .stats-value, .superprof-profile-header .stats-label {
+    color: #fff !important;
+}
+
+/* Textos sobre fondo claro */
+.card, .card *, .obrero-profile-container, .obrero-profile-container * {
+    color: #232323 !important;
+}
+
+/* Fondo blanco para tarjetas y contenedores principales */
+.card, .obrero-profile-container, .superprof-profile-header {
+    background: #fff !important;
+}
+
+/* Refuerzo: todos los íconos y textos claros en .profile-card sobre fondo oscuro */
+.profile-card, .profile-card * {
+    color: #fff !important;
+}
+.profile-card-title, .profile-card-title i, .rating-stars .fa-star {
+    color: #ffe082 !important;
+}
+
+/* Botones de acciones rápidas worker, cada uno diferente */
+.quick-actions .btn, .acciones-rapidas .btn, .acciones-rapidas button {
+    color: #fff !important;
+    font-weight: 700;
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.quick-actions .btn-buscar, .acciones-rapidas .btn-buscar {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+}
+.quick-actions .btn-aplicaciones, .acciones-rapidas .btn-aplicaciones {
+    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+}
+.quick-actions .btn-ganancias, .acciones-rapidas .btn-ganancias {
+    background: linear-gradient(90deg, #fa709a 0%, #fee140 100%) !important;
+}
+.quick-actions .btn-editar, .acciones-rapidas .btn-editar {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
+}
+.quick-actions .btn:hover, .acciones-rapidas .btn:hover, .acciones-rapidas button:hover {
+    filter: brightness(1.08) saturate(1.2);
+    transform: translateY(-2px);
+}
+
+/* Forzar fondo blanco puro y texto negro en todos los inputs de texto del perfil */
+body input.form-control,
+body input[type="text"].form-control,
+body input[type="text"],
+body input[type="text"]:focus,
+body input.form-control:focus,
+body input[type="text"].form-control:focus,
+body input[type="text"]:-webkit-autofill,
+body input[type="text"]:-webkit-autofill:focus {
+    color: #232323 !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    -webkit-text-fill-color: #232323 !important;
+    box-shadow: 0 0 0 1000px #fff inset !important;
+    border: 1.5px solid #ffb300 !important;
+    font-weight: 600;
+    opacity: 1 !important;
+    caret-color: #ffb300;
+}
+body input.form-control::placeholder,
+body input[type="text"].form-control::placeholder,
+body input[type="text"]::placeholder {
+    color: #ffb300 !important;
+    opacity: 1;
+}
 </style>
 
 <?php if (!empty($_SESSION['auth_success'])): ?>
