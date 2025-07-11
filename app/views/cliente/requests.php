@@ -142,18 +142,44 @@
     text-decoration: none;
 }
 </style>
-<div class="superprof-requests-container">
-    <div class="superprof-requests-title">Mis Solicitudes</div>
-    
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <a href="/cliente/requests?view=cards" class="btn btn-sm btn-primary" style="margin-right: 0.5rem;">
-            <i class="fas fa-th-large"></i> Tarjetas
-        </a>
-        <a href="/cliente/requests?view=table" class="btn btn-sm btn-secondary">
-            <i class="fas fa-table"></i> Tabla
-        </a>
-    </div>
-    <?php
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link<?= $_SERVER['REQUEST_URI'] === '/cliente/dashboard' ? ' active' : '' ?>" href="/cliente/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link<?= strpos($_SERVER['REQUEST_URI'], '/cliente/requests') !== false ? ' active' : '' ?>" href="/cliente/requests">
+                            <i class="fas fa-list"></i> Mis Solicitudes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cliente/profile">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="superprof-requests-container">
+                <div class="superprof-requests-title">Mis Solicitudes</div>
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <a href="/cliente/requests?view=cards" class="btn btn-sm btn-primary" style="margin-right: 0.5rem;">
+                        <i class="fas fa-th-large"></i> Tarjetas
+                    </a>
+                    <a href="/cliente/requests?view=table" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-table"></i> Tabla
+                    </a>
+                </div>
+                <?php
 // Verificar que tenemos datos
 if (empty($requests)) {
     echo '<div class="alert alert-info text-center py-4">

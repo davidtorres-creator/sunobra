@@ -1,6 +1,147 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
 
 <link href="assets/css/obrero-profile.css" rel="stylesheet">
+<style>
+.superprof-profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 22px;
+    padding: 38px 0 28px 0;
+    margin-bottom: 32px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(102, 126, 234, 0.13);
+    position: relative;
+}
+.superprof-profile-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #fff;
+    color: #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    margin: 0 auto 18px auto;
+    box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
+    border: 5px solid #e0eaff;
+}
+.superprof-profile-name {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #fff;
+}
+.superprof-profile-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #e0eaff;
+    margin-bottom: 10px;
+}
+.superprof-profile-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #38a169;
+    color: #fff;
+    border-radius: 12px;
+    padding: 5px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(56, 161, 105, 0.10);
+}
+.superprof-verification-badge {
+    position: absolute;
+    top: 18px;
+    right: 32px;
+    background: #fff;
+    color: #38a169;
+    border-radius: 16px;
+    padding: 7px 18px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(56, 161, 105, 0.10);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.superprof-profile-cards-row {
+    margin-top: 18px;
+}
+.superprof-profile-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    border: none;
+}
+.superprof-profile-card-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.superprof-profile-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+.superprof-profile-info-icon {
+    font-size: 1.3rem;
+    color: #764ba2;
+    background: #f3f0fa;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.superprof-profile-info-content {
+    flex: 1;
+}
+.superprof-profile-info-label {
+    font-size: 0.95rem;
+    color: #718096;
+    font-weight: 500;
+}
+.superprof-profile-info-value {
+    font-size: 1.08rem;
+    color: #2d3748;
+    font-weight: 600;
+}
+.superprof-profile-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 14px;
+}
+.superprof-btn {
+    border-radius: 10px;
+    padding: 8px 26px;
+    font-weight: 600;
+    border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.superprof-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+</style>
 
 <?php if (!empty($_SESSION['auth_success'])): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -62,25 +203,21 @@
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!-- Profile Header -->
-            <div class="profile-header">
-                <div class="verification-badge">
+            <div class="superprof-profile-header">
+                <div class="superprof-verification-badge">
                     <i class="fas fa-check-circle"></i>
                     Verificado
                 </div>
-                
-                <div class="text-center">
-                    <div class="profile-avatar">
-                        <i class="fas fa-hard-hat"></i>
-                    </div>
-                    <h1 class="profile-name"><?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?></h1>
-                    <p class="profile-title">Profesional de Construcción</p>
-                    <div class="profile-status">
-                        <i class="fas fa-circle" style="color: #38a169;"></i>
-                        Disponible para trabajar
-                    </div>
+                <div class="superprof-profile-avatar">
+                    <i class="fas fa-hard-hat"></i>
+                </div>
+                <div class="superprof-profile-name"><?= htmlspecialchars($user['nombre'] . ' ' . $user['apellido']) ?></div>
+                <div class="superprof-profile-title">Profesional de Construcción</div>
+                <div class="superprof-profile-status">
+                    <i class="fas fa-circle"></i>
+                    Disponible para trabajar
                 </div>
             </div>
-
             <!-- Stats Section -->
             <div class="stats-section">
                 <div class="row">
@@ -110,113 +247,85 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row">
+            <div class="row superprof-profile-cards-row">
                 <!-- Información Personal -->
                 <div class="col-lg-6 mb-4">
-                    <div class="profile-card">
-                        <div class="profile-card-header">
-                            <h3 class="profile-card-title">
-                                <i class="fas fa-user"></i>
-                                Información Personal
-                            </h3>
+                    <div class="superprof-profile-card">
+                        <div class="superprof-profile-card-header">
+                            <i class="fas fa-user"></i>
+                            Información Personal
                         </div>
                         <div class="profile-card-body">
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Correo Electrónico</div>
-                                    <div class="info-value"><?= htmlspecialchars($user['correo'] ?? 'carlos.mendoza@email.com') ?></div>
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-envelope"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Correo Electrónico</div>
+                                    <div class="superprof-profile-info-value"><?= htmlspecialchars($user['correo'] ?? 'carlos.mendoza@email.com') ?></div>
                                 </div>
                             </div>
-                            
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-phone"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Teléfono</div>
-                                    <div class="info-value"><?= htmlspecialchars($user['telefono'] ?? '+57 300 123 4567') ?></div>
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-phone"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Teléfono</div>
+                                    <div class="superprof-profile-info-value"><?= htmlspecialchars($user['telefono'] ?? '+57 300 123 4567') ?></div>
                                 </div>
                             </div>
-                            
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Ubicación</div>
-                                    <div class="info-value"><?= htmlspecialchars($user['direccion'] ?? 'Bogotá, Colombia') ?></div>
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Ubicación</div>
+                                    <div class="superprof-profile-info-value"><?= htmlspecialchars($user['direccion'] ?? 'Bogotá, Colombia') ?></div>
                                 </div>
                             </div>
-                            
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Miembro desde</div>
-                                    <div class="info-value">Enero 2024</div>
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-calendar-alt"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Miembro desde</div>
+                                    <div class="superprof-profile-info-value">Enero 2024</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Información Profesional -->
                 <div class="col-lg-6 mb-4">
-                    <div class="profile-card">
-                        <div class="profile-card-header">
-                            <h3 class="profile-card-title">
-                                <i class="fas fa-hard-hat"></i>
-                                Información Profesional
-                            </h3>
+                    <div class="superprof-profile-card">
+                        <div class="superprof-profile-card-header">
+                            <i class="fas fa-hard-hat"></i>
+                            Información Profesional
                         </div>
                         <div class="profile-card-body">
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Años de Experiencia</div>
-                                    <div class="info-value">
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-clock"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Años de Experiencia</div>
+                                    <div class="superprof-profile-info-value">
                                         <?= htmlspecialchars($user['experiencia'] ?? 'No especificado') ?>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Tarifa por Hora</div>
-                                    <div class="info-value">
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-dollar-sign"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Tarifa por Hora</div>
+                                    <div class="superprof-profile-info-value">
                                         <?= isset($user['tarifa_hora']) ? '$' . number_format($user['tarifa_hora'], 0, ',', '.') . ' COP' : 'No especificado' ?>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-certificate"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Certificaciones</div>
-                                    <div class="info-value">
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-certificate"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Certificaciones</div>
+                                    <div class="superprof-profile-info-value">
                                         <?= htmlspecialchars($user['certificaciones'] ?? 'No especificado') ?>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Especialidades</div>
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-tools"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Especialidades</div>
                                     <div class="specialties-grid">
                                         <?php if (!empty($user['especialidad'])): ?>
                                             <div class="specialty-badge">
@@ -229,13 +338,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-calendar-check"></i>
-                                </div>
-                                <div class="info-content">
-                                    <div class="info-label">Disponibilidad</div>
-                                    <div class="info-value">
+                            <div class="superprof-profile-info-item">
+                                <div class="superprof-profile-info-icon"><i class="fas fa-calendar-check"></i></div>
+                                <div class="superprof-profile-info-content">
+                                    <div class="superprof-profile-info-label">Disponibilidad</div>
+                                    <div class="superprof-profile-info-value">
                                         <?= htmlspecialchars($user['disponibilidad'] ?? 'No especificado') ?>
                                     </div>
                                 </div>

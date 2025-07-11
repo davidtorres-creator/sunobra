@@ -66,148 +66,71 @@
 
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">
-                    <i class="fas fa-edit"></i>
-                    Editar Perfil
-                </h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="/obrero/profile" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        Volver al Perfil
-                    </a>
+            <div class="superprof-edit-header">
+                <div class="superprof-edit-avatar">
+                    <i class="fas fa-user-edit"></i>
                 </div>
+                <div class="superprof-edit-title">Editar Perfil</div>
+                <div class="superprof-edit-desc">Actualiza tu información personal y profesional para mejorar tu visibilidad en la plataforma.</div>
             </div>
-
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="profile-card">
-                        <div class="profile-card-header">
-                            <h3 class="profile-card-title">
-                                <i class="fas fa-user-edit"></i>
-                                Información Personal y Profesional
-                            </h3>
-                            <p class="text-muted">Actualiza tu información personal y profesional para mejorar tu visibilidad en la plataforma.</p>
+                    <div class="superprof-edit-card">
+                        <div class="superprof-edit-card-header">
+                            <i class="fas fa-user-edit"></i>
+                            Información Personal y Profesional
                         </div>
-                        <div class="profile-card-body">
-                            <form method="POST" action="/obrero/profile" class="needs-validation" novalidate>
-                                <!-- Información Personal -->
-                                <div class="row mb-4">
-                                    <div class="col-12">
-                                        <h4 class="form-section-title">
-                                            <i class="fas fa-user"></i>
-                                            Información Personal
-                                        </h4>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="nombre" class="form-label">Nombre *</label>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" 
-                                               value="<?= htmlspecialchars($user['nombre'] ?? '') ?>" required>
-                                        <div class="invalid-feedback">
-                                            El nombre es requerido.
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="apellido" class="form-label">Apellido *</label>
-                                        <input type="text" class="form-control" id="apellido" name="apellido" 
-                                               value="<?= htmlspecialchars($user['apellido'] ?? '') ?>" required>
-                                        <div class="invalid-feedback">
-                                            El apellido es requerido.
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="telefono" class="form-label">Teléfono</label>
-                                        <input type="tel" class="form-control" id="telefono" name="telefono" 
-                                               value="<?= htmlspecialchars($user['telefono'] ?? '') ?>" 
-                                               placeholder="+57 300 123 4567">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" name="direccion" 
-                                               value="<?= htmlspecialchars($user['direccion'] ?? '') ?>" 
-                                               placeholder="Ciudad, Departamento">
+                        <form method="POST" action="/obrero/profile" class="superprof-edit-card p-4" style="max-width:900px;margin:auto;">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="nombre" class="form-label superprof-profile-info-label">Nombre</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="nombre" name="nombre" value="<?= htmlspecialchars($user['nombre'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="apellido" class="form-label superprof-profile-info-label">Apellido</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="apellido" name="apellido" value="<?= htmlspecialchars($user['apellido'] ?? '') ?>" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="telefono" class="form-label superprof-profile-info-label">Teléfono</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="telefono" name="telefono" value="<?= htmlspecialchars($user['telefono'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="direccion" class="form-label superprof-profile-info-label">Dirección</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="direccion" name="direccion" value="<?= htmlspecialchars($user['direccion'] ?? '') ?>">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="especialidad" class="form-label superprof-profile-info-label">Especialidad</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="especialidad" name="especialidad" value="<?= htmlspecialchars($user['especialidad'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="experiencia" class="form-label superprof-profile-info-label">Años de Experiencia</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="experiencia" name="experiencia" value="<?= htmlspecialchars($user['experiencia'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="tarifa_hora" class="form-label superprof-profile-info-label">Tarifa por Hora (COP)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0" style="color:#764ba2;">$</span>
+                                        <input type="number" class="form-control superprof-profile-info-value" id="tarifa_hora" name="tarifa_hora" value="<?= htmlspecialchars($user['tarifa_hora'] ?? '') ?>">
+                                        <span class="input-group-text bg-light border-0" style="color:#764ba2;">COP</span>
                                     </div>
                                 </div>
-
-                                <!-- Información Profesional -->
-                                <div class="row mb-4">
-                                    <div class="col-12">
-                                        <h4 class="form-section-title">
-                                            <i class="fas fa-hard-hat"></i>
-                                            Información Profesional
-                                        </h4>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="especialidad" class="form-label">Especialidad</label>
-                                        <select class="form-select" id="especialidad" name="especialidad">
-                                            <option value="">Selecciona tu especialidad</option>
-                                            <option value="Albañil" <?= ($user['especialidad'] ?? '') === 'Albañil' ? 'selected' : '' ?>>Albañil</option>
-                                            <option value="Electricista" <?= ($user['especialidad'] ?? '') === 'Electricista' ? 'selected' : '' ?>>Electricista</option>
-                                            <option value="Plomero" <?= ($user['especialidad'] ?? '') === 'Plomero' ? 'selected' : '' ?>>Plomero</option>
-                                            <option value="Carpintero" <?= ($user['especialidad'] ?? '') === 'Carpintero' ? 'selected' : '' ?>>Carpintero</option>
-                                            <option value="Pintor" <?= ($user['especialidad'] ?? '') === 'Pintor' ? 'selected' : '' ?>>Pintor</option>
-                                            <option value="Soldador" <?= ($user['especialidad'] ?? '') === 'Soldador' ? 'selected' : '' ?>>Soldador</option>
-                                            <option value="Técnico HVAC" <?= ($user['especialidad'] ?? '') === 'Técnico HVAC' ? 'selected' : '' ?>>Técnico HVAC</option>
-                                            <option value="Otro" <?= ($user['especialidad'] ?? '') === 'Otro' ? 'selected' : '' ?>>Otro</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="experiencia" class="form-label">Años de Experiencia</label>
-                                        <select class="form-select" id="experiencia" name="experiencia">
-                                            <option value="">Selecciona años de experiencia</option>
-                                            <option value="Menos de 1 año" <?= ($user['experiencia'] ?? '') === 'Menos de 1 año' ? 'selected' : '' ?>>Menos de 1 año</option>
-                                            <option value="1-2 años" <?= ($user['experiencia'] ?? '') === '1-2 años' ? 'selected' : '' ?>>1-2 años</option>
-                                            <option value="3-5 años" <?= ($user['experiencia'] ?? '') === '3-5 años' ? 'selected' : '' ?>>3-5 años</option>
-                                            <option value="5-10 años" <?= ($user['experiencia'] ?? '') === '5-10 años' ? 'selected' : '' ?>>5-10 años</option>
-                                            <option value="Más de 10 años" <?= ($user['experiencia'] ?? '') === 'Más de 10 años' ? 'selected' : '' ?>>Más de 10 años</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="tarifa_hora" class="form-label">Tarifa por Hora (COP)</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" id="tarifa_hora" name="tarifa_hora" 
-                                                   value="<?= htmlspecialchars($user['tarifa_hora'] ?? '') ?>" 
-                                                   placeholder="25000" min="0">
-                                            <span class="input-group-text">COP</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="disponibilidad" class="form-label">Disponibilidad</label>
-                                        <select class="form-select" id="disponibilidad" name="disponibilidad">
-                                            <option value="">Selecciona disponibilidad</option>
-                                            <option value="Disponible inmediatamente" <?= ($user['disponibilidad'] ?? '') === 'Disponible inmediatamente' ? 'selected' : '' ?>>Disponible inmediatamente</option>
-                                            <option value="Disponible en 1 semana" <?= ($user['disponibilidad'] ?? '') === 'Disponible en 1 semana' ? 'selected' : '' ?>>Disponible en 1 semana</option>
-                                            <option value="Disponible en 2 semanas" <?= ($user['disponibilidad'] ?? '') === 'Disponible en 2 semanas' ? 'selected' : '' ?>>Disponible en 2 semanas</option>
-                                            <option value="Solo fines de semana" <?= ($user['disponibilidad'] ?? '') === 'Solo fines de semana' ? 'selected' : '' ?>>Solo fines de semana</option>
-                                            <option value="Por consultar" <?= ($user['disponibilidad'] ?? '') === 'Por consultar' ? 'selected' : '' ?>>Por consultar</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="certificaciones" class="form-label">Certificaciones y Cursos</label>
-                                        <textarea class="form-control" id="certificaciones" name="certificaciones" rows="3" 
-                                                  placeholder="Ej: Certificación SENA en Albañilería, Curso de Seguridad Industrial, etc."><?= htmlspecialchars($user['certificaciones'] ?? '') ?></textarea>
-                                        <div class="form-text">Menciona tus certificaciones, cursos y capacitaciones relevantes.</div>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="certificaciones" class="form-label superprof-profile-info-label">Certificaciones</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="certificaciones" name="certificaciones" value="<?= htmlspecialchars($user['certificaciones'] ?? '') ?>">
                                 </div>
-
-                                <!-- Botones de acción -->
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-between">
-                                            <a href="/obrero/profile" class="btn btn-secondary">
-                                                <i class="fas fa-times"></i>
-                                                Cancelar
-                                            </a>
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-save"></i>
-                                                Guardar Cambios
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="disponibilidad" class="form-label superprof-profile-info-label">Disponibilidad</label>
+                                    <input type="text" class="form-control superprof-profile-info-value" id="disponibilidad" name="disponibilidad" value="<?= htmlspecialchars($user['disponibilidad'] ?? '') ?>">
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                            <button type="submit" class="superprof-btn mt-3">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -235,7 +158,7 @@
 
 // Animación de entrada
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('.profile-card');
+    const form = document.querySelector('.superprof-edit-card');
     form.style.opacity = '0';
     form.style.transform = 'translateY(30px)';
     
@@ -248,66 +171,86 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-.form-section-title {
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+.superprof-edit-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 22px;
+    padding: 32px 0 22px 0;
+    margin-bottom: 32px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(102, 126, 234, 0.13);
+    position: relative;
 }
-
-.form-section-title i {
-    color: #3498db;
-    margin-right: 10px;
+.superprof-edit-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #fff;
+    color: #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    margin: 0 auto 12px auto;
+    box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
+    border: 4px solid #e0eaff;
 }
-
-.profile-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+.superprof-edit-title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #fff;
 }
-
-.profile-card-header {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 15px 15px 0 0;
+.superprof-edit-desc {
+    font-size: 1.08rem;
+    color: #e0eaff;
+    margin-bottom: 0;
 }
-
-.profile-card-title {
-    margin: 0;
-    font-size: 1.5rem;
-}
-
-.profile-card-body {
-    padding: 30px;
-}
-
-.btn {
-    border-radius: 25px;
-    padding: 10px 25px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+.superprof-edit-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 32px 36px;
+    margin-bottom: 24px;
     border: none;
 }
-
-.btn-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+.superprof-edit-card-header {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-
-.btn-secondary {
-    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+.superprof-form-section-title {
+    font-size: 1.1rem;
+    color: #764ba2;
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.superprof-btn {
+    border-radius: 10px;
+    padding: 8px 26px;
+    font-weight: 600;
     border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
 }
-
-.btn-secondary:hover {
+.superprof-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(149, 165, 166, 0.3);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
 </style>
 
