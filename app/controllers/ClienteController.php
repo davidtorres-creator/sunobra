@@ -488,7 +488,14 @@ class ClienteController extends BaseController {
         $obreroModel = new ObreroModel();
         $ok = $obreroModel->cambiarEstadoCotizacion($id, 'aceptada');
         $_SESSION['auth_success'] = $ok ? 'Cotización aceptada correctamente.' : 'No se pudo aceptar la cotización.';
-        $this->redirect('/cliente/requests'); // Cambia la ruta si tu panel es diferente
+        // Obtener el id de la solicitud asociada a la cotización
+        $cotizacion = $obreroModel->getCotizacionById($id);
+        $solicitudId = $cotizacion ? $cotizacion['solicitud_id'] : null;
+        if ($solicitudId) {
+            $this->redirect('/cliente/requests/' . $solicitudId);
+        } else {
+            $this->redirect('/cliente/requests');
+        }
     }
 
     public function rechazarCotizacion($id) {
@@ -496,7 +503,33 @@ class ClienteController extends BaseController {
         $obreroModel = new ObreroModel();
         $ok = $obreroModel->cambiarEstadoCotizacion($id, 'rechazada');
         $_SESSION['auth_success'] = $ok ? 'Cotización rechazada correctamente.' : 'No se pudo rechazar la cotización.';
-        $this->redirect('/cliente/requests'); // Cambia la ruta si tu panel es diferente
+        // Obtener el id de la solicitud asociada a la cotización
+        $cotizacion = $obreroModel->getCotizacionById($id);
+        $solicitudId = $cotizacion ? $cotizacion['solicitud_id'] : null;
+        if ($solicitudId) {
+            $this->redirect('/cliente/requests/' . $solicitudId);
+        } else {
+            $this->redirect('/cliente/requests');
+        }
+    }
+
+    public function cancelRequest($id) {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'cliente') {
+            $this->redirect('/login');
+            return;
+        }
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $sql = "UPDATE solicitudes_servicio SET estado = 'cancelado' WHERE id = ? AND cliente_id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('ii', $id, $_SESSION['user_id']);
+        $ok = $stmt->execute();
+        if ($ok) {
+            $_SESSION['auth_success'] = 'Solicitud cancelada correctamente.';
+        } else {
+            $_SESSION['auth_error'] = 'No se pudo cancelar la solicitud.';
+        }
+        $this->redirect('/cliente/requests');
     }
     
     // ========================================
@@ -552,7 +585,24 @@ class ClienteController extends BaseController {
         $stmt->execute();
         $result = $stmt->get_result();
         $requests = [];
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
         while ($row = $result->fetch_assoc()) {
+            // Obtener cotizaciones asociadas
+            $cotizaciones = $obreroModel->getCotizacionesPorSolicitud($row['id']);
+            // Buscar la cotización más relevante (aprobada > pendiente > rechazada)
+            $estadoCotizacion = 'sin cotizaciones';
+            foreach ($cotizaciones as $cot) {
+                if ($cot['estado'] === 'aprobada' || $cot['estado'] === 'aceptada') {
+                    $estadoCotizacion = 'aceptada';
+                    break;
+                } elseif ($cot['estado'] === 'pendiente' && $estadoCotizacion !== 'aceptada') {
+                    $estadoCotizacion = 'pendiente';
+                } elseif ($cot['estado'] === 'rechazada' && $estadoCotizacion === 'sin cotizaciones') {
+                    $estadoCotizacion = 'rechazada';
+                }
+            }
+            $row['estado_cotizacion'] = $estadoCotizacion;
             $requests[] = $row;
         }
         return $requests;

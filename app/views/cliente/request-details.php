@@ -244,6 +244,10 @@
     font-size: 0.9rem;
 }
 
+.cotizacion-estado {
+    margin-top: 0.5rem;
+}
+
 .no-cotizaciones {
     text-align: center;
     padding: 2rem;
@@ -341,23 +345,27 @@
                             <div class="cotizacion-fecha">
                                 Cotizada el <?= date('d/m/Y', strtotime($cotizacion['fecha'])) ?>
                             </div>
+                            <div class="cotizacion-estado">
+                                <?php
+                                $estado = strtolower($cotizacion['estado']);
+                                if ($estado === 'pendiente') {
+                                    echo '<span class="badge bg-warning">Pendiente</span>';
+                                } elseif ($estado === 'aprobada' || $estado === 'aceptada') {
+                                    echo '<span class="badge bg-success">Aceptada</span>';
+                                } elseif ($estado === 'rechazada') {
+                                    echo '<span class="badge bg-danger">Rechazada</span>';
+                                } else {
+                                    echo '<span class="badge bg-secondary">' . ucfirst($estado) . '</span>';
+                                }
+                                ?>
+                            </div>
                             <?php if ($cotizacion['estado'] === 'pendiente'): ?>
-                                <div class="mt-2">
-                                    <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/aceptar" style="display:inline;">
-                                        <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Aceptar esta cotización?')">
-                                            <i class="fas fa-check"></i> Aceptar
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/rechazar" style="display:inline;">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Rechazar esta cotización?')">
-                                            <i class="fas fa-times"></i> Rechazar
-                                        </button>
-                                    </form>
-                                </div>
-                            <?php else: ?>
-                                <div class="mt-2">
-                                    <span class="badge bg-secondary">Estado: <?= ucfirst($cotizacion['estado']) ?></span>
-                                </div>
+                                <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/aceptar" style="display:inline;">
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Aceptar esta cotización?')">Aceptar</button>
+                                </form>
+                                <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/rechazar" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Rechazar esta cotización?')">Rechazar</button>
+                                </form>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>

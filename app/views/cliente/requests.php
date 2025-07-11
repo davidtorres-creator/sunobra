@@ -203,9 +203,16 @@ if (empty($requests)) {
                         $statusIcon = 'fas fa-question-circle';
                 }
                 ?>
-                <div class="status-badge <?= $statusClass ?>">
-                    <i class="<?= $statusIcon ?>"></i>
-                    <?= ucfirst(str_replace('_', ' ', $request['estado'])) ?>
+                <div class="superprof-request-status <?= $request['estado_cotizacion'] ?>">
+                    <?php if ($request['estado_cotizacion'] === 'aceptada'): ?>
+                        <i class="fas fa-check-circle"></i> Cotización Aceptada
+                    <?php elseif ($request['estado_cotizacion'] === 'pendiente'): ?>
+                        <i class="fas fa-clock"></i> Cotización Pendiente
+                    <?php elseif ($request['estado_cotizacion'] === 'rechazada'): ?>
+                        <i class="fas fa-times-circle"></i> Cotización Rechazada
+                    <?php else: ?>
+                        <i class="fas fa-info-circle"></i> Sin Cotizaciones
+                    <?php endif; ?>
                 </div>
             </div>
             

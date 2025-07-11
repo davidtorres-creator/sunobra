@@ -380,4 +380,14 @@ class ObreroModel {
         $stmt->bind_param('iisd', $obreroId, $solicitudId, $detalle, $montoEstimado);
         return $stmt->execute();
     }
+
+    public function getCotizacionById($id) {
+        $db = $this->db;
+        $sql = "SELECT * FROM cotizaciones WHERE id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
 } 

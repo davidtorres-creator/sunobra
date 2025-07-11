@@ -66,3 +66,50 @@ SunObra es una plataforma web para la gestión de servicios de construcción. El
 ---
 
 *Última actualización: <?= date('Y-m-d H:i:s') ?>* 
+
+# Informe Detallado del Estado de Solicitudes y Cotizaciones en SunObra
+
+## Resumen General
+El sistema SunObra permite la interacción entre clientes y obreros mediante la creación de solicitudes de servicio, el envío de cotizaciones por parte de los obreros y la gestión de estas cotizaciones por parte de los clientes. Se han realizado mejoras significativas para garantizar que la información fluya correctamente y sea visible y actualizada para ambos roles.
+
+---
+
+## Mejoras Realizadas
+- **Flujo completo de solicitudes y cotizaciones:** Ahora el cliente puede crear solicitudes, los obreros pueden enviar cotizaciones y ambos pueden ver el estado actualizado de cada cotización.
+- **Visibilidad bidireccional:** Cuando una cotización es aceptada o rechazada, el cambio de estado se refleja tanto en la vista del cliente como en la del obrero.
+- **Redirección inteligente:** Tras aceptar o rechazar una cotización, el cliente permanece en la página de detalle de la solicitud, viendo el estado actualizado en tiempo real.
+- **Detalle enriquecido:** El obrero puede ver en su panel de detalle de aplicación el nombre del cliente, el servicio solicitado y la fecha de la solicitud, además de su propuesta y estado.
+- **Cancelación dinámica:** El cliente puede cancelar solicitudes y el cambio se refleja inmediatamente en la base de datos y en la interfaz.
+- **Estadísticas y tarjetas dinámicas:** Todos los paneles muestran datos reales y actualizados desde la base de datos, eliminando valores estáticos o "N/A".
+
+---
+
+## Puntos Fuertes
+- **Transparencia:** Ambos roles (cliente y obrero) tienen acceso a información clara y actualizada sobre el estado de sus interacciones.
+- **Experiencia de usuario mejorada:** La navegación es más intuitiva y los usuarios reciben retroalimentación inmediata tras cada acción.
+- **Modularidad:** El código está organizado en controladores, modelos y vistas, facilitando futuras mejoras.
+- **Seguridad básica:** Las acciones críticas (aceptar, rechazar, cancelar) requieren autenticación y validan el rol del usuario.
+
+---
+
+## Debilidades y Áreas de Mejora
+- **Falta de notificaciones:** No hay alertas automáticas (correo, notificaciones in-app) cuando una cotización es aceptada, rechazada o una solicitud es cancelada.
+- **Validaciones adicionales:** Sería recomendable agregar validaciones más estrictas en los formularios y en el backend para evitar datos incompletos o inconsistentes.
+- **Historial y auditoría:** No se almacena un historial detallado de cambios de estado, lo que dificulta la trazabilidad de acciones pasadas.
+- **UX en estados intermedios:** El sistema podría mejorar la visualización de estados intermedios (por ejemplo, "en proceso", "finalizado") y permitir comentarios o calificaciones tras la finalización del trabajo.
+- **Optimización de consultas:** Algunas consultas pueden optimizarse para reducir la carga en la base de datos, especialmente en vistas con muchos datos.
+
+---
+
+## Recomendaciones
+1. **Implementar notificaciones automáticas** para cambios de estado importantes.
+2. **Agregar historial de acciones** para mayor trazabilidad y transparencia.
+3. **Permitir calificaciones y comentarios** tras la finalización de un trabajo.
+4. **Optimizar y documentar las consultas SQL** para mejorar el rendimiento.
+5. **Revisar y reforzar la seguridad** en endpoints críticos.
+6. **Mejorar la experiencia móvil** y la accesibilidad en todas las vistas.
+
+---
+
+## Conclusión
+El sistema SunObra ha avanzado considerablemente en la gestión dinámica y transparente de solicitudes y cotizaciones. Sin embargo, aún existen áreas clave donde se puede fortalecer la experiencia y la robustez del sistema. Se recomienda priorizar las notificaciones, la trazabilidad y la optimización para alcanzar un producto más maduro y competitivo. 

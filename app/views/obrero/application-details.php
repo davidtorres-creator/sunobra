@@ -28,6 +28,15 @@
 
                             <dt class="col-sm-4">Fecha de Aplicación</dt>
                             <dd class="col-sm-8"><?= isset($application['fecha']) ? date('d/m/Y H:i', strtotime($application['fecha'])) : 'N/A' ?></dd>
+
+                            <dt class="col-sm-4">Servicio</dt>
+                            <dd class="col-sm-8"><?= htmlspecialchars($application['nombre_servicio'] ?? 'N/A') ?></dd>
+
+                            <dt class="col-sm-4">Cliente</dt>
+                            <dd class="col-sm-8"><?= htmlspecialchars($application['cliente'] ?? 'N/A') ?></dd>
+
+                            <dt class="col-sm-4">Fecha de Solicitud</dt>
+                            <dd class="col-sm-8"><?= isset($application['fecha_solicitud']) ? date('d/m/Y H:i', strtotime($application['fecha_solicitud'])) : 'N/A' ?></dd>
                         </dl>
                     <?php else: ?>
                         <div class="alert alert-warning text-center">

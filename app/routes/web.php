@@ -70,6 +70,7 @@ $router->prefix('/cliente')
         $router->post('/services/{id}/request', 'ClienteController@requestService');
         $router->get('/requests', 'ClienteController@requests');
         $router->get('/requests/{id}', 'ClienteController@showRequest');
+        $router->get('/requests/{id}/cancel', 'ClienteController@cancelRequest');
         $router->post('/cotizaciones/{id}/aceptar', 'ClienteController@aceptarCotizacion');
         $router->post('/cotizaciones/{id}/rechazar', 'ClienteController@rechazarCotizacion');
         $router->get('/history', 'ClienteController@history');
@@ -97,6 +98,7 @@ $router->prefix('/obrero')
         $router->get('/applications/{id}', 'ObreroController@showApplication');
         $router->get('/schedule', 'ObreroController@schedule');
         $router->get('/earnings', 'ObreroController@earnings');
+        $router->get('/schedule/{id}/confirm', 'ObreroController@confirmSchedule');
         $router->get('/services/create', 'ServicioController@create');
         $router->post('/services/create', 'ServicioController@store');
     });

@@ -900,3 +900,96 @@
     [auth_success] => Cotización aceptada correctamente.
 )
 
+2025-07-10 17:21:48 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-10 17:32:28 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-10 18:08:33 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-10 18:13:23 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-10 18:15:43 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Solicitud cancelada correctamente.
+)
+
+2025-07-10 18:15:49 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-10 18:19:25 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+2025-07-10 18:25:27 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+2025-07-10 18:25:30 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+

@@ -354,6 +354,22 @@ class ObreroController extends BaseController {
         
         $this->render('obrero/earnings', $data);
     }
+
+    public function confirmSchedule($id) {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'obrero') {
+            $this->redirect('/login');
+            return;
+        }
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $ok = $obreroModel->cambiarEstadoCotizacion($id, 'aprobada');
+        if ($ok) {
+            $_SESSION['auth_success'] = 'Trabajo confirmado correctamente.';
+        } else {
+            $_SESSION['auth_error'] = 'No se pudo confirmar el trabajo.';
+        }
+        $this->redirect('/obrero/schedule');
+    }
     
     // ========================================
     // MÉTODOS PRIVADOS
@@ -613,130 +629,96 @@ class ObreroController extends BaseController {
      * Obtener aplicación por ID
      */
     private function getApplicationById($id) {
-        $applications = $this->getObreroApplications();
-        foreach ($applications as $application) {
-            if ($application['id'] == $id) {
-                return $application;
-            }
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $cotizacion = $obreroModel->getCotizacionById($id);
+        if (!$cotizacion) return null;
+        // Obtener datos adicionales: nombre del cliente, nombre del servicio, fecha de la solicitud
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $sql = "SELECT s.nombre_servicio, ss.fecha, CONCAT(u.nombre, ' ', u.apellido) as cliente
+                FROM solicitudes_servicio ss
+                INNER JOIN servicios s ON ss.servicio_id = s.id
+                INNER JOIN clientes c ON ss.cliente_id = c.id
+                INNER JOIN usuarios u ON c.id = u.id
+                WHERE ss.id = ? LIMIT 1";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('i', $cotizacion['solicitud_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $cotizacion['nombre_servicio'] = $row['nombre_servicio'];
+            $cotizacion['fecha_solicitud'] = $row['fecha'];
+            $cotizacion['cliente'] = $row['cliente'];
         }
-        return null;
+        return $cotizacion;
     }
     
     /**
      * Obtener calendario del obrero
      */
     private function getObreroSchedule() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'trabajo_id' => 1,
-                'titulo_trabajo' => 'Reparación de pared',
-                'cliente' => 'Juan Pérez',
-                'ubicacion' => 'Bogotá, Colombia',
-                'direccion' => 'Calle 123 #45-67, Chapinero',
-                'fecha' => '2024-02-15',
-                'hora_inicio' => '09:00',
-                'hora_fin' => '17:00',
-                'duracion' => '8 horas',
-                'estado' => 'confirmado',
-                'precio' => 140000,
-                'categoria' => 'Albañilería',
-                'descripcion' => 'Reparación de pared dañada en sala de estar',
-                'telefono_cliente' => '+57 300 123 4567',
-                'notas' => 'Llevar materiales de reparación. Cliente preferirá pagar en efectivo.'
-            ],
-            [
-                'id' => 2,
-                'trabajo_id' => 2,
-                'titulo_trabajo' => 'Instalación eléctrica',
-                'cliente' => 'María García',
-                'ubicacion' => 'Bogotá, Colombia',
-                'direccion' => 'Carrera 78 #90-12, Suba',
-                'fecha' => '2024-02-16',
-                'hora_inicio' => '08:00',
-                'hora_fin' => '16:00',
-                'duracion' => '8 horas',
-                'estado' => 'confirmado',
-                'precio' => 180000,
-                'categoria' => 'Electricidad',
-                'descripcion' => 'Instalación de tomas y luces en cocina',
-                'telefono_cliente' => '+57 310 987 6543',
-                'notas' => 'Trabajo requiere certificación. Cliente tiene mascotas.'
-            ],
-            [
-                'id' => 3,
-                'trabajo_id' => 3,
-                'titulo_trabajo' => 'Pintura de habitación',
-                'cliente' => 'Carlos López',
-                'ubicacion' => 'Bogotá, Colombia',
-                'direccion' => 'Avenida 68 #23-45, Teusaquillo',
-                'fecha' => '2024-02-17',
-                'hora_inicio' => '10:00',
-                'hora_fin' => '18:00',
-                'duracion' => '8 horas',
-                'estado' => 'pendiente',
-                'precio' => 120000,
-                'categoria' => 'Pintura',
-                'descripcion' => 'Pintura de habitación principal',
-                'telefono_cliente' => '+57 315 456 7890',
-                'notas' => 'Color elegido: azul claro. Cliente proporcionará pintura.'
-            ],
-            [
-                'id' => 4,
-                'trabajo_id' => 4,
-                'titulo_trabajo' => 'Reparación de tubería',
-                'cliente' => 'Ana Rodríguez',
-                'ubicacion' => 'Bogotá, Colombia',
-                'direccion' => 'Calle 45 #67-89, La Soledad',
-                'fecha' => '2024-02-18',
-                'hora_inicio' => '07:00',
-                'hora_fin' => '12:00',
-                'duracion' => '5 horas',
-                'estado' => 'confirmado',
-                'precio' => 90000,
-                'categoria' => 'Plomería',
-                'descripcion' => 'Reparación de fuga en tubería principal',
-                'telefono_cliente' => '+57 320 111 2222',
-                'notas' => 'Urgente. Cliente sin agua desde ayer.'
-            ],
-            [
-                'id' => 5,
-                'trabajo_id' => 5,
-                'titulo_trabajo' => 'Instalación de puertas',
-                'cliente' => 'Luis Martínez',
-                'ubicacion' => 'Bogotá, Colombia',
-                'direccion' => 'Carrera 15 #34-56, Usaquén',
-                'fecha' => '2024-02-19',
-                'hora_inicio' => '09:00',
-                'hora_fin' => '17:00',
-                'duracion' => '8 horas',
-                'estado' => 'confirmado',
-                'precio' => 240000,
-                'categoria' => 'Carpintería',
-                'descripcion' => 'Instalación de 3 puertas de madera',
-                'telefono_cliente' => '+57 300 555 6666',
-                'notas' => 'Puertas ya compradas. Necesita ajustes de marco.'
-            ],
-            [
-                'id' => 6,
-                'trabajo_id' => 6,
-                'titulo_trabajo' => 'Mantenimiento de aire acondicionado',
-                'cliente' => 'Patricia Silva',
-                'ubicacion' => 'Bogotá, Colombia',
-                'direccion' => 'Calle 100 #11-22, Chicó',
-                'fecha' => '2024-02-20',
-                'hora_inicio' => '14:00',
-                'hora_fin' => '16:00',
-                'duracion' => '2 horas',
-                'estado' => 'pendiente',
-                'precio' => 80000,
-                'categoria' => 'Mantenimiento',
-                'descripcion' => 'Limpieza y mantenimiento de 2 aires acondicionados',
-                'telefono_cliente' => '+57 318 777 8888',
-                'notas' => 'Cliente en casa todo el día. Preferiblemente tarde.'
-            ]
-        ];
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+
+        try {
+            // Consulta para obtener trabajos programados del obrero
+            $sql = "SELECT 
+                        c.id,
+                        c.solicitud_id as trabajo_id,
+                        s.nombre_servicio as titulo_trabajo,
+                        CONCAT(u.nombre, ' ', u.apellido) as cliente,
+                        u.direccion,
+                        ss.fecha,
+                        '09:00' as hora_inicio,
+                        '17:00' as hora_fin,
+                        '8 horas' as duracion,
+                        c.estado,
+                        c.monto_estimado as precio,
+                        s.categoria,
+                        ss.descripcion,
+                        u.telefono as telefono_cliente,
+                        c.detalle as notas
+                    FROM cotizaciones c
+                    INNER JOIN solicitudes_servicio ss ON c.solicitud_id = ss.id
+                    INNER JOIN servicios s ON ss.servicio_id = s.id
+                    INNER JOIN clientes cl ON ss.cliente_id = cl.id
+                    INNER JOIN usuarios u ON cl.id = u.id
+                    WHERE c.obrero_id = ? AND c.estado IN ('aprobada', 'pendiente')
+                    ORDER BY ss.fecha ASC, c.fecha ASC";
+            
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param('i', $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $schedule = [];
+            while ($row = $result->fetch_assoc()) {
+                // Formatear la fecha si es necesario
+                $fecha = $row['fecha'];
+                if ($fecha) {
+                    $fecha_obj = new DateTime($fecha);
+                    $row['fecha'] = $fecha_obj->format('Y-m-d');
+                }
+                
+                // Formatear el precio
+                $row['precio'] = (int)$row['precio'];
+                
+                // Asegurar que el estado esté en el formato correcto
+                if ($row['estado'] === 'aprobada') {
+                    $row['estado'] = 'confirmado';
+                }
+                
+                $schedule[] = $row;
+            }
+            
+            return $schedule;
+            
+        } catch (Exception $e) {
+            error_log("Error en getObreroSchedule: " . $e->getMessage());
+            return [];
+        }
     }
     
     /**

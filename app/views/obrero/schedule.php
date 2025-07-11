@@ -2,6 +2,7 @@
 
 <link href="assets/css/obrero-calendar.css" rel="stylesheet">
 
+<style>
 .day-number {
     font-size: 1rem;
     font-weight: 700;
