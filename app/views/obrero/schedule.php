@@ -192,6 +192,54 @@
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
 }
 
+/* Animaciones para el calendario */
+.calendar-day {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.calendar-day:nth-child(1) { animation-delay: 0.1s; }
+.calendar-day:nth-child(2) { animation-delay: 0.2s; }
+.calendar-day:nth-child(3) { animation-delay: 0.3s; }
+.calendar-day:nth-child(4) { animation-delay: 0.4s; }
+.calendar-day:nth-child(5) { animation-delay: 0.5s; }
+.calendar-day:nth-child(6) { animation-delay: 0.6s; }
+.calendar-day:nth-child(7) { animation-delay: 0.7s; }
+.calendar-day:nth-child(8) { animation-delay: 0.8s; }
+.calendar-day:nth-child(9) { animation-delay: 0.9s; }
+.calendar-day:nth-child(10) { animation-delay: 1.0s; }
+.calendar-day:nth-child(11) { animation-delay: 1.1s; }
+.calendar-day:nth-child(12) { animation-delay: 1.2s; }
+.calendar-day:nth-child(13) { animation-delay: 1.3s; }
+.calendar-day:nth-child(14) { animation-delay: 1.4s; }
+.calendar-day:nth-child(15) { animation-delay: 1.5s; }
+.calendar-day:nth-child(16) { animation-delay: 1.6s; }
+.calendar-day:nth-child(17) { animation-delay: 1.7s; }
+.calendar-day:nth-child(18) { animation-delay: 1.8s; }
+.calendar-day:nth-child(19) { animation-delay: 1.9s; }
+.calendar-day:nth-child(20) { animation-delay: 2.0s; }
+.calendar-day:nth-child(21) { animation-delay: 2.1s; }
+.calendar-day:nth-child(22) { animation-delay: 2.2s; }
+.calendar-day:nth-child(23) { animation-delay: 2.3s; }
+.calendar-day:nth-child(24) { animation-delay: 2.4s; }
+.calendar-day:nth-child(25) { animation-delay: 2.5s; }
+.calendar-day:nth-child(26) { animation-delay: 2.6s; }
+.calendar-day:nth-child(27) { animation-delay: 2.7s; }
+.calendar-day:nth-child(28) { animation-delay: 2.8s; }
+.calendar-day:nth-child(29) { animation-delay: 2.9s; }
+.calendar-day:nth-child(30) { animation-delay: 3.0s; }
+.calendar-day:nth-child(31) { animation-delay: 3.1s; }
+.calendar-day:nth-child(32) { animation-delay: 3.2s; }
+.calendar-day:nth-child(33) { animation-delay: 3.3s; }
+.calendar-day:nth-child(34) { animation-delay: 3.4s; }
+.calendar-day:nth-child(35) { animation-delay: 3.5s; }
+.calendar-day:nth-child(36) { animation-delay: 3.6s; }
+.calendar-day:nth-child(37) { animation-delay: 3.7s; }
+.calendar-day:nth-child(38) { animation-delay: 3.8s; }
+.calendar-day:nth-child(39) { animation-delay: 3.9s; }
+.calendar-day:nth-child(40) { animation-delay: 4.0s; }
+.calendar-day:nth-child(41) { animation-delay: 4.1s; }
+.calendar-day:nth-child(42) { animation-delay: 4.2s; }
+
 .calendar-day.other-month {
     color: #cbd5e0;
     background: #f7fafc;

@@ -64,6 +64,26 @@
 }
 .superprof-job-tag.urgent { background: #e53e3e; }
 .superprof-job-tag.new { background: #38a169; }
+
+/* Animaciones para badges y cards */
+.superprof-job-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.superprof-job-card:nth-child(1) { animation-delay: 0.1s; }
+.superprof-job-card:nth-child(2) { animation-delay: 0.2s; }
+.superprof-job-card:nth-child(3) { animation-delay: 0.3s; }
+.superprof-job-card:nth-child(4) { animation-delay: 0.4s; }
+.superprof-job-card:nth-child(5) { animation-delay: 0.5s; }
+.superprof-job-card:nth-child(6) { animation-delay: 0.6s; }
+
+.superprof-job-tag.urgent {
+    animation: pulse 2s infinite;
+}
+
+.superprof-job-tag.new {
+    animation: pulseGlow 2s infinite;
+}
 .superprof-job-actions {
     margin-top: 18px;
     display: flex;

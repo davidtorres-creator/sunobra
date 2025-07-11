@@ -26,6 +26,7 @@
     
     <!-- Scripts de SunObra -->
     <script src="/app/assets/js/index.js"></script>
+    <script src="/app/assets/js/animations.js"></script>
     
     <!-- Debug en desarrollo -->
     <?php if (defined('DEBUG') && DEBUG): ?>

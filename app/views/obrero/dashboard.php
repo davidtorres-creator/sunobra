@@ -59,14 +59,14 @@
             <!-- Welcome Section -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card bg-gradient-primary text-white">
+                    <div class="card bg-gradient-primary text-white hero-animate">
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <div class="col-md-8">
+                                <div class="col-md-8 animate-fade-in-up">
                                     <h4 class="card-title">¡Bienvenido, <?= htmlspecialchars($user['nombre'] ?? 'Usuario') ?>!</h4>
                                     <p class="card-text">Encuentra nuevos trabajos, gestiona tus aplicaciones y maximiza tus ganancias.</p>
                                 </div>
-                                <div class="col-md-4 text-center">
+                                <div class="col-md-4 text-center animate-fade-in-up animate-delay-2">
                                     <i class="fas fa-hard-hat fa-3x"></i>
                                 </div>
                             </div>
@@ -153,29 +153,29 @@
             <!-- Quick Actions -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card shadow">
+                    <div class="card shadow animate-fade-in-up">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Acciones Rápidas</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 mb-3">
-                                    <a href="/obrero/jobs" class="btn btn-primary btn-block">
+                                    <a href="/obrero/jobs" class="btn btn-primary btn-block btn-hover animate-fade-in-up animate-delay-1">
                                         <i class="fas fa-search"></i> Buscar Trabajos
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <a href="/obrero/applications" class="btn btn-info btn-block">
+                                    <a href="/obrero/applications" class="btn btn-info btn-block btn-hover animate-fade-in-up animate-delay-2">
                                         <i class="fas fa-list"></i> Ver Aplicaciones
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <a href="/obrero/profile" class="btn btn-success btn-block">
+                                    <a href="/obrero/profile" class="btn btn-success btn-block btn-hover animate-fade-in-up animate-delay-3">
                                         <i class="fas fa-edit"></i> Editar Perfil
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <a href="/obrero/earnings" class="btn btn-warning btn-block">
+                                    <a href="/obrero/earnings" class="btn btn-warning btn-block btn-hover animate-fade-in-up animate-delay-4">
                                         <i class="fas fa-chart-line"></i> Ver Ganancias
                                     </a>
                                 </div>

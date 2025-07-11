@@ -49,14 +49,14 @@
             <!-- Welcome Section -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card bg-gradient-primary text-white">
+                    <div class="card bg-gradient-primary text-white hero-animate">
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <div class="col-md-8">
+                                <div class="col-md-8 animate-fade-in-up">
                                     <h4 class="card-title">¡Bienvenido, <?= htmlspecialchars($user['nombre']) ?>!</h4>
                                     <p class="card-text">Gestiona el sistema, monitorea usuarios y genera reportes para optimizar la plataforma.</p>
                                 </div>
-                                <div class="col-md-4 text-center">
+                                <div class="col-md-4 text-center animate-fade-in-up animate-delay-2">
                                     <i class="fas fa-shield-alt fa-3x"></i>
                                 </div>
                             </div>
@@ -68,14 +68,14 @@
             <!-- Statistics Cards -->
             <div class="row mb-4">
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card border-left-primary shadow h-100 py-2 dashboard-card-animate card-hover animate-fade-in-up animate-delay-1">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                         Total Usuarios
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $stats['total_users'] ?? 0 ?></div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" data-counter="<?= $stats['total_users'] ?? 0 ?>"><?= $stats['total_users'] ?? 0 ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -86,14 +86,14 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card border-left-success shadow h-100 py-2 dashboard-card-animate card-hover animate-fade-in-up animate-delay-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Clientes
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $stats['total_clients'] ?? 0 ?></div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" data-counter="<?= $stats['total_clients'] ?? 0 ?>"><?= $stats['total_clients'] ?? 0 ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -104,14 +104,14 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card border-left-info shadow h-100 py-2 dashboard-card-animate card-hover animate-fade-in-up animate-delay-3">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                         Obreros
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $stats['total_workers'] ?? 0 ?></div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" data-counter="<?= $stats['total_workers'] ?? 0 ?>"><?= $stats['total_workers'] ?? 0 ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-hard-hat fa-2x text-gray-300"></i>
@@ -122,14 +122,14 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card border-left-warning shadow h-100 py-2 dashboard-card-animate card-hover animate-fade-in-up animate-delay-4">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                         Solicitudes
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $stats['total_requests'] ?? 0 ?></div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" data-counter="<?= $stats['total_requests'] ?? 0 ?>"><?= $stats['total_requests'] ?? 0 ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -218,29 +218,29 @@
             <!-- Quick Actions -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card shadow">
+                    <div class="card shadow animate-fade-in-up">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Acciones Rápidas</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 mb-3">
-                                    <a href="/admin/users" class="btn btn-primary btn-block">
+                                    <a href="/admin/users" class="btn btn-primary btn-block btn-hover animate-fade-in-up animate-delay-1">
                                         <i class="fas fa-users"></i> Gestionar Usuarios
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <a href="/admin/reports" class="btn btn-info btn-block">
+                                    <a href="/admin/reports" class="btn btn-info btn-block btn-hover animate-fade-in-up animate-delay-2">
                                         <i class="fas fa-chart-bar"></i> Ver Reportes
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <a href="/admin/settings" class="btn btn-success btn-block">
+                                    <a href="/admin/settings" class="btn btn-success btn-block btn-hover animate-fade-in-up animate-delay-3">
                                         <i class="fas fa-cog"></i> Configuración
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <a href="#" class="btn btn-warning btn-block">
+                                    <a href="#" class="btn btn-warning btn-block btn-hover animate-fade-in-up animate-delay-4">
                                         <i class="fas fa-download"></i> Exportar Datos
                                     </a>
                                 </div>
