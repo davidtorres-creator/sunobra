@@ -2,6 +2,67 @@
 
 <link href="assets/css/obrero-applications.css" rel="stylesheet">
 
+<style>
+.superprof-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+}
+.superprof-table {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+.superprof-table th {
+    background: #f7fafc;
+    color: #4a5568;
+    font-weight: 700;
+    border-bottom: 2px solid #e2e8f0;
+}
+.superprof-table td, .superprof-table th {
+    vertical-align: middle;
+    padding: 16px 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.superprof-table tr:last-child td {
+    border-bottom: none;
+}
+.superprof-badge {
+    border-radius: 12px;
+    padding: 6px 16px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-block;
+}
+.superprof-badge.warning { background: #fbbf24; color: #fff; }
+.superprof-badge.success { background: #38a169; color: #fff; }
+.superprof-badge.danger { background: #e53e3e; color: #fff; }
+.superprof-badge.secondary { background: #a0aec0; color: #fff; }
+.superprof-badge.info { background: #4299e1; color: #fff; }
+.superprof-badge.primary { background: #667eea; color: #fff; }
+.superprof-btn {
+    border-radius: 10px;
+    padding: 6px 18px;
+    font-weight: 600;
+    border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+}
+.superprof-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -45,20 +106,18 @@
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!-- Header Section -->
-            <div class="applications-header">
-                <div class="text-center">
-                    <h1 class="display-5 fw-bold mb-3">Mis Aplicaciones</h1>
-                    <p class="lead mb-0">Gestiona y da seguimiento a todas tus aplicaciones de trabajo</p>
-                </div>
+            <div class="superprof-header">
+                <h1 class="display-5 fw-bold mb-2">Mis Aplicaciones</h1>
+                <p class="lead mb-0">Gestiona y da seguimiento a todas tus aplicaciones de trabajo</p>
             </div>
 
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Listado de Aplicaciones</h5>
+            <div class="card mt-4 superprof-table">
+                <div class="card-header" style="background: #f7fafc; border-bottom: 2px solid #e2e8f0;">
+                    <h5 class="mb-0" style="color: #4a5568; font-weight: 700;">Listado de Aplicaciones</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table mb-0">
                             <thead>
                                 <tr>
                                     <th>Trabajo</th>
@@ -74,18 +133,38 @@
                                     <tr>
                                         <td><?= htmlspecialchars($app['trabajo']) ?></td>
                                         <td>
-                                            <?php if ($app['estado'] == 'pendiente'): ?>
-                                                <span class="badge bg-warning">Pendiente</span>
-                                            <?php elseif ($app['estado'] == 'aceptada'): ?>
-                                                <span class="badge bg-success">Aceptada</span>
-                                            <?php else: ?>
-                                                <span class="badge bg-secondary"><?= htmlspecialchars($app['estado']) ?></span>
-                                            <?php endif; ?>
+                                            <?php
+                                            $estado = strtolower(trim($app['estado'] ?? ''));
+                                            if ($estado === '' || $estado === null) {
+                                                $estado = 'pendiente';
+                                            }
+                                            $estados = [
+                                                'pendiente' => ['label' => 'Pendiente', 'badge' => 'warning'],
+                                                'aprobada' => ['label' => 'Aceptada', 'badge' => 'success'],
+                                                'aceptada' => ['label' => 'Aceptada', 'badge' => 'success'],
+                                                'rechazada' => ['label' => 'Rechazada', 'badge' => 'danger'],
+                                                'cancelada' => ['label' => 'Cancelada', 'badge' => 'secondary'],
+                                                'confirmado' => ['label' => 'Confirmado', 'badge' => 'info'],
+                                                'pagado' => ['label' => 'Pagado', 'badge' => 'primary'],
+                                                'en_proceso' => ['label' => 'En proceso', 'badge' => 'info'],
+                                            ];
+                                            $estadoInfo = $estados[$estado] ?? ['label' => ucfirst($estado), 'badge' => 'secondary'];
+                                            ?>
+                                            <span class="superprof-badge <?= $estadoInfo['badge'] ?>">
+                                                <?= $estadoInfo['label'] ?>
+                                            </span>
                                         </td>
                                         <td><?= htmlspecialchars(date('Y-m-d', strtotime($app['fecha']))) ?></td>
                                         <td><?= htmlspecialchars($app['propuesta']) ?></td>
                                         <td>
-                                            <a href="/obrero/applications/<?= $app['id'] ?>" class="btn btn-sm btn-info">Ver</a>
+                                            <a href="/obrero/applications/<?= $app['id'] ?>" class="superprof-btn btn-sm">Ver</a>
+                                            <?php if ($estado === 'pendiente'): ?>
+                                                <form method="POST" action="/obrero/cotizaciones/actualizar" style="display:inline;">
+                                                    <input type="hidden" name="id" value="<?= $app['id'] ?>">
+                                                    <input type="hidden" name="estado" value="cancelada">
+                                                    <button type="submit" class="superprof-btn btn-sm btn-danger" style="background: #e53e3e; margin-left: 6px;" onclick="return confirm('¿Seguro que deseas retirar esta aplicación?')">Retirar aplicación</button>
+                                                </form>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

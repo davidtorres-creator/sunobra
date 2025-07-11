@@ -347,17 +347,25 @@
                             </div>
                             <div class="cotizacion-estado">
                                 <?php
-                                $estado = strtolower($cotizacion['estado']);
-                                if ($estado === 'pendiente') {
-                                    echo '<span class="badge bg-warning">Pendiente</span>';
-                                } elseif ($estado === 'aprobada' || $estado === 'aceptada') {
-                                    echo '<span class="badge bg-success">Aceptada</span>';
-                                } elseif ($estado === 'rechazada') {
-                                    echo '<span class="badge bg-danger">Rechazada</span>';
-                                } else {
-                                    echo '<span class="badge bg-secondary">' . ucfirst($estado) . '</span>';
+                                $estado = strtolower(trim($cotizacion['estado'] ?? ''));
+                                if ($estado === '' || $estado === null) {
+                                    $estado = 'pendiente';
                                 }
+                                $estados = [
+                                    'pendiente' => ['label' => 'Pendiente', 'badge' => 'warning'],
+                                    'aprobada' => ['label' => 'Aceptada', 'badge' => 'success'],
+                                    'aceptada' => ['label' => 'Aceptada', 'badge' => 'success'],
+                                    'rechazada' => ['label' => 'Rechazada', 'badge' => 'danger'],
+                                    'cancelada' => ['label' => 'Cancelada', 'badge' => 'secondary'],
+                                    'confirmado' => ['label' => 'Confirmado', 'badge' => 'info'],
+                                    'pagado' => ['label' => 'Pagado', 'badge' => 'primary'],
+                                    'en_proceso' => ['label' => 'En proceso', 'badge' => 'info'],
+                                ];
+                                $estadoInfo = $estados[$estado] ?? ['label' => ucfirst($estado), 'badge' => 'secondary'];
                                 ?>
+                                <span class="badge bg-<?= $estadoInfo['badge'] ?>">
+                                    <?= $estadoInfo['label'] ?>
+                                </span>
                             </div>
                             <?php if ($cotizacion['estado'] === 'pendiente'): ?>
                                 <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/aceptar" style="display:inline;">
@@ -365,6 +373,13 @@
                                 </form>
                                 <form method="POST" action="/cliente/cotizaciones/<?= $cotizacion['id'] ?>/rechazar" style="display:inline;">
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Rechazar esta cotización?')">Rechazar</button>
+                                </form>
+                            <?php endif; ?>
+                            <?php if ($cotizacion['estado'] === 'aceptada' || $cotizacion['estado'] === 'aprobada'): ?>
+                                <form method="POST" action="/obrero/cotizaciones/actualizar" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?= $cotizacion['id'] ?>">
+                                    <input type="hidden" name="estado" value="cancelada">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas cancelar esta cotización aceptada?')">Cancelar Cotización</button>
                                 </form>
                             <?php endif; ?>
                         </div>

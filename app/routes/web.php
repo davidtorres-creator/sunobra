@@ -101,6 +101,7 @@ $router->prefix('/obrero')
         $router->get('/schedule/{id}/confirm', 'ObreroController@confirmSchedule');
         $router->get('/services/create', 'ServicioController@create');
         $router->post('/services/create', 'ServicioController@store');
+        $router->get('/obrero/schedule/ajax', 'ObreroController@ajaxSchedule');
     });
 
 // ========================================

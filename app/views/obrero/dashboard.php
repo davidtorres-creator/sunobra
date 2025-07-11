@@ -257,13 +257,26 @@
         <tr>
             <td><?= htmlspecialchars($app['trabajo']) ?></td>
             <td>
-                <?php if ($app['estado'] == 'pendiente'): ?>
-                    <span class="badge bg-warning">Pendiente</span>
-                <?php elseif ($app['estado'] == 'aceptada'): ?>
-                    <span class="badge bg-success">Aceptada</span>
-                <?php else: ?>
-                    <span class="badge bg-secondary"><?= htmlspecialchars($app['estado']) ?></span>
-                <?php endif; ?>
+                <?php
+                $estado = strtolower(trim($app['estado'] ?? ''));
+                if ($estado === '' || $estado === null) {
+                    $estado = 'pendiente';
+                }
+                $estados = [
+                    'pendiente' => ['label' => 'Pendiente', 'badge' => 'warning'],
+                    'aprobada' => ['label' => 'Aceptada', 'badge' => 'success'],
+                    'aceptada' => ['label' => 'Aceptada', 'badge' => 'success'],
+                    'rechazada' => ['label' => 'Rechazada', 'badge' => 'danger'],
+                    'cancelada' => ['label' => 'Cancelada', 'badge' => 'secondary'],
+                    'confirmado' => ['label' => 'Confirmado', 'badge' => 'info'],
+                    'pagado' => ['label' => 'Pagado', 'badge' => 'primary'],
+                    'en_proceso' => ['label' => 'En proceso', 'badge' => 'info'],
+                ];
+                $estadoInfo = $estados[$estado] ?? ['label' => ucfirst($estado), 'badge' => 'secondary'];
+                ?>
+                <span class="badge bg-<?= $estadoInfo['badge'] ?>">
+                    <?= $estadoInfo['label'] ?>
+                </span>
             </td>
             <td><?= htmlspecialchars(date('Y-m-d', strtotime($app['fecha']))) ?></td>
             <td><?= htmlspecialchars($app['propuesta']) ?></td>

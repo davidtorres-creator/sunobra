@@ -538,3 +538,368 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Solicitud enviada correctamente. Te notificaremos cuando un obrero esté disponible.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+    [auth_success] => Cotización enviada correctamente
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Solicitud enviada correctamente. Te notificaremos cuando un obrero esté disponible.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+    [auth_success] => Cotización enviada correctamente
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+    [auth_success] => Cotización enviada correctamente
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+    [auth_success] => Cotización enviada correctamente
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Solicitud enviada correctamente. Te notificaremos cuando un obrero esté disponible.
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+    [auth_success] => Cotización enviada correctamente
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+    [auth_success] => Cotización aceptada correctamente.
+)
+
+DESPUES: Array
+(
+)
+

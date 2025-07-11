@@ -632,6 +632,32 @@
             </div>
 
             <!-- Stats Section -->
+            <?php
+            // Calcular estadísticas reales a partir de $earnings
+            $totalGanancias = 0;
+            $totalEsteMes = 0;
+            $totalEstaSemana = 0;
+            $promedioPorTrabajo = 0;
+            $hoy = date('Y-m-d');
+            $mesActual = date('Y-m');
+            $semanaInicio = date('Y-m-d', strtotime('monday this week'));
+            $semanaFin = date('Y-m-d', strtotime('sunday this week'));
+
+            if (!empty($earnings)) {
+                foreach ($earnings as $e) {
+                    $ganancia = isset($e['ganancia_neta']) ? (float)$e['ganancia_neta'] : 0;
+                    $fecha = isset($e['fecha_pago']) ? $e['fecha_pago'] : (isset($e['fecha_aprobacion']) ? $e['fecha_aprobacion'] : null);
+                    $totalGanancias += $ganancia;
+                    if ($fecha && strpos($fecha, $mesActual) === 0) {
+                        $totalEsteMes += $ganancia;
+                    }
+                    if ($fecha && $fecha >= $semanaInicio && $fecha <= $semanaFin) {
+                        $totalEstaSemana += $ganancia;
+                    }
+                }
+                $promedioPorTrabajo = count($earnings) > 0 ? $totalGanancias / count($earnings) : 0;
+            }
+            ?>
             <div class="stats-section">
                 <div class="row">
                     <div class="col-md-3 mb-3">
@@ -639,7 +665,7 @@
                             <div class="stats-icon total">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <div class="stats-number">$<?= number_format(array_sum(array_column($earnings, 'ganancia_neta'))) ?></div>
+                            <div class="stats-number">$<?= number_format($totalGanancias) ?></div>
                             <div class="stats-label">Ganancias Totales</div>
                         </div>
                     </div>
@@ -648,9 +674,7 @@
                             <div class="stats-icon month">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
-                            <div class="stats-number">$<?= number_format(array_sum(array_filter(array_column($earnings, 'ganancia_neta'), function($earnings) { 
-                                return date('Y-m', strtotime($earnings['fecha_pago'])) === date('Y-m');
-                            }))) ?></div>
+                            <div class="stats-number">$<?= number_format($totalEsteMes) ?></div>
                             <div class="stats-label">Este Mes</div>
                         </div>
                     </div>
@@ -659,11 +683,7 @@
                             <div class="stats-icon week">
                                 <i class="fas fa-calendar-week"></i>
                             </div>
-                            <div class="stats-number">$<?= number_format(array_sum(array_filter(array_column($earnings, 'ganancia_neta'), function($earnings) { 
-                                $weekStart = date('Y-m-d', strtotime('monday this week'));
-                                $weekEnd = date('Y-m-d', strtotime('sunday this week'));
-                                return $earnings['fecha_pago'] >= $weekStart && $earnings['fecha_pago'] <= $weekEnd;
-                            }))) ?></div>
+                            <div class="stats-number">$<?= number_format($totalEstaSemana) ?></div>
                             <div class="stats-label">Esta Semana</div>
                         </div>
                     </div>
@@ -672,7 +692,7 @@
                             <div class="stats-icon average">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="stats-number">$<?= number_format(array_sum(array_column($earnings, 'ganancia_neta')) / count($earnings)) ?></div>
+                            <div class="stats-number">$<?= number_format($promedioPorTrabajo) ?></div>
                             <div class="stats-label">Promedio por Trabajo</div>
                         </div>
                     </div>
@@ -738,18 +758,19 @@
                         </a>
                     </div>
                     <?php else: ?>
-                    <?php foreach ($earnings as $earning): ?>
-                    <div class="earnings-item" data-method="<?= $earning['metodo_pago'] ?>" data-amount="<?= $earning['ganancia_neta'] ?>">
+                    <?php foreach (
+    $earnings as $earning): ?>
+                    <div class="earnings-item" data-method="<?= htmlspecialchars($earning['metodo_pago'] ?? '-') ?>" data-amount="<?= htmlspecialchars($earning['ganancia_neta'] ?? 0) ?>">
                         <div class="earnings-item-header">
-                            <h3 class="earnings-item-title"><?= htmlspecialchars($earning['titulo_trabajo']) ?></h3>
+                            <h3 class="earnings-item-title"><?= htmlspecialchars($earning['titulo_trabajo'] ?? '-') ?></h3>
                             <div class="earnings-item-amount">
                                 <div class="amount-badge">
                                     <i class="fas fa-dollar-sign"></i>
-                                    $<?= number_format($earning['ganancia_neta']) ?>
+                                    $<?= number_format($earning['ganancia_neta'] ?? 0) ?>
                                 </div>
-                                <div class="status-badge <?= $earning['estado'] ?>">
+                                <div class="status-badge <?= htmlspecialchars($earning['estado'] ?? '') ?>">
                                     <i class="fas fa-check-circle"></i>
-                                    <?= ucfirst($earning['estado']) ?>
+                                    <?= ucfirst($earning['estado'] ?? '-') ?>
                                 </div>
                             </div>
                         </div>
@@ -761,41 +782,37 @@
                                     </div>
                                     <div class="earnings-info-content">
                                         <div class="earnings-info-label">Cliente</div>
-                                        <div class="earnings-info-value"><?= htmlspecialchars($earning['cliente']) ?></div>
+                                        <div class="earnings-info-value"><?= htmlspecialchars($earning['cliente'] ?? '-') ?></div>
                                     </div>
                                 </div>
-                                
                                 <div class="earnings-info-item">
                                     <div class="earnings-info-icon">
                                         <i class="fas fa-calendar"></i>
                                     </div>
                                     <div class="earnings-info-content">
                                         <div class="earnings-info-label">Fecha de Pago</div>
-                                        <div class="earnings-info-value"><?= htmlspecialchars($earning['fecha_pago']) ?></div>
+                                        <div class="earnings-info-value"><?= htmlspecialchars($earning['fecha_pago'] ?? ($earning['fecha_aprobacion'] ?? '-')) ?></div>
                                     </div>
                                 </div>
-                                
                                 <div class="earnings-info-item">
                                     <div class="earnings-info-icon">
                                         <i class="fas fa-clock"></i>
                                     </div>
                                     <div class="earnings-info-content">
                                         <div class="earnings-info-label">Duración</div>
-                                        <div class="earnings-info-value"><?= htmlspecialchars($earning['duracion_trabajo']) ?></div>
+                                        <div class="earnings-info-value"><?= htmlspecialchars($earning['duracion_trabajo'] ?? '-') ?></div>
                                     </div>
                                 </div>
-                                
                                 <div class="earnings-info-item">
                                     <div class="earnings-info-icon">
                                         <i class="fas fa-star"></i>
                                     </div>
                                     <div class="earnings-info-content">
                                         <div class="earnings-info-label">Calificación</div>
-                                        <div class="earnings-info-value"><?= $earning['calificacion'] ?>/5</div>
+                                        <div class="earnings-info-value"><?= isset($earning['calificacion']) ? $earning['calificacion'] : '-' ?>/5</div>
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="earnings-breakdown">
                                 <div class="earnings-breakdown-title">
                                     <i class="fas fa-calculator"></i>
@@ -803,18 +820,17 @@
                                 </div>
                                 <div class="breakdown-item">
                                     <div class="breakdown-label">Ganancia Bruta</div>
-                                    <div class="breakdown-value">$<?= number_format($earning['ganancia']) ?></div>
+                                    <div class="breakdown-value">$<?= number_format($earning['ganancia'] ?? 0) ?></div>
                                 </div>
                                 <div class="breakdown-item">
                                     <div class="breakdown-label">Comisión Plataforma (10%)</div>
-                                    <div class="breakdown-value commission">-$<?= number_format($earning['comision_plataforma']) ?></div>
+                                    <div class="breakdown-value commission">-$<?= number_format($earning['comision_plataforma'] ?? 0) ?></div>
                                 </div>
                                 <div class="breakdown-item">
                                     <div class="breakdown-label">Ganancia Neta</div>
-                                    <div class="breakdown-value net">$<?= number_format($earning['ganancia_neta']) ?></div>
+                                    <div class="breakdown-value net">$<?= number_format($earning['ganancia_neta'] ?? 0) ?></div>
                                 </div>
                             </div>
-                            
                             <?php if (!empty($earning['comentario_cliente'])): ?>
                             <div class="rating-section">
                                 <div class="rating-title">
@@ -823,36 +839,33 @@
                                 </div>
                                 <div class="rating-stars">
                                     <?php for ($i = 1; $i <= 5; $i++): ?>
-                                    <i class="fas fa-star star <?= $i <= $earning['calificacion'] ? 'filled' : '' ?>"></i>
+                                    <i class="fas fa-star star <?= ($i <= ($earning['calificacion'] ?? 0)) ? 'filled' : '' ?>"></i>
                                     <?php endfor; ?>
                                 </div>
                                 <div class="rating-comment">"<?= htmlspecialchars($earning['comentario_cliente']) ?>"</div>
                             </div>
                             <?php endif; ?>
-                            
                             <div class="earnings-tags">
                                 <div class="earnings-tag">
                                     <i class="fas fa-hammer"></i>
-                                    <?= htmlspecialchars($earning['categoria']) ?>
+                                    <?= htmlspecialchars($earning['categoria'] ?? '-') ?>
                                 </div>
-                                <div class="earnings-tag <?= $earning['metodo_pago'] ?>">
-                                    <i class="fas fa-<?= $earning['metodo_pago'] === 'efectivo' ? 'money-bill-wave' : 'university' ?>"></i>
-                                    <?= ucfirst($earning['metodo_pago']) ?>
+                                <div class="earnings-tag <?= htmlspecialchars($earning['metodo_pago'] ?? '') ?>">
+                                    <i class="fas fa-<?= ($earning['metodo_pago'] ?? '') === 'efectivo' ? 'money-bill-wave' : 'university' ?>"></i>
+                                    <?= ucfirst($earning['metodo_pago'] ?? '-') ?>
                                 </div>
-                                <?php if ($earning['ganancia_neta'] > 150000): ?>
+                                <?php if (($earning['ganancia_neta'] ?? 0) > 150000): ?>
                                 <div class="earnings-tag" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
                                     <i class="fas fa-star"></i>
                                     Alto Ingreso
                                 </div>
                                 <?php endif; ?>
                             </div>
-                            
                             <div class="earnings-actions">
-                                <a href="/obrero/earnings/<?= $earning['id'] ?>" class="btn-primary-action">
+                                <a href="/obrero/earnings/<?= $earning['id'] ?? 0 ?>" class="btn-primary-action">
                                     <i class="fas fa-eye"></i>
                                     Ver Detalles
                                 </a>
-                                
                                 <a href="/obrero/schedule" class="btn-secondary-action">
                                     <i class="fas fa-calendar"></i>
                                     Ver Calendario

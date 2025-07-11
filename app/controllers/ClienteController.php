@@ -487,6 +487,8 @@ class ClienteController extends BaseController {
         require_once __DIR__ . '/../models/ObreroModel.php';
         $obreroModel = new ObreroModel();
         $ok = $obreroModel->cambiarEstadoCotizacion($id, 'aceptada');
+        // Sincronizar estado en el flujo del obrero
+        $this->actualizarEstadoObrero($id, 'aceptada');
         $_SESSION['auth_success'] = $ok ? 'Cotización aceptada correctamente.' : 'No se pudo aceptar la cotización.';
         // Obtener el id de la solicitud asociada a la cotización
         $cotizacion = $obreroModel->getCotizacionById($id);
@@ -496,6 +498,14 @@ class ClienteController extends BaseController {
         } else {
             $this->redirect('/cliente/requests');
         }
+    }
+
+    // Método privado para sincronizar el estado en el flujo del obrero
+    private function actualizarEstadoObrero($id, $nuevoEstado) {
+        // Llamada interna al modelo (ya que ambos usan cambiarEstadoCotizacion)
+        require_once __DIR__ . '/../models/ObreroModel.php';
+        $obreroModel = new ObreroModel();
+        $obreroModel->cambiarEstadoCotizacion($id, $nuevoEstado);
     }
 
     public function rechazarCotizacion($id) {

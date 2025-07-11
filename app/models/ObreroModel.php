@@ -281,7 +281,11 @@ class ObreroModel {
         $sql = "UPDATE cotizaciones SET estado = ? WHERE id = ?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param('si', $nuevoEstado, $cotizacionId);
-        return $stmt->execute();
+        $result = $stmt->execute();
+        // Log de depuración
+        $logMsg = date('Y-m-d H:i:s') . " | cambiarEstadoCotizacion | id: $cotizacionId | estado: $nuevoEstado | resultado: " . ($result ? 'OK' : 'FALLO') . "\n";
+        file_put_contents(__DIR__ . '/../../logs/update_obrero_debug.log', $logMsg, FILE_APPEND);
+        return $result;
     }
 
     /**

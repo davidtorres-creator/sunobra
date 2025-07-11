@@ -66,3 +66,13 @@ POST: Array
 
 updateUser: OK
 updateObrero: OK
+2025-07-10 20:02:25 | cambiarEstadoCotizacion | id: 3 | estado: aceptada | resultado: OK
+2025-07-10 20:02:25 | cambiarEstadoCotizacion | id: 3 | estado: aceptada | resultado: OK
+2025-07-10 20:14:16 | cambiarEstadoCotizacion | id: 4 | estado: aceptada | resultado: OK
+2025-07-10 20:14:16 | cambiarEstadoCotizacion | id: 4 | estado: aceptada | resultado: OK
+2025-07-10 20:26:29 | cambiarEstadoCotizacion | id: 5 | estado: aceptada | resultado: OK
+2025-07-10 20:26:29 | cambiarEstadoCotizacion | id: 5 | estado: aceptada | resultado: OK
+2025-07-10 20:33:30 | cambiarEstadoCotizacion | id: 6 | estado: aceptada | resultado: OK
+2025-07-10 20:33:30 | cambiarEstadoCotizacion | id: 6 | estado: aceptada | resultado: OK
+2025-07-10 20:50:28 | cambiarEstadoCotizacion | id: 7 | estado: aceptada | resultado: OK
+2025-07-10 20:50:28 | cambiarEstadoCotizacion | id: 7 | estado: aceptada | resultado: OK

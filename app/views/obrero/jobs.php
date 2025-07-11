@@ -2,6 +2,95 @@
 
 <link href="assets/css/obrero-jobs.css" rel="stylesheet">
 
+<style>
+.superprof-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+}
+.superprof-job-card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: none;
+}
+.superprof-job-card:hover {
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+    transform: translateY(-4px);
+}
+.superprof-job-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+.superprof-job-budget {
+    background: #fbbf24;
+    color: #fff;
+    border-radius: 12px;
+    padding: 6px 18px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-block;
+}
+.superprof-job-info-label {
+    color: #718096;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+.superprof-job-info-value {
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.superprof-job-tag {
+    background: #667eea;
+    color: #fff;
+    border-radius: 10px;
+    padding: 5px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.superprof-job-tag.urgent { background: #e53e3e; }
+.superprof-job-tag.new { background: #38a169; }
+.superprof-job-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 12px;
+}
+.superprof-btn {
+    border-radius: 10px;
+    padding: 7px 22px;
+    font-weight: 600;
+    border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.superprof-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -45,13 +134,11 @@
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!-- Header Section -->
-            <div class="jobs-header">
-                <div class="text-center">
-                    <h1 class="display-5 fw-bold mb-3">Trabajos Disponibles</h1>
-                    <p class="lead mb-0">Encuentra las mejores oportunidades laborales en tu área</p>
-                </div>
+            <div class="superprof-header">
+                <h1 class="display-5 fw-bold mb-2">Trabajos Disponibles</h1>
+                <p class="lead mb-0">Encuentra las mejores oportunidades laborales en tu área</p>
                 <div class="text-center mt-3">
-                    <a href="/obrero/jobs-table" class="btn btn-outline-primary">
+                    <a href="/obrero/jobs-table" class="superprof-btn">
                         <i class="fas fa-table"></i> Ver en Tabla
                     </a>
                 </div>
@@ -186,87 +273,57 @@
                      data-category="<?= strtolower($job['categoria'] ?? 'general') ?>"
                      data-location="<?= strtolower($job['ubicacion'] ?? '') ?>"
                      data-budget="<?= $job['presupuesto'] ?>">
-                    <div class="job-card">
-                        <div class="job-card-header">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h3 class="job-title"><?= htmlspecialchars($job['titulo']) ?></h3>
-                                <div class="job-budget">$<?= number_format($job['presupuesto']) ?></div>
+                    <div class="superprof-job-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="superprof-job-title"><?= htmlspecialchars($job['titulo']) ?></h3>
+                            <div class="superprof-job-budget">$<?= number_format($job['presupuesto']) ?></div>
+                        </div>
+                        <p class="job-description mb-2"><?= htmlspecialchars($job['descripcion']) ?></p>
+                        <div class="row mb-2">
+                            <div class="col-6 col-md-6 mb-2">
+                                <div class="superprof-job-info-label">Cliente</div>
+                                <div class="superprof-job-info-value"><?= htmlspecialchars($job['cliente']) ?></div>
+                            </div>
+                            <div class="col-6 col-md-6 mb-2">
+                                <div class="superprof-job-info-label">Ubicación</div>
+                                <div class="superprof-job-info-value"><?= htmlspecialchars($job['ubicacion']) ?></div>
+                            </div>
+                            <div class="col-6 col-md-6 mb-2">
+                                <div class="superprof-job-info-label">Fecha Límite</div>
+                                <div class="superprof-job-info-value"><?= htmlspecialchars($job['fecha_limite']) ?></div>
+                            </div>
+                            <div class="col-6 col-md-6 mb-2">
+                                <div class="superprof-job-info-label">Aplicaciones</div>
+                                <div class="superprof-job-info-value"><?= rand(1, 8) ?> aplicaciones</div>
                             </div>
                         </div>
-                        <div class="job-card-body">
-                            <p class="job-description"><?= htmlspecialchars($job['descripcion']) ?></p>
-                            
-                            <div class="job-info-grid">
-                                <div class="job-info-item">
-                                    <div class="job-info-icon">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="job-info-content">
-                                        <div class="job-info-label">Cliente</div>
-                                        <div class="job-info-value"><?= htmlspecialchars($job['cliente']) ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="job-info-item">
-                                    <div class="job-info-icon">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                    </div>
-                                    <div class="job-info-content">
-                                        <div class="job-info-label">Ubicación</div>
-                                        <div class="job-info-value"><?= htmlspecialchars($job['ubicacion']) ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="job-info-item">
-                                    <div class="job-info-icon">
-                                        <i class="fas fa-calendar"></i>
-                                    </div>
-                                    <div class="job-info-content">
-                                        <div class="job-info-label">Fecha Límite</div>
-                                        <div class="job-info-value"><?= htmlspecialchars($job['fecha_limite']) ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="job-info-item">
-                                    <div class="job-info-icon">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <div class="job-info-content">
-                                        <div class="job-info-label">Aplicaciones</div>
-                                        <div class="job-info-value"><?= rand(1, 8) ?> aplicaciones</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="job-tags">
-                                <div class="job-tag">
-                                    <i class="fas fa-hammer"></i>
-                                    <?= $job['categoria'] ?? 'Albañilería' ?>
-                                </div>
-                                <?php if (rand(0, 1)): ?>
-                                <div class="job-tag urgent">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Urgente
-                                </div>
-                                <?php endif; ?>
-                                <?php if (rand(0, 1)): ?>
-                                <div class="job-tag new">
-                                    <i class="fas fa-star"></i>
-                                    Nuevo
-                                </div>
-                                <?php endif; ?>
-                            </div>
-                            
-                            <div class="job-actions">
-                                <a href="/obrero/jobs/<?= $job['id'] ?>/apply" class="btn-apply">
-                                    <i class="fas fa-paper-plane"></i>
-                                    Aplicar Ahora
-                                </a>
-                                <a href="/obrero/jobs/<?= $job['id'] ?>" class="btn-details">
-                                    <i class="fas fa-eye"></i>
-                                    Ver Detalles
-                                </a>
-                            </div>
+                        <div class="mb-2">
+                            <span class="superprof-job-tag">
+                                <i class="fas fa-hammer"></i>
+                                <?= $job['categoria'] ?? 'Albañilería' ?>
+                            </span>
+                            <?php if (rand(0, 1)): ?>
+                            <span class="superprof-job-tag urgent">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Urgente
+                            </span>
+                            <?php endif; ?>
+                            <?php if (rand(0, 1)): ?>
+                            <span class="superprof-job-tag new">
+                                <i class="fas fa-star"></i>
+                                Nuevo
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="superprof-job-actions">
+                            <a href="/obrero/jobs/<?= $job['id'] ?>/apply" class="superprof-btn btn-aplicar" data-job-id="<?= $job['id'] ?>">
+                                <i class="fas fa-paper-plane"></i>
+                                Aplicar Ahora
+                            </a>
+                            <a href="/obrero/jobs/<?= $job['id'] ?>" class="superprof-btn" style="background: #38a169;">
+                                <i class="fas fa-eye"></i>
+                                Ver Detalles
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -393,6 +450,40 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
         }, index * 100);
+    });
+
+    // AJAX para aplicar a un trabajo y actualizar agenda/calendario
+    document.querySelectorAll('.btn-aplicar').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const jobId = this.dataset.jobId;
+            const button = this;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aplicando...';
+            fetch(`/obrero/jobs/${jobId}/apply`, {
+                method: 'POST',
+                headers: {'X-Requested-With': 'XMLHttpRequest'},
+            })
+            .then(res => res.ok ? res.text() : Promise.reject('Error al aplicar'))
+            .then(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Aplicado';
+                button.classList.add('aplicado');
+                // Actualizar agenda/calendario
+                fetch('/obrero/schedule/ajax')
+                  .then(res => res.text())
+                  .then(html => {
+                      const scheduleContainer = window.parent.document.getElementById('scheduleContainer') || document.getElementById('scheduleContainer');
+                      if (scheduleContainer) scheduleContainer.innerHTML = html;
+                  });
+            })
+            .catch(() => {
+                button.innerHTML = '<i class="fas fa-times"></i> Error';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-paper-plane"></i> Aplicar Ahora';
+                    button.disabled = false;
+                }, 2000);
+            });
+        });
     });
 });
 </script>

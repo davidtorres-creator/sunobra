@@ -371,6 +371,46 @@ class ObreroController extends BaseController {
         $this->redirect('/obrero/schedule');
     }
     
+    /**
+     * Actualizar el estado de una cotización (expuesto para ser llamado tras aceptación del cliente)
+     */
+    public function actualizarEstadoCotizacion() {
+        if (!$this->isAuthenticated()) {
+            $this->redirect('/login');
+            return;
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'] ?? null;
+            $nuevoEstado = $_POST['estado'] ?? null;
+            if ($id && $nuevoEstado) {
+                require_once __DIR__ . '/../models/ObreroModel.php';
+                $obreroModel = new ObreroModel();
+                $ok = $obreroModel->cambiarEstadoCotizacion($id, $nuevoEstado);
+                if ($ok) {
+                    $_SESSION['auth_success'] = 'Estado actualizado correctamente.';
+                } else {
+                    $_SESSION['auth_error'] = 'No se pudo actualizar el estado.';
+                }
+            } else {
+                $_SESSION['auth_error'] = 'Datos incompletos para actualizar estado.';
+            }
+        }
+        $this->redirect('/obrero/applications');
+    }
+    
+    public function ajaxSchedule() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'obrero') {
+            http_response_code(403);
+            echo 'No autorizado';
+            exit;
+        }
+        $data = [
+            'schedule' => $this->getObreroSchedule()
+        ];
+        require __DIR__ . '/../views/obrero/_schedule_partial.php';
+        exit;
+    }
+    
     // ========================================
     // MÉTODOS PRIVADOS
     // ========================================
@@ -399,16 +439,16 @@ class ObreroController extends BaseController {
         $resultPendientes = $stmtPendientes->get_result();
         $pendingApplications = $resultPendientes->fetch_assoc()['pendientes'] ?? 0;
 
-        // Cotizaciones aprobadas (aceptadas)
-        $sqlAceptadas = "SELECT COUNT(*) as aceptadas FROM cotizaciones WHERE obrero_id = ? AND estado = 'aprobada'";
+        // Cotizaciones aceptadas
+        $sqlAceptadas = "SELECT COUNT(*) as aceptadas FROM cotizaciones WHERE obrero_id = ? AND estado = 'aceptada'";
         $stmtAceptadas = $db->prepare($sqlAceptadas);
         $stmtAceptadas->bind_param('i', $userId);
         $stmtAceptadas->execute();
         $resultAceptadas = $stmtAceptadas->get_result();
         $acceptedApplications = $resultAceptadas->fetch_assoc()['aceptadas'] ?? 0;
 
-        // Ganancias totales: suma de monto_estimado de cotizaciones aprobadas
-        $sqlGanancias = "SELECT SUM(monto_estimado) as total_ganancias FROM cotizaciones WHERE obrero_id = ? AND estado = 'aprobada'";
+        // Ganancias totales: suma de monto_estimado de cotizaciones aceptadas
+        $sqlGanancias = "SELECT SUM(monto_estimado) as total_ganancias FROM cotizaciones WHERE obrero_id = ? AND estado = 'aceptada'";
         $stmtGanancias = $db->prepare($sqlGanancias);
         $stmtGanancias->bind_param('i', $userId);
         $stmtGanancias->execute();
@@ -725,145 +765,27 @@ class ObreroController extends BaseController {
      * Obtener ganancias del obrero
      */
     private function getObreroEarnings() {
-        // Por ahora retornamos datos de ejemplo
-        return [
-            [
-                'id' => 1,
-                'trabajo_id' => 1,
-                'titulo_trabajo' => 'Reparación de pared',
-                'cliente' => 'Juan Pérez',
-                'fecha_completado' => '2024-02-15',
-                'fecha_pago' => '2024-02-16',
-                'ganancia' => 140000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'efectivo',
-                'categoria' => 'Albañilería',
-                'duracion_trabajo' => '8 horas',
-                'calificacion' => 5,
-                'comentario_cliente' => 'Excelente trabajo, muy profesional y puntual.',
-                'comision_plataforma' => 14000,
-                'ganancia_neta' => 126000
-            ],
-            [
-                'id' => 2,
-                'trabajo_id' => 2,
-                'titulo_trabajo' => 'Instalación eléctrica',
-                'cliente' => 'María García',
-                'fecha_completado' => '2024-02-10',
-                'fecha_pago' => '2024-02-12',
-                'ganancia' => 180000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'transferencia',
-                'categoria' => 'Electricidad',
-                'duracion_trabajo' => '8 horas',
-                'calificacion' => 5,
-                'comentario_cliente' => 'Trabajo impecable, instalación perfecta.',
-                'comision_plataforma' => 18000,
-                'ganancia_neta' => 162000
-            ],
-            [
-                'id' => 3,
-                'trabajo_id' => 3,
-                'titulo_trabajo' => 'Pintura de habitación',
-                'cliente' => 'Carlos López',
-                'fecha_completado' => '2024-02-08',
-                'fecha_pago' => '2024-02-09',
-                'ganancia' => 120000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'efectivo',
-                'categoria' => 'Pintura',
-                'duracion_trabajo' => '6 horas',
-                'calificacion' => 4,
-                'comentario_cliente' => 'Buen trabajo, acabados limpios.',
-                'comision_plataforma' => 12000,
-                'ganancia_neta' => 108000
-            ],
-            [
-                'id' => 4,
-                'trabajo_id' => 4,
-                'titulo_trabajo' => 'Reparación de tubería',
-                'cliente' => 'Ana Rodríguez',
-                'fecha_completado' => '2024-02-05',
-                'fecha_pago' => '2024-02-07',
-                'ganancia' => 90000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'transferencia',
-                'categoria' => 'Plomería',
-                'duracion_trabajo' => '4 horas',
-                'calificacion' => 5,
-                'comentario_cliente' => 'Rápido y eficiente, problema resuelto.',
-                'comision_plataforma' => 9000,
-                'ganancia_neta' => 81000
-            ],
-            [
-                'id' => 5,
-                'trabajo_id' => 5,
-                'titulo_trabajo' => 'Instalación de puertas',
-                'cliente' => 'Luis Martínez',
-                'fecha_completado' => '2024-02-03',
-                'fecha_pago' => '2024-02-05',
-                'ganancia' => 240000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'efectivo',
-                'categoria' => 'Carpintería',
-                'duracion_trabajo' => '10 horas',
-                'calificacion' => 5,
-                'comentario_cliente' => 'Trabajo artesanal, puertas perfectas.',
-                'comision_plataforma' => 24000,
-                'ganancia_neta' => 216000
-            ],
-            [
-                'id' => 6,
-                'trabajo_id' => 6,
-                'titulo_trabajo' => 'Mantenimiento de aire acondicionado',
-                'cliente' => 'Patricia Silva',
-                'fecha_completado' => '2024-02-01',
-                'fecha_pago' => '2024-02-02',
-                'ganancia' => 80000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'transferencia',
-                'categoria' => 'Mantenimiento',
-                'duracion_trabajo' => '3 horas',
-                'calificacion' => 4,
-                'comentario_cliente' => 'Servicio técnico profesional.',
-                'comision_plataforma' => 8000,
-                'ganancia_neta' => 72000
-            ],
-            [
-                'id' => 7,
-                'trabajo_id' => 7,
-                'titulo_trabajo' => 'Reparación de techo',
-                'cliente' => 'Roberto Díaz',
-                'fecha_completado' => '2024-01-28',
-                'fecha_pago' => '2024-01-30',
-                'ganancia' => 200000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'efectivo',
-                'categoria' => 'Albañilería',
-                'duracion_trabajo' => '12 horas',
-                'calificacion' => 5,
-                'comentario_cliente' => 'Trabajo complejo bien ejecutado.',
-                'comision_plataforma' => 20000,
-                'ganancia_neta' => 180000
-            ],
-            [
-                'id' => 8,
-                'trabajo_id' => 8,
-                'titulo_trabajo' => 'Instalación de luces LED',
-                'cliente' => 'Carmen Vega',
-                'fecha_completado' => '2024-01-25',
-                'fecha_pago' => '2024-01-27',
-                'ganancia' => 150000,
-                'estado' => 'pagado',
-                'metodo_pago' => 'transferencia',
-                'categoria' => 'Electricidad',
-                'duracion_trabajo' => '6 horas',
-                'calificacion' => 5,
-                'comentario_cliente' => 'Iluminación perfecta, muy satisfecha.',
-                'comision_plataforma' => 15000,
-                'ganancia_neta' => 135000
-            ]
-        ];
+        $userId = $_SESSION['user_id'];
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $sql = "SELECT c.id, c.solicitud_id as trabajo_id, s.nombre_servicio as titulo_trabajo, CONCAT(u.nombre, ' ', u.apellido) as cliente, c.monto_estimado as ganancia, c.estado, c.fecha as fecha_aprobacion FROM cotizaciones c INNER JOIN solicitudes_servicio ss ON c.solicitud_id = ss.id INNER JOIN servicios s ON ss.servicio_id = s.id INNER JOIN clientes cl ON ss.cliente_id = cl.id INNER JOIN usuarios u ON cl.id = u.id WHERE c.obrero_id = ? AND c.estado = 'aceptada' ORDER BY c.fecha DESC";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $earnings = [];
+        while ($row = $result->fetch_assoc()) {
+            $earnings[] = [
+                'id' => $row['id'],
+                'trabajo_id' => $row['trabajo_id'],
+                'titulo_trabajo' => $row['titulo_trabajo'],
+                'cliente' => $row['cliente'],
+                'ganancia' => $row['ganancia'],
+                'estado' => $row['estado'],
+                'fecha_aprobacion' => $row['fecha_aprobacion'],
+            ];
+        }
+        return $earnings;
     }
 
     /**
