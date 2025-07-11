@@ -437,6 +437,52 @@ body input[type="text"]::placeholder {
     color: #ffb300 !important;
     opacity: 1;
 }
+.superprof-header {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    border-radius: 28px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    padding: 38px 0 28px 0 !important;
+    margin-bottom: 32px !important;
+    text-align: center;
+}
+.superprof-header h1,
+.superprof-header .display-5,
+.superprof-header .fw-bold {
+    color: #fff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.superprof-header p,
+.superprof-header .lead {
+    color: #fff !important;
+    font-weight: 500;
+    text-shadow: none;
+}
+.superprof-header .btn-ver-tabla {
+    margin-top: 18px;
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    font-weight: 700;
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 12px rgba(60,60,120,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    padding: 0.7rem 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.superprof-header .btn-ver-tabla i {
+    color: #fff !important;
+}
+.superprof-header .btn-ver-tabla:hover {
+    filter: brightness(1.08) saturate(1.2);
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+}
 </style>
 
 <div class="container-fluid">
@@ -481,15 +527,11 @@ body input[type="text"]::placeholder {
 
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header Section -->
+            <!-- Header visual worker -->
             <div class="superprof-header">
                 <h1 class="display-5 fw-bold mb-2">Trabajos Disponibles</h1>
-                <p class="lead mb-0">Encuentra las mejores oportunidades laborales en tu área</p>
-                <div class="text-center mt-3">
-                    <a href="/obrero/jobs-table" class="superprof-btn">
-                        <i class="fas fa-table"></i> Ver en Tabla
-                    </a>
-                </div>
+                <p class="lead mb-3">Encuentra las mejores oportunidades laborales en tu área</p>
+                <a href="#tabla-trabajos" class="btn-ver-tabla"><i class="fas fa-table"></i> Ver en Tabla</a>
             </div>
 
             <!-- Stats Section -->

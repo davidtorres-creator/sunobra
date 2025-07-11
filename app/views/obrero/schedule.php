@@ -280,7 +280,7 @@ body, .container-fluid {
     color: #ffb300 !important;
 }
 .superprof-header {
-    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    background: linear-gradient(120deg, #ffb300 0%, #ff6f00 100%) !important;
     color: #fff !important;
     border-radius: 28px !important;
     box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
@@ -302,6 +302,12 @@ body, .container-fluid {
     font-weight: 500;
     text-shadow: none;
 }
+
+/* Elimino el CSS de scrollbar worker para volver al estilo por defecto */
+::-webkit-scrollbar {}
+::-webkit-scrollbar-thumb {}
+::-webkit-scrollbar-thumb:hover {}
+html { scrollbar-width: auto; scrollbar-color: auto; }
 </style>
 
 <div class="container-fluid">
