@@ -1,146 +1,126 @@
 <?php
-/**
- * Script de depuración para el registro
- * Muestra información detallada sobre el proceso de registro
- */
+// Script de diagnóstico para el registro
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Iniciar sesión si no está iniciada
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Simular datos de registro
+$testData = [
+    'nombre' => 'Test',
+    'apellido' => 'User',
+    'email' => 'test' . time() . '@example.com',
+    'password' => '123456',
+    'confirmPassword' => '123456',
+    'userType' => 'cliente',
+    'telefono' => '123456789',
+    'direccion' => 'Test Address',
+    'preferencias_contacto' => 'Email'
+];
 
-echo "<h1>🔍 Debug del Registro - SunObra</h1>";
-
-// Mostrar información de la sesión
-echo "<h2>📋 Información de Sesión</h2>";
+echo "<h2>Diagnóstico de Registro</h2>";
 echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
 
-// Mostrar información del POST si existe
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "<h2>📤 Datos POST Recibidos</h2>";
-    echo "<pre>";
-    print_r($_POST);
-    echo "</pre>";
-    
-    echo "<h2>🔍 Análisis de Datos</h2>";
-    
-    // Verificar campos requeridos
-    $required_fields = ['nombre', 'apellido', 'email', 'password', 'confirmPassword', 'userType'];
-    $missing_fields = [];
-    
-    foreach ($required_fields as $field) {
-        if (empty($_POST[$field])) {
-            $missing_fields[] = $field;
-        }
-    }
-    
-    if (!empty($missing_fields)) {
-        echo "<p style='color: red;'>❌ Campos faltantes: " . implode(', ', $missing_fields) . "</p>";
-    } else {
-        echo "<p style='color: green;'>✅ Todos los campos requeridos están presentes</p>";
-    }
-    
-    // Verificar contraseñas
-    if ($_POST['password'] !== $_POST['confirmPassword']) {
-        echo "<p style='color: red;'>❌ Las contraseñas no coinciden</p>";
-    } else {
-        echo "<p style='color: green;'>✅ Las contraseñas coinciden</p>";
-    }
-    
-    // Verificar email
-    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        echo "<p style='color: red;'>❌ Email inválido: " . htmlspecialchars($_POST['email']) . "</p>";
-    } else {
-        echo "<p style='color: green;'>✅ Email válido</p>";
-    }
-    
-    // Verificar tipo de usuario
-    if (!in_array($_POST['userType'], ['cliente', 'obrero'])) {
-        echo "<p style='color: red;'>❌ Tipo de usuario inválido: " . htmlspecialchars($_POST['userType']) . "</p>";
-    } else {
-        echo "<p style='color: green;'>✅ Tipo de usuario válido: " . htmlspecialchars($_POST['userType']) . "</p>";
-    }
-    
-    // Verificar especialidades para obreros
-    if ($_POST['userType'] === 'obrero') {
-        if (empty($_POST['especialidades'])) {
-            echo "<p style='color: red;'>❌ No se seleccionaron especialidades</p>";
-        } else {
-            echo "<p style='color: green;'>✅ Especialidades seleccionadas: " . implode(', ', $_POST['especialidades']) . "</p>";
-        }
-    }
-}
-
-// Mostrar información del servidor
-echo "<h2>🖥️ Información del Servidor</h2>";
-echo "<p><strong>Método HTTP:</strong> " . $_SERVER['REQUEST_METHOD'] . "</p>";
-echo "<p><strong>URL:</strong> " . $_SERVER['REQUEST_URI'] . "</p>";
-echo "<p><strong>User Agent:</strong> " . $_SERVER['HTTP_USER_AGENT'] . "</p>";
-
-// Probar conexión a la base de datos
-echo "<h2>🗄️ Prueba de Conexión a Base de Datos</h2>";
+// 1. Verificar conexión a base de datos
+echo "1. Probando conexión a base de datos...\n";
 try {
     require_once 'app/library/db.php';
     $db = new Database();
     $connection = $db->getConnection();
+    echo "✓ Conexión exitosa\n";
+} catch (Exception $e) {
+    echo "✗ Error de conexión: " . $e->getMessage() . "\n";
+    exit;
+}
+
+// 2. Verificar estructura de tablas
+echo "\n2. Verificando estructura de tablas...\n";
+$tables = ['usuarios', 'clientes', 'obreros'];
+foreach ($tables as $table) {
+    $sql = "DESCRIBE $table";
+    $result = $connection->query($sql);
+    if ($result) {
+        echo "✓ Tabla '$table' existe\n";
+    } else {
+        echo "✗ Tabla '$table' no existe o error: " . $connection->error . "\n";
+    }
+}
+
+// 3. Verificar si el email ya existe
+echo "\n3. Verificando email duplicado...\n";
+$sql_check = "SELECT id FROM usuarios WHERE correo = ?";
+$stmt_check = $connection->prepare($sql_check);
+$stmt_check->bind_param("s", $testData['email']);
+$stmt_check->execute();
+$result_check = $stmt_check->get_result();
+
+if ($result_check->num_rows > 0) {
+    echo "✗ El email ya existe en la base de datos\n";
+} else {
+    echo "✓ Email disponible para registro\n";
+}
+
+// 4. Probar inserción en tabla usuarios
+echo "\n4. Probando inserción en tabla usuarios...\n";
+try {
+    $sql_insert = "INSERT INTO usuarios (nombre, apellido, correo, telefono, direccion, password, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt_insert = $connection->prepare($sql_insert);
+    $stmt_insert->bind_param("sssssss", 
+        $testData['nombre'], 
+        $testData['apellido'], 
+        $testData['email'],
+        $testData['telefono'],
+        $testData['direccion'],
+        $testData['password'], 
+        $testData['userType']
+    );
     
-    if ($connection->ping()) {
-        echo "<p style='color: green;'>✅ Conexión a la base de datos exitosa</p>";
+    if ($stmt_insert->execute()) {
+        $userId = $connection->insert_id;
+        echo "✓ Usuario insertado con ID: $userId\n";
         
-        // Verificar si las tablas existen
-        $tables = ['usuarios', 'obreros', 'clientes'];
-        foreach ($tables as $table) {
-            $result = $connection->query("SHOW TABLES LIKE '$table'");
-            if ($result->num_rows > 0) {
-                echo "<p style='color: green;'>✅ Tabla '$table' existe</p>";
-            } else {
-                echo "<p style='color: red;'>❌ Tabla '$table' NO existe</p>";
-            }
+        // 5. Probar inserción en tabla clientes
+        echo "\n5. Probando inserción en tabla clientes...\n";
+        $sql_cliente = "INSERT INTO clientes (id, preferencias_contacto) VALUES (?, ?)";
+        $stmt_cliente = $connection->prepare($sql_cliente);
+        $stmt_cliente->bind_param("is", $userId, $testData['preferencias_contacto']);
+        
+        if ($stmt_cliente->execute()) {
+            echo "✓ Cliente insertado correctamente\n";
+        } else {
+            echo "✗ Error al insertar cliente: " . $stmt_cliente->error . "\n";
         }
         
-        // Verificar estructura de la tabla usuarios
-        echo "<h3>📋 Estructura de la tabla usuarios</h3>";
-        $result = $connection->query("DESCRIBE usuarios");
-        if ($result) {
-            echo "<table border='1' style='border-collapse: collapse;'>";
-            echo "<tr><th>Campo</th><th>Tipo</th><th>Nulo</th><th>Llave</th><th>Default</th></tr>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['Field']}</td>";
-                echo "<td>{$row['Type']}</td>";
-                echo "<td>{$row['Null']}</td>";
-                echo "<td>{$row['Key']}</td>";
-                echo "<td>{$row['Default']}</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        }
+        // Limpiar datos de prueba
+        $connection->query("DELETE FROM clientes WHERE id = $userId");
+        $connection->query("DELETE FROM usuarios WHERE id = $userId");
+        echo "✓ Datos de prueba limpiados\n";
         
     } else {
-        echo "<p style='color: red;'>❌ Error en la conexión a la base de datos</p>";
+        echo "✗ Error al insertar usuario: " . $stmt_insert->error . "\n";
     }
     
-    $connection->close();
-    
 } catch (Exception $e) {
-    echo "<p style='color: red;'>❌ Error de conexión: " . $e->getMessage() . "</p>";
+    echo "✗ Excepción durante inserción: " . $e->getMessage() . "\n";
 }
 
-// Mostrar errores de PHP si existen
-echo "<h2>⚠️ Errores de PHP</h2>";
-$errors = error_get_last();
-if ($errors) {
-    echo "<pre style='color: red;'>";
-    print_r($errors);
-    echo "</pre>";
-} else {
-    echo "<p style='color: green;'>✅ No hay errores de PHP</p>";
+// 6. Verificar configuración de sesiones
+echo "\n6. Verificando configuración de sesiones...\n";
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+echo "✓ Sesión iniciada\n";
+echo "Session save path: " . session_save_path() . "\n";
+echo "Session name: " . session_name() . "\n";
+
+// 7. Probar redirección
+echo "\n7. Probando función de redirección...\n";
+function testRedirect($url) {
+    echo "Redirigiendo a: $url\n";
+    // En un entorno real, esto haría header("Location: $url");
+    echo "✓ Redirección simulada exitosa\n";
 }
 
-echo "<h2>🔗 Enlaces de Prueba</h2>";
-echo "<p><a href='/register'>Ir al formulario de registro</a></p>";
-echo "<p><a href='/test-swal.php'>Probar SweetAlert2</a></p>";
-echo "<p><a href='/test_registration.php'>Probar registro</a></p>";
+testRedirect('/cliente/dashboard');
+
+echo "\n=== Diagnóstico completado ===\n";
+echo "</pre>";
 ?> 

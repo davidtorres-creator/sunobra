@@ -1669,3 +1669,53 @@
     [cliente_id] => 3
 )
 
+2025-07-12 07:20:37 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+
+2025-07-12 07:20:41 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+
+2025-07-12 07:21:15 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+
+2025-07-12 07:21:29 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+
+2025-07-12 07:21:31 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+

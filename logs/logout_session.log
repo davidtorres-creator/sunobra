@@ -1396,3 +1396,31 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => David
+    [apellido] => Torres
+    [cliente_id] => 3
+)
+
+DESPUES: Array
+(
+)
+
