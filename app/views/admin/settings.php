@@ -132,7 +132,7 @@ body, .container-fluid, .container {
                         <div class="alert alert-danger"> <?= $_SESSION['settings_error'] ?> </div>
                         <?php unset($_SESSION['settings_error']); ?>
                     <?php endif; ?>
-                    <form method="POST" action="">
+                    <form method="POST" action="/admin/settings">
                         <div class="row">
                             <?php foreach (
                                 $settings as $key => $value): ?>

@@ -50,6 +50,7 @@ $router->prefix('/admin')
         $router->delete('/users/{id}', 'AdminController@deleteUser');
         $router->get('/reports', 'AdminController@reports');
         $router->get('/settings', 'AdminController@settings');
+        $router->post('/settings', 'AdminController@settings');
         $router->post('/cotizaciones/{id}/aceptar', 'AdminController@aceptarCotizacion');
         $router->post('/cotizaciones/{id}/rechazar', 'AdminController@rechazarCotizacion');
     });
