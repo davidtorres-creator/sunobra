@@ -1267,3 +1267,17 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 5
+    [email] => daniel@gmail.com
+    [user_role] => admin
+    [nombre] => daniel
+    [apellido] => torres
+    [admin_id] => 5
+)
+
+DESPUES: Array
+(
+)
+
