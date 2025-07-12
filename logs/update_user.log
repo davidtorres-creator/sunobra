@@ -139,3 +139,24 @@
 )
 
 2025-07-09 21:19:55 - ÉXITO: Filas afectadas: 1
+2025-07-12 06:40:24 - Iniciando updateUser para ID: 3
+2025-07-12 06:40:24 - Datos: Array
+(
+    [nombre] => David
+    [apellido] => Torres
+    [telefono] => 3204060266
+    [direccion] => calle 13
+)
+
+2025-07-12 06:40:24 - SQL: UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ?, direccion = ? WHERE id = ?
+2025-07-12 06:40:24 - Tipos: ssssi
+2025-07-12 06:40:24 - Valores: Array
+(
+    [0] => David
+    [1] => Torres
+    [2] => 3204060266
+    [3] => calle 13
+    [4] => 3
+)
+
+2025-07-12 06:40:24 - ÉXITO: Filas afectadas: 1
