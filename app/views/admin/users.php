@@ -1,5 +1,124 @@
 <?php require_once __DIR__ . '/../partials/header.php'; ?>
 
+<style>
+/* === ESTILO SUPERPROF ADMIN USUARIOS === */
+body, .container-fluid {
+    background: #181818 !important;
+    color: #fff !important;
+}
+.sidebar, .bg-light.sidebar {
+    background: #232323 !important;
+    color: #fff !important;
+    min-height: 100vh;
+    border-right: none !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+.sidebar .nav-link {
+    color: #ffe082 !important;
+    font-weight: 500;
+    border-radius: 12px;
+    margin: 4px 12px;
+    transition: all 0.3s ease;
+}
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255,179,0,0.12);
+}
+.sidebar .nav-link i {
+    color: #ffe082 !important;
+}
+.superprof-header-admin {
+    background: linear-gradient(120deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #fff !important;
+    border-radius: 28px !important;
+    box-shadow: 0 4px 24px rgba(255,179,0,0.10) !important;
+    padding: 38px 0 28px 0 !important;
+    margin-bottom: 32px !important;
+    text-align: center;
+}
+.superprof-header-admin h1 {
+    color: #fff !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.superprof-header-admin p {
+    color: #fff !important;
+    font-weight: 500;
+    text-shadow: none;
+}
+.card, .card-body, .table, .table-responsive, .table-bordered, .table-striped, .table-hover {
+    background: #fff !important;
+    color: #232323 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(60,60,120,0.10) !important;
+    border: none !important;
+}
+.card-title, .section-title, .table-title, .fw-bold, h4, h5 {
+    color: #ff6f00 !important;
+    font-weight: 800 !important;
+}
+.btn-primary, .btn-info, .btn-success, .btn-warning, .btn-export, .btn-ver, .btn {
+    background: linear-gradient(90deg, #ffb300 0%, #ff6f00 100%) !important;
+    color: #232323 !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(255,179,0,0.10);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-primary:hover, .btn-info:hover, .btn-success:hover, .btn-warning:hover, .btn-export:hover, .btn-ver:hover, .btn:hover {
+    background: linear-gradient(90deg, #ff6f00 0%, #ffb300 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,179,0,0.18);
+}
+.badge, .badge-admin, .badge-obrero, .badge-cliente {
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 7px 18px !important;
+    color: #fff !important;
+    background: #ffb300 !important;
+}
+.badge-obrero {
+    background: #38b6ff !important;
+}
+.badge-cliente {
+    background: #2979ff !important;
+}
+.badge-admin {
+    background: #ffb300 !important;
+    color: #232323 !important;
+}
+.badge-success, .badge-estado-activo {
+    background: #43e97b !important;
+}
+.table thead th {
+    background: #181818 !important;
+    color: #FFD966 !important;
+    border: none !important;
+    font-weight: 800 !important;
+    font-size: 1.08rem !important;
+    letter-spacing: 0.04em;
+}
+.table tbody tr {
+    background: #fff !important;
+    color: #232323 !important;
+}
+.table td {
+    color: #232323 !important;
+    font-weight: 500 !important;
+    font-size: 1.05rem !important;
+    border-bottom: 1px solid #ececec !important;
+}
+.table tr:last-child td {
+    border-bottom: none !important;
+}
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -32,12 +151,18 @@
 
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Gestión de Usuarios</h1>
+            <!-- Header visual tipo Superprof -->
+            <div class="superprof-header-admin">
+                <h1>Gestión de Usuarios</h1>
+                <p>Administra, filtra y gestiona los usuarios de la plataforma</p>
+            </div>
+            <!-- Botonera superior -->
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
+                <div></div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Exportar</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Filtrar</button>
+                        <button type="button" class="btn btn-sm btn-export"><i class="fas fa-file-export"></i> Exportar</button>
+                        <button type="button" class="btn btn-sm btn-ver"><i class="fas fa-filter"></i> Filtrar</button>
                     </div>
                     <button type="button" class="btn btn-sm btn-primary">
                         <i class="fas fa-plus"></i> Nuevo Usuario

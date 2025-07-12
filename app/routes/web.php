@@ -43,6 +43,7 @@ $router->prefix('/admin')
     ->middleware(['auth', 'admin'])
     ->group(function($router) {
         $router->get('/dashboard', 'AdminController@dashboard');
+        $router->get('/dashboard/stats', 'AdminController@getStats');
         $router->get('/users', 'AdminController@users');
         $router->get('/users/{id}', 'AdminController@showUser');
         $router->post('/users/{id}', 'AdminController@updateUser');

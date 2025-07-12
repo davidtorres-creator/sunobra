@@ -247,6 +247,21 @@ class AdminController extends BaseController {
     }
     
     /**
+     * Endpoint para obtener estadísticas dinámicas (AJAX)
+     */
+    public function getStats() {
+        if (!$this->isAuthenticated() || $_SESSION['user_role'] !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['error' => 'No autorizado']);
+            return;
+        }
+        
+        $stats = $this->getAdminStats();
+        header('Content-Type: application/json');
+        echo json_encode($stats);
+    }
+    
+    /**
      * Aceptar cotización (admin)
      */
     public function aceptarCotizacion($id) {
@@ -336,38 +351,155 @@ class AdminController extends BaseController {
         require_once __DIR__ . '/../library/db.php';
         $db = new Database();
         $connection = $db->getConnection();
-        // Total usuarios
-        $totalUsers = $connection->query("SELECT COUNT(*) as total FROM usuarios")->fetch_assoc()['total'] ?? 0;
-        // Total clientes
-        $totalClients = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'cliente'")->fetch_assoc()['total'] ?? 0;
-        // Total obreros
-        $totalWorkers = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'obrero'")->fetch_assoc()['total'] ?? 0;
-        // Total solicitudes
-        $totalRequests = 0;
-        $pendingRequests = 0;
-        $completedRequests = 0;
-        $totalRevenue = 0;
-        // Si existe la tabla solicitudes, obtener datos
-        if ($connection->query("SHOW TABLES LIKE 'solicitudes'")->num_rows > 0) {
-            $totalRequests = $connection->query("SELECT COUNT(*) as total FROM solicitudes")->fetch_assoc()['total'] ?? 0;
-            $pendingRequests = $connection->query("SELECT COUNT(*) as total FROM solicitudes WHERE estado = 'pendiente'")->fetch_assoc()['total'] ?? 0;
-            $completedRequests = $connection->query("SELECT COUNT(*) as total FROM solicitudes WHERE estado = 'completada'")->fetch_assoc()['total'] ?? 0;
-            // Si hay un campo monto o similar para ingresos
-            $result = $connection->query("SELECT SUM(monto) as total FROM solicitudes WHERE estado = 'completada'");
-            if ($result) {
-                $row = $result->fetch_assoc();
-                $totalRevenue = $row['total'] ?? 0;
+        
+        $stats = [];
+        
+        try {
+            // Total usuarios
+            $result = $connection->query("SELECT COUNT(*) as total FROM usuarios");
+            $stats['total_users'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Total clientes
+            $result = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'cliente'");
+            $stats['total_clients'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Total obreros
+            $result = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'obrero'");
+            $stats['total_workers'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Verificar si existe la tabla solicitudes_servicio
+            $tableExists = $connection->query("SHOW TABLES LIKE 'solicitudes_servicio'");
+            if ($tableExists && $tableExists->num_rows > 0) {
+                // Total solicitudes
+                $result = $connection->query("SELECT COUNT(*) as total FROM solicitudes_servicio");
+                $stats['total_requests'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Solicitudes pendientes
+                $result = $connection->query("SELECT COUNT(*) as total FROM solicitudes_servicio WHERE estado = 'pendiente'");
+                $stats['pending_requests'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Solicitudes completadas
+                $result = $connection->query("SELECT COUNT(*) as total FROM solicitudes_servicio WHERE estado = 'completado'");
+                $stats['completed_requests'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Solicitudes aceptadas
+                $result = $connection->query("SELECT COUNT(*) as total FROM solicitudes_servicio WHERE estado = 'aceptado'");
+                $stats['accepted_requests'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Solicitudes rechazadas
+                $result = $connection->query("SELECT COUNT(*) as total FROM solicitudes_servicio WHERE estado = 'rechazado'");
+                $stats['rejected_requests'] = $result ? $result->fetch_assoc()['total'] : 0;
+            } else {
+                $stats['total_requests'] = 0;
+                $stats['pending_requests'] = 0;
+                $stats['completed_requests'] = 0;
+                $stats['accepted_requests'] = 0;
+                $stats['rejected_requests'] = 0;
             }
+            
+            // Verificar si existe la tabla cotizaciones
+            $cotizacionesExists = $connection->query("SHOW TABLES LIKE 'cotizaciones'");
+            if ($cotizacionesExists && $cotizacionesExists->num_rows > 0) {
+                // Total cotizaciones
+                $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones");
+                $stats['total_quotations'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Cotizaciones pendientes
+                $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones WHERE estado = 'pendiente'");
+                $stats['pending_quotations'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Cotizaciones aprobadas
+                $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones WHERE estado = 'aprobada'");
+                $stats['approved_quotations'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Cotizaciones rechazadas
+                $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones WHERE estado = 'rechazada'");
+                $stats['rejected_quotations'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Total ingresos (suma de cotizaciones aprobadas)
+                $result = $connection->query("SELECT SUM(monto_estimado) as total FROM cotizaciones WHERE estado = 'aprobada'");
+                $stats['total_revenue'] = $result ? ($result->fetch_assoc()['total'] ?? 0) : 0;
+                
+                // Ingresos del mes actual
+                $result = $connection->query("SELECT SUM(monto_estimado) as total FROM cotizaciones WHERE estado = 'aprobada' AND MONTH(fecha) = MONTH(CURRENT_DATE()) AND YEAR(fecha) = YEAR(CURRENT_DATE())");
+                $stats['monthly_revenue'] = $result ? ($result->fetch_assoc()['total'] ?? 0) : 0;
+            } else {
+                $stats['total_quotations'] = 0;
+                $stats['pending_quotations'] = 0;
+                $stats['approved_quotations'] = 0;
+                $stats['rejected_quotations'] = 0;
+                $stats['total_revenue'] = 0;
+                $stats['monthly_revenue'] = 0;
+            }
+            
+            // Verificar si existe la tabla valoraciones
+            $valoracionesExists = $connection->query("SHOW TABLES LIKE 'valoraciones'");
+            if ($valoracionesExists && $valoracionesExists->num_rows > 0) {
+                // Total valoraciones
+                $result = $connection->query("SELECT COUNT(*) as total FROM valoraciones");
+                $stats['total_ratings'] = $result ? $result->fetch_assoc()['total'] : 0;
+                
+                // Promedio de calificaciones
+                $result = $connection->query("SELECT AVG(calificacion) as promedio FROM valoraciones");
+                $stats['average_rating'] = $result ? round($result->fetch_assoc()['promedio'] ?? 0, 1) : 0;
+            } else {
+                $stats['total_ratings'] = 0;
+                $stats['average_rating'] = 0;
+            }
+            
+            // Usuarios nuevos este mes
+            $result = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE MONTH(fecha_registro) = MONTH(CURRENT_DATE()) AND YEAR(fecha_registro) = YEAR(CURRENT_DATE())");
+            $stats['new_users_this_month'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Usuarios nuevos esta semana
+            $result = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE fecha_registro >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)");
+            $stats['new_users_this_week'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Usuarios activos (que han tenido actividad en los últimos 30 días)
+            $result = $connection->query("SELECT COUNT(DISTINCT u.id) as total FROM usuarios u 
+                                        LEFT JOIN solicitudes_servicio ss ON u.id = ss.cliente_id 
+                                        LEFT JOIN cotizaciones c ON u.id = c.obrero_id 
+                                        WHERE ss.fecha >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) 
+                                        OR c.fecha >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)");
+            $stats['active_users'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Obreros disponibles
+            $result = $connection->query("SELECT COUNT(*) as total FROM obreros WHERE disponibilidad = 1");
+            $stats['available_workers'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+            // Obreros verificados
+            $result = $connection->query("SELECT COUNT(*) as total FROM obreros WHERE verificado = 1");
+            $stats['verified_workers'] = $result ? $result->fetch_assoc()['total'] : 0;
+            
+        } catch (Exception $e) {
+            error_log("Error en getAdminStats: " . $e->getMessage());
+            // Valores por defecto en caso de error
+            $stats = [
+                'total_users' => 0,
+                'total_clients' => 0,
+                'total_workers' => 0,
+                'total_requests' => 0,
+                'pending_requests' => 0,
+                'completed_requests' => 0,
+                'accepted_requests' => 0,
+                'rejected_requests' => 0,
+                'total_quotations' => 0,
+                'pending_quotations' => 0,
+                'approved_quotations' => 0,
+                'rejected_quotations' => 0,
+                'total_revenue' => 0,
+                'monthly_revenue' => 0,
+                'total_ratings' => 0,
+                'average_rating' => 0,
+                'new_users_this_month' => 0,
+                'new_users_this_week' => 0,
+                'active_users' => 0,
+                'available_workers' => 0,
+                'verified_workers' => 0
+            ];
         }
-        return [
-            'total_users' => $totalUsers,
-            'total_clients' => $totalClients,
-            'total_workers' => $totalWorkers,
-            'total_requests' => $totalRequests,
-            'pending_requests' => $pendingRequests,
-            'completed_requests' => $completedRequests,
-            'total_revenue' => $totalRevenue
-        ];
+        
+        return $stats;
     }
     
     /**

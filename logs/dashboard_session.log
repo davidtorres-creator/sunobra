@@ -1567,3 +1567,13 @@
     [cliente_id] => 3
 )
 
+2025-07-11 19:31:40 Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+

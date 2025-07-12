@@ -1085,3 +1085,73 @@ DESPUES: Array
 (
 )
 
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 5
+    [email] => daniel@gmail.com
+    [user_role] => admin
+    [nombre] => daniel
+    [apellido] => torres
+    [admin_id] => 5
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 5
+    [email] => daniel@gmail.com
+    [user_role] => admin
+    [nombre] => daniel
+    [apellido] => torres
+    [admin_id] => 5
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 3
+    [email] => david@gmail.com
+    [user_role] => cliente
+    [nombre] => david
+    [apellido] => torres
+    [cliente_id] => 3
+)
+
+DESPUES: Array
+(
+)
+
+ANTES: Array
+(
+    [user_id] => 4
+    [email] => ivan@gmail.com
+    [user_role] => obrero
+    [nombre] => ivan
+    [apellido] => ruiz
+    [obrero_id] => 4
+)
+
+DESPUES: Array
+(
+)
+
