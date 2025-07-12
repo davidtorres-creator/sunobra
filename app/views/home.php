@@ -102,6 +102,9 @@
 <!-- Hero Section -->
 <section class="worker-hero">
     <div class="container worker-hero-content">
+        <?php if (!empty($settings['logo_url'])): ?>
+            <img src="<?= htmlspecialchars($settings['logo_url']) ?>" alt="Logo SunObra" style="max-width:180px; margin-bottom: 1.5rem; border-radius: 18px; box-shadow: 0 4px 24px rgba(34,34,34,0.10); background: #fff; padding: 8px;">
+        <?php endif; ?>
         <h1 class="worker-hero-title hero-animate animate-fade-in-up">S U N O B R A</h1>
         <h2 class="worker-hero-subtitle animate-fade-in-up animate-delay-1">Construye tu futuro con tus manos</h2>
         <a class="worker-hero-btn btn-hover animate-fade-in-up animate-delay-2" href="#proyectos">Avancemos juntos</a>

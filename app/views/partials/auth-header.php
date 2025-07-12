@@ -49,7 +49,7 @@
                     </li>
                 </ul>
                 <a class="navbar-brand mx-auto" href="/">
-                    <img src="https://via.placeholder.com/40x40/667eea/ffffff?text=SO" class="brand-img" alt="SunObra Logo" style="height: 40px;">
+                    <img src="<?= assetUrl('imgs/logo-sunobra.png') ?>" class="brand-img" alt="SunObra Logo" style="height: 40px;">
                     <span class="brand-txt">S U N O B R A</span>
                 </a>
                 <ul class="navbar-nav ms-auto">

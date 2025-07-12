@@ -14,9 +14,11 @@ class HomeController extends BaseController {
      * Página principal
      */
     public function index() {
+        $settings = $this->getSystemSettings();
         $this->render('home', [
             'title' => 'SunObra - Plataforma de Servicios de Construcción',
-            'user' => $this->getCurrentUser()
+            'user' => $this->getCurrentUser(),
+            'settings' => $settings
         ]);
     }
     
@@ -45,5 +47,20 @@ class HomeController extends BaseController {
         $this->render('services', [
             'title' => 'Servicios - SunObra'
         ]);
+    }
+
+    private function getSystemSettings() {
+        require_once __DIR__ . '/../library/db.php';
+        $db = new Database();
+        $connection = $db->getConnection();
+        $settings = [];
+        $sql = "SELECT clave, valor FROM settings";
+        $result = $connection->query($sql);
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $settings[$row['clave']] = $row['valor'];
+            }
+        }
+        return $settings;
     }
 } 

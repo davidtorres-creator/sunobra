@@ -175,36 +175,34 @@ body, .container-fluid {
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-body">
-                            <div class="row">
+                            <form method="get" action="" class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="search" class="form-label">Buscar Usuarios</label>
-                                    <input type="text" class="form-control" id="search" placeholder="Nombre, email...">
+                                    <input type="text" class="form-control" id="search" name="search" placeholder="Nombre, email..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label for="role" class="form-label">Rol</label>
-                                    <select class="form-select" id="role">
-                                        <option value="">Todos los roles</option>
-                                        <option value="admin">Administrador</option>
-                                        <option value="cliente">Cliente</option>
-                                        <option value="obrero">Obrero</option>
+                                    <select class="form-select" id="role" name="role">
+                                        <option value="" <?= empty($_GET['role']) ? 'selected' : '' ?>>Todos los roles</option>
+                                        <option value="admin" <?= (($_GET['role'] ?? '') === 'admin') ? 'selected' : '' ?>>Administrador</option>
+                                        <option value="cliente" <?= (($_GET['role'] ?? '') === 'cliente') ? 'selected' : '' ?>>Cliente</option>
+                                        <option value="obrero" <?= (($_GET['role'] ?? '') === 'obrero') ? 'selected' : '' ?>>Obrero</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label for="status" class="form-label">Estado</label>
-                                    <select class="form-select" id="status">
-                                        <option value="">Todos los estados</option>
-                                        <option value="active">Activo</option>
-                                        <option value="inactive">Inactivo</option>
-                                        <option value="suspended">Suspendido</option>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="" <?= empty($_GET['status']) ? 'selected' : '' ?>>Todos los estados</option>
+                                        <option value="active" <?= (($_GET['status'] ?? '') === 'active') ? 'selected' : '' ?>>Activo</option>
+                                        <option value="inactive" <?= (($_GET['status'] ?? '') === 'inactive') ? 'selected' : '' ?>>Inactivo</option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 mb-3">
-                                    <label class="form-label">&nbsp;</label>
-                                    <button type="button" class="btn btn-primary w-100">
+                                <div class="col-md-2 mb-3 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
                                         <i class="fas fa-search"></i> Buscar
                                     </button>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

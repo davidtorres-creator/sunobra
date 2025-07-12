@@ -475,26 +475,26 @@ body, .container-fluid {
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <div class="text-center">
-                                        <h4 class="text-primary"><?= $stats['new_users_this_week'] ?? 0 ?></h4>
-                                        <p class="text-muted">Nuevos esta semana</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <div class="text-center">
-                                        <h4 class="text-success"><?= $stats['verified_workers'] ?? 0 ?></h4>
-                                        <p class="text-muted">Obreros verificados</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <div class="text-center">
                                         <h4 class="text-info"><?= $stats['approved_quotations'] ?? 0 ?></h4>
                                         <p class="text-muted">Cotizaciones aprobadas</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <div class="text-center">
-                                        <h4 class="text-warning"><?= $stats['rejected_requests'] ?? 0 ?></h4>
-                                        <p class="text-muted">Solicitudes rechazadas</p>
+                                        <h4 class="text-warning"><?= $stats['pending_quotations'] ?? 0 ?></h4>
+                                        <p class="text-muted">Cotizaciones pendientes</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="text-center">
+                                        <h4 class="text-danger"><?= $stats['rejected_quotations'] ?? 0 ?></h4>
+                                        <p class="text-muted">Cotizaciones rechazadas</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="text-center">
+                                        <h4 class="text-success"><?= $stats['verified_workers'] ?? 0 ?></h4>
+                                        <p class="text-muted">Obreros verificados</p>
                                     </div>
                                 </div>
                             </div>

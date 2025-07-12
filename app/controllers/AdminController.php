@@ -46,13 +46,15 @@ class AdminController extends BaseController {
             $this->redirect('/login');
             return;
         }
-        
+        // Obtener filtros desde GET
+        $search = $_GET['search'] ?? '';
+        $role = $_GET['role'] ?? '';
+        $status = $_GET['status'] ?? '';
         $data = [
             'title' => 'Gestión de Usuarios',
             'user' => $this->getCurrentUser(),
-            'users' => $this->getAllUsers()
+            'users' => $this->getAllUsers($search, $role, $status)
         ];
-        
         $this->render('admin/users', $data);
     }
     
@@ -220,6 +222,24 @@ class AdminController extends BaseController {
         require_once __DIR__ . '/../library/db.php';
         $db = new Database();
         $connection = $db->getConnection();
+        // --- Agregar settings visuales y de control de usuarios si no existen ---
+        $defaultSettings = [
+            'logo_url' => '/app/assets/imgs/logo-sunobra.png',
+            'primary_color' => '#ffb300',
+            'welcome_message' => '¡Bienvenido a SunObra!',
+            'registration_open' => 'true',
+            'require_email_verification' => 'false'
+        ];
+        foreach ($defaultSettings as $key => $value) {
+            $result = $connection->query("SELECT 1 FROM settings WHERE clave = '".$connection->real_escape_string($key)."'");
+            if (!$result || $result->num_rows === 0) {
+                $stmt = $connection->prepare("INSERT INTO settings (clave, valor) VALUES (?, ?)");
+                $stmt->bind_param('ss', $key, $value);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+        // --- Fin agregar settings visuales y control usuarios ---
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['settings']) && is_array($_POST['settings'])) {
             $ok = true;
             foreach ($_POST['settings'] as $key => $value) {
@@ -366,6 +386,12 @@ class AdminController extends BaseController {
             // Total obreros
             $result = $connection->query("SELECT COUNT(*) as total FROM usuarios WHERE tipo_usuario = 'obrero'");
             $stats['total_workers'] = $result ? $result->fetch_assoc()['total'] : 0;
+
+            // === Agregar obreros verificados ===
+            require_once __DIR__ . '/../models/ObreroModel.php';
+            $obreroModel = new ObreroModel();
+            $stats['verified_workers'] = $obreroModel->countVerificados();
+            // === Fin obreros verificados ===
             
             // Verificar si existe la tabla solicitudes_servicio
             $tableExists = $connection->query("SHOW TABLES LIKE 'solicitudes_servicio'");
@@ -408,8 +434,8 @@ class AdminController extends BaseController {
                 $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones WHERE estado = 'pendiente'");
                 $stats['pending_quotations'] = $result ? $result->fetch_assoc()['total'] : 0;
                 
-                // Cotizaciones aprobadas
-                $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones WHERE estado = 'aprobada'");
+                // Cotizaciones aprobadas (aprobada o aceptada)
+                $result = $connection->query("SELECT COUNT(*) as total FROM cotizaciones WHERE estado = 'aprobada' OR estado = 'aceptada'");
                 $stats['approved_quotations'] = $result ? $result->fetch_assoc()['total'] : 0;
                 
                 // Cotizaciones rechazadas
@@ -505,12 +531,31 @@ class AdminController extends BaseController {
     /**
      * Obtener todos los usuarios
      */
-    private function getAllUsers() {
+    private function getAllUsers($search = '', $role = '', $status = '') {
         require_once __DIR__ . '/../library/db.php';
         $db = new Database();
         $connection = $db->getConnection();
         $users = [];
+        $where = [];
+        if ($search !== '') {
+            $searchEscaped = $connection->real_escape_string($search);
+            $where[] = "(CONCAT(nombre, ' ', apellido) LIKE '%$searchEscaped%' OR correo LIKE '%$searchEscaped%')";
+        }
+        if ($role !== '') {
+            $roleEscaped = $connection->real_escape_string($role);
+            $where[] = "tipo_usuario = '$roleEscaped'";
+        }
+        if ($status !== '') {
+            if ($status === 'active') {
+                $where[] = "estado = 1";
+            } elseif ($status === 'inactive') {
+                $where[] = "estado = 0";
+            }
+        }
         $sql = "SELECT id, nombre, apellido, correo, tipo_usuario, estado, fecha_registro FROM usuarios";
+        if (count($where) > 0) {
+            $sql .= " WHERE " . implode(' AND ', $where);
+        }
         $result = $connection->query($sql);
         if ($result) {
             while ($row = $result->fetch_assoc()) {
@@ -525,7 +570,6 @@ class AdminController extends BaseController {
                 ];
             }
         }
-        // $connection->close(); // Eliminado para evitar doble cierre
         return $users;
     }
     
